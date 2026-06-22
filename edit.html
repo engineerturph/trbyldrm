@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080a0d;
+      --panel: #0d1014;
+      --panel-2: #11151a;
+      --line: #30363d;
+      --line-strong: #59616b;
+      --text: #f4f6f8;
+      --muted: #9ca5af;
+      --danger: #ff7777;
+      --success: #9ce2b1;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    button, input, textarea { font: inherit; }
+    button, input, textarea, a { outline-offset: 3px; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8,10,13,0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+
+    .icon-button,
+    .button {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line-strong);
+      border-radius: 5px;
+      background: #13171c;
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 13px;
+    }
+
+    .icon-button { width: 36px; padding: 0; }
+    .icon-button svg, .button svg { width: 16px; height: 16px; }
+    .button.primary { background: #f3f5f7; color: #080a0d; border-color: #f3f5f7; }
+    .button.danger { color: var(--danger); border-color: rgba(255,119,119,0.45); }
+
+    main { width: min(1120px, calc(100% - 32px)); margin: 32px auto 64px; }
+
+    .login-shell {
+      min-height: calc(100vh - 122px);
+      display: grid;
+      place-items: center;
+    }
+
+    .login-panel {
+      width: min(390px, 100%);
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: var(--panel);
+      padding: 26px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 8px; font-size: 22px; }
+    h2 { margin-bottom: 0; font-size: 17px; }
+    h3 { margin: 0; font-size: 15px; }
+    .muted { color: var(--muted); font-size: 13px; }
+
+    .section {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+    }
+
+    .section:first-child { border-top: 0; padding-top: 0; }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .field { display: grid; gap: 7px; }
+    .field + .field { margin-top: 15px; }
+
+    label {
+      color: #c9d0d7;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #090c10;
+      color: var(--text);
+      padding: 10px 11px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    textarea { min-height: 92px; resize: vertical; }
+    input:focus, textarea:focus { border-color: #8b949e; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .form-grid .field + .field { margin-top: 0; }
+    .full { grid-column: 1 / -1; }
+
+    .project-list { display: grid; gap: 14px; }
+
+    .project-editor {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      padding: 18px;
+    }
+
+    .project-editor-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .project-editor-actions { display: flex; align-items: center; gap: 12px; }
+
+    .featured-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #d8dde2;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .featured-toggle input { width: 16px; height: 16px; margin: 0; accent-color: #fff; }
+
+    .image-row {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .image-preview {
+      width: 112px;
+      height: 92px;
+      object-fit: contain;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #000;
+      padding: 5px;
+    }
+
+    .status {
+      min-height: 20px;
+      margin: 12px 0 0;
+      color: var(--danger);
+      font-size: 12px;
+    }
+
+    .status.success { color: var(--success); }
+    .featured-count { color: var(--muted); font-size: 12px; }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 720px) {
+      .topbar { padding: 0 14px; }
+      main { width: min(100% - 20px, 1120px); margin-top: 22px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+      .project-editor-head { align-items: flex-start; }
+      .project-editor-actions { flex-direction: column; align-items: flex-end; }
+      .image-row { grid-template-columns: 86px 1fr; }
+      .image-preview { width: 86px; height: 76px; }
+      .button span.optional { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Portfolio Editor</div>
+    <div class="top-actions">
+      <a class="icon-button" href="/" target="_blank" aria-label="Open portfolio" title="Open portfolio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+      </a>
+      <button class="icon-button" id="logout-button" type="button" aria-label="Log out" title="Log out" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="login-shell" id="login-view">
+      <form class="login-panel" id="login-form">
+        <h1>Editor Login</h1>
+        <p class="muted">Turabi Yıldırım Portfolio</p>
+        <div class="field">
+          <label for="nickname">Nickname</label>
+          <input id="nickname" name="nickname" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="button primary" type="submit" style="width:100%;margin-top:18px">Log In</button>
+        <div class="status" id="login-status" role="alert"></div>
+      </form>
+    </section>
+
+    <section id="editor-view" hidden>
+      <div class="section">
+        <div class="section-head">
+          <div>
+            <h1>Portfolio Content</h1>
+            <div class="muted">English and Turkish</div>
+          </div>
+          <button class="button primary" id="save-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+            Save
+          </button>
+        </div>
+        <div class="status" id="save-status" role="status"></div>
+      </div>
+
+      <section class="section">
+        <div class="section-head"><h2>About</h2></div>
+        <div class="form-grid">
+          <div class="field"><label for="about-en-1">English Paragraph 1</label><textarea id="about-en-1"></textarea></div>
+          <div class="field"><label for="about-tr-1">Turkish Paragraph 1</label><textarea id="about-tr-1"></textarea></div>
+          <div class="field"><label for="about-en-2">English Paragraph 2</label><textarea id="about-en-2"></textarea></div>
+          <div class="field"><label for="about-tr-2">Turkish Paragraph 2</label><textarea id="about-tr-2"></textarea></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Projects</h2>
+            <div class="featured-count" id="featured-count">0 / 3 featured</div>
+          </div>
+          <button class="button" id="add-project" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Add Project
+          </button>
+        </div>
+        <div class="project-list" id="project-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const loginView = document.getElementById("login-view");
+    const editorView = document.getElementById("editor-view");
+    const loginForm = document.getElementById("login-form");
+    const loginStatus = document.getElementById("login-status");
+    const saveStatus = document.getElementById("save-status");
+    const logoutButton = document.getElementById("logout-button");
+    const projectList = document.getElementById("project-list");
+    const featuredCount = document.getElementById("featured-count");
+    let portfolio = null;
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function api(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: { "Content-Type": "application/json", ...(options.headers || {}) }
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || "Request failed");
+      return payload;
+    }
+
+    function setAuthenticated(authenticated) {
+      loginView.hidden = authenticated;
+      editorView.hidden = !authenticated;
+      logoutButton.hidden = !authenticated;
+    }
+
+    function updateFeaturedCount() {
+      const count = portfolio.projects.filter((project) => project.featured).length;
+      featuredCount.textContent = `${count} / 3 featured`;
+      featuredCount.style.color = count === 3 ? "var(--success)" : "var(--danger)";
+    }
+
+    function projectTemplate(project, index) {
+      const image = project.image || "assets/a-star-cropped.png";
+      return `
+        <article class="project-editor" data-index="${index}">
+          <div class="project-editor-head">
+            <h3>${escapeHtml(project.title || `Project ${index + 1}`)}</h3>
+            <div class="project-editor-actions">
+              <label class="featured-toggle"><input type="checkbox" data-action="featured" ${project.featured ? "checked" : ""}> Featured</label>
+              <button class="icon-button button danger" type="button" data-action="delete" aria-label="Delete project" title="Delete project">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field"><label>Title</label><input data-path="title" value="${escapeHtml(project.title)}"></div>
+            <div class="field"><label>Image Path or Data URL</label><input data-path="image" value="${escapeHtml(project.image)}"></div>
+            <div class="field full">
+              <label>Project Image</label>
+              <div class="image-row">
+                <img class="image-preview" src="${escapeHtml(image)}" alt="">
+                <input type="file" data-action="image" accept="image/png,image/jpeg,image/webp,image/gif">
+              </div>
+            </div>
+            <div class="field"><label>English Subtitle</label><input data-path="subtitle.en" value="${escapeHtml(project.subtitle.en)}"></div>
+            <div class="field"><label>Turkish Subtitle</label><input data-path="subtitle.tr" value="${escapeHtml(project.subtitle.tr)}"></div>
+            <div class="field"><label>English Meta</label><input data-path="meta.en" value="${escapeHtml(project.meta.en)}"></div>
+            <div class="field"><label>Turkish Meta</label><input data-path="meta.tr" value="${escapeHtml(project.meta.tr)}"></div>
+            <div class="field"><label>English Summary</label><textarea data-path="summary.en">${escapeHtml(project.summary.en)}</textarea></div>
+            <div class="field"><label>Turkish Summary</label><textarea data-path="summary.tr">${escapeHtml(project.summary.tr)}</textarea></div>
+            <div class="field"><label>English Details (one per line)</label><textarea data-path="details.en">${escapeHtml(project.details.en.join("\n"))}</textarea></div>
+            <div class="field"><label>Turkish Details (one per line)</label><textarea data-path="details.tr">${escapeHtml(project.details.tr.join("\n"))}</textarea></div>
+            <div class="field"><label>Paper URL</label><input data-path="paperUrl" type="url" value="${escapeHtml(project.paperUrl)}"></div>
+            <div class="field"><label>Hugging Face URL</label><input data-path="huggingFaceUrl" type="url" value="${escapeHtml(project.huggingFaceUrl)}"></div>
+          </div>
+        </article>`;
+    }
+
+    function renderProjects() {
+      projectList.innerHTML = portfolio.projects.map(projectTemplate).join("");
+      updateFeaturedCount();
+    }
+
+    function setPath(target, path, value) {
+      const parts = path.split(".");
+      let cursor = target;
+      parts.slice(0, -1).forEach((part) => { cursor = cursor[part]; });
+      cursor[parts.at(-1)] = value;
+    }
+
+    function collectAbout() {
+      portfolio.about.en.p1 = document.getElementById("about-en-1").value;
+      portfolio.about.en.p2 = document.getElementById("about-en-2").value;
+      portfolio.about.tr.p1 = document.getElementById("about-tr-1").value;
+      portfolio.about.tr.p2 = document.getElementById("about-tr-2").value;
+    }
+
+    function fillAbout() {
+      document.getElementById("about-en-1").value = portfolio.about.en.p1 || "";
+      document.getElementById("about-en-2").value = portfolio.about.en.p2 || "";
+      document.getElementById("about-tr-1").value = portfolio.about.tr.p1 || "";
+      document.getElementById("about-tr-2").value = portfolio.about.tr.p2 || "";
+    }
+
+    async function loadPortfolio() {
+      portfolio = await api("/api/portfolio");
+      fillAbout();
+      renderProjects();
+    }
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      loginStatus.textContent = "";
+      try {
+        await api("/api/login", {
+          method: "POST",
+          body: JSON.stringify({ nickname: loginForm.nickname.value, password: loginForm.password.value })
+        });
+        setAuthenticated(true);
+        await loadPortfolio();
+      } catch (error) {
+        loginStatus.textContent = error.message;
+      }
+    });
+
+    logoutButton.addEventListener("click", async () => {
+      await api("/api/logout", { method: "POST", body: "{}" });
+      portfolio = null;
+      loginForm.reset();
+      setAuthenticated(false);
+    });
+
+    document.getElementById("add-project").addEventListener("click", () => {
+      portfolio.projects.push({
+        id: `project-${Date.now()}`,
+        title: "New Project",
+        image: "assets/a-star-cropped.png",
+        featured: false,
+        subtitle: { en: "", tr: "" },
+        meta: { en: "", tr: "" },
+        summary: { en: "", tr: "" },
+        details: { en: [], tr: [] },
+        paperUrl: "",
+        huggingFaceUrl: ""
+      });
+      renderProjects();
+      projectList.lastElementChild.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    projectList.addEventListener("input", (event) => {
+      const editor = event.target.closest(".project-editor");
+      if (!editor || !event.target.dataset.path) return;
+      const project = portfolio.projects[Number(editor.dataset.index)];
+      const path = event.target.dataset.path;
+      const value = path.startsWith("details.")
+        ? event.target.value.split("\n").map((item) => item.trim()).filter(Boolean)
+        : event.target.value;
+      setPath(project, path, value);
+      if (path === "title") editor.querySelector("h3").textContent = value || "Untitled Project";
+      if (path === "image") editor.querySelector(".image-preview").src = value || "assets/a-star-cropped.png";
+    });
+
+    projectList.addEventListener("change", (event) => {
+      const editor = event.target.closest(".project-editor");
+      if (!editor) return;
+      const index = Number(editor.dataset.index);
+      const project = portfolio.projects[index];
+
+      if (event.target.dataset.action === "featured") {
+        const currentCount = portfolio.projects.filter((item) => item.featured).length;
+        if (event.target.checked && currentCount >= 3) {
+          event.target.checked = false;
+          saveStatus.className = "status";
+          saveStatus.textContent = "Only three projects can be featured.";
+          return;
+        }
+        project.featured = event.target.checked;
+        updateFeaturedCount();
+      }
+
+      if (event.target.dataset.action === "image" && event.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          project.image = reader.result;
+          editor.querySelector('[data-path="image"]').value = reader.result;
+          editor.querySelector(".image-preview").src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    });
+
+    projectList.addEventListener("click", (event) => {
+      const button = event.target.closest('[data-action="delete"]');
+      if (!button) return;
+      const editor = button.closest(".project-editor");
+      portfolio.projects.splice(Number(editor.dataset.index), 1);
+      renderProjects();
+    });
+
+    document.getElementById("save-button").addEventListener("click", async () => {
+      collectAbout();
+      saveStatus.className = "status";
+      saveStatus.textContent = "";
+      if (portfolio.projects.length >= 3 && portfolio.projects.filter((project) => project.featured).length !== 3) {
+        saveStatus.textContent = "Select exactly three featured projects.";
+        return;
+      }
+      try {
+        portfolio = await api("/api/portfolio", { method: "PUT", body: JSON.stringify(portfolio) });
+        fillAbout();
+        renderProjects();
+        saveStatus.className = "status success";
+        saveStatus.textContent = "Portfolio saved.";
+      } catch (error) {
+        saveStatus.textContent = error.message;
+      }
+    });
+
+    (async () => {
+      try {
+        const session = await api("/api/session");
+        setAuthenticated(session.authenticated);
+        if (session.authenticated) await loadPortfolio();
+      } catch {
+        setAuthenticated(false);
+      }
+    })();
+  </script>
+</body>
+</html>

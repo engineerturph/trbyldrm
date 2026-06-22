@@ -1,0 +1,142 @@
+{
+  "about": {
+    "en": {
+      "p1": "I am a Computer Engineering graduate focused on Visual AI and remote sensing. My work spans 2D visual understanding, vision-language large models, and multimodal AI systems. I also enjoy exploring and testing different AI agent tools.",
+      "p2": "Recently, I have worked on satellite-image interpretation models, including both a frontier VLLM-based model and a parameter-efficient alternative."
+    },
+    "tr": {
+      "p1": "Görsel Yapay Zekâ ve uzaktan algılama alanlarına odaklanan bir Bilgisayar Mühendisliği mezunuyum. Çalışmalarım 2D görsel anlama, görsel-dil büyük modelleri ve multimodal yapay zekâ sistemlerini kapsıyor. Ayrıca farklı yapay zekâ agent araçlarını keşfetmekten ve test etmekten keyif alıyorum.",
+      "p2": "Son dönemde, frontier VLLM tabanlı bir model ve parametre verimli bir alternatif dahil olmak üzere uydu görüntüsü yorumlama modelleri üzerinde çalıştım."
+    }
+  },
+  "projects": [
+    {
+      "id": "llava-rs",
+      "title": "LLaVa-RS",
+      "image": "assets/llava-rs-cropped.png",
+      "featured": true,
+      "subtitle": {
+        "en": "Frontier Vision-Language Model for Remote Sensing Image Understanding",
+        "tr": "Uzaktan Algılama Görüntülerini Anlamak için Frontier Görsel-Dil Modeli"
+      },
+      "meta": {
+        "en": "2025 · VLLM · Remote Sensing",
+        "tr": "2025 · VLLM · Uzaktan Algılama"
+      },
+      "summary": {
+        "en": "A remote-sensing VLLM project for interpreting satellite imagery and image-change captions.",
+        "tr": "Uydu görüntülerini ve görüntü değişimi açıklamalarını yorumlamaya yönelik bir uzaktan algılama VLLM projesi."
+      },
+      "details": {
+        "en": [
+          "Built a satellite-image interpretation VLLM based on LLaVa-OneVision.",
+          "Experimented with Qwen language models and SigLIP-style visual encoders.",
+          "Achieved top performance under current evaluation settings on a remote-sensing change-captioning dataset.",
+          "Presented the graduation project at SIU 2025 and published a related Hugging Face model."
+        ],
+        "tr": [
+          "LLaVa-OneVision tabanlı, uydu görüntülerini yorumlayabilen bir VLLM geliştirdim.",
+          "Qwen dil modelleri ve SigLIP tarzı görsel kodlayıcılarla deneyler yaptım.",
+          "Güncel değerlendirme parametreleri altında uzaktan algılama değişim özetleme verisetinde en yüksek skoru elde ettim.",
+          "Bitirme projemi SIU 2025'te sundum ve ilgili bir modeli Hugging Face üzerinde yayınladım."
+        ]
+      },
+      "paperUrl": "https://ieeexplore.ieee.org/document/11112506",
+      "huggingFaceUrl": "https://huggingface.co/turabimi4/llava-onevision-qwen2-0.5b-ov-levircc"
+    },
+    {
+      "id": "mmodalcc",
+      "title": "MModalCC",
+      "image": "assets/mmodalcc-cropped.png",
+      "featured": true,
+      "subtitle": {
+        "en": "Parameter Efficient Change Captioning Model",
+        "tr": "Parametre Verimli Değişim Açıklama Modeli"
+      },
+      "meta": {
+        "en": "2024 · PyTorch · JSTARS",
+        "tr": "2024 · PyTorch · JSTARS"
+      },
+      "summary": {
+        "en": "Research work around multimodal satellite-image understanding, experiments, and publication support.",
+        "tr": "Multimodal uydu görüntüsü anlama, deney süreçleri ve yayın katkısı etrafında yürütülen araştırma çalışması."
+      },
+      "details": {
+        "en": [
+          "Trained and evaluated vision-to-text models for satellite-image understanding.",
+          "Tested visual augmentation methods including flipping and color transformations.",
+          "Worked on creation of SECOND-CC, a visual interpretation dataset for satellite-image understanding.",
+          "Contributed to research published in IEEE JSTARS, a Q1 journal with IF 5.3."
+        ],
+        "tr": [
+          "Uydu görüntülerini anlamaya yönelik vision-to-text modellerini eğittim ve değerlendirdim.",
+          "Çevirme ve renk dönüşümleri gibi görsel veri arttırma tekniklerini test ettim.",
+          "Uydu görüntülerini anlamaya yönelik bir görsel yorumlama veri seti olan SECOND-CC'nin oluşturulmasında çalıştım.",
+          "IEEE JSTARS Q1, IF 5.3 dergisinde yayınlanan çalışmaya katkı sağladım."
+        ]
+      },
+      "paperUrl": "https://ieeexplore.ieee.org/document/11130644",
+      "huggingFaceUrl": ""
+    },
+    {
+      "id": "cuda-coming-soon",
+      "title": "Coming Soon...",
+      "image": "assets/a-star-cropped.png",
+      "featured": true,
+      "subtitle": {
+        "en": "In Development",
+        "tr": "Geliştiriliyor"
+      },
+      "meta": {
+        "en": "Coming Soon · CUDA Project",
+        "tr": "Yakında · CUDA Projesi"
+      },
+      "summary": {
+        "en": "A new CUDA-focused project is being prepared and will be added here soon.",
+        "tr": "Yeni bir CUDA odaklı proje hazırlanıyor ve yakında burada yer alacak."
+      },
+      "details": {
+        "en": [
+          "Project details are currently being finalized.",
+          "The work will be published after the first stable prototype."
+        ],
+        "tr": [
+          "Proje detayları şu anda son haline getiriliyor.",
+          "Çalışma ilk kararlı prototipten sonra yayınlanacak."
+        ]
+      },
+      "paperUrl": "",
+      "huggingFaceUrl": ""
+    },
+    {
+      "id": "robotics-coming-soon",
+      "title": "Coming Soon...",
+      "image": "assets/walking-robot-cropped.png",
+      "featured": false,
+      "subtitle": {
+        "en": "Robotics AI",
+        "tr": "Robotik AI"
+      },
+      "meta": {
+        "en": "Coming Soon · Robotics AI",
+        "tr": "Yakında · Robotik AI"
+      },
+      "summary": {
+        "en": "A robotics-oriented AI project is planned for this slot.",
+        "tr": "Robotik odaklı bir yapay zekâ projesi bu alan için planlanıyor."
+      },
+      "details": {
+        "en": [
+          "Project details are currently being finalized.",
+          "The work will be published after the first stable prototype."
+        ],
+        "tr": [
+          "Proje detayları şu anda son haline getiriliyor.",
+          "Çalışma ilk kararlı prototipten sonra yayınlanacak."
+        ]
+      },
+      "paperUrl": "",
+      "huggingFaceUrl": ""
+    }
+  ]
+}
