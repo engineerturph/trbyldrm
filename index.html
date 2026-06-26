@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Turabi Yildirim Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #010101;
+      --panel: rgba(2, 2, 2, 0.78);
+      --line: rgba(255, 255, 255, 0.78);
+      --line-soft: rgba(255, 255, 255, 0.36);
+      --text: #f4f4f4;
+      --muted: #b8b8b8;
+      --dim: #8f8f8f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: #000;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: block;
+      padding: 0;
+      overflow-x: hidden;
+      background: #000;
+    }
+
+    #sky-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100svh;
+      pointer-events: none;
+      background: #000;
+    }
+
+    .sky-toggle {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 5;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.62);
+      border-radius: 50%;
+      background: rgba(0,0,0,0.56);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(255,255,255,0.18), inset 0 0 18px rgba(255,255,255,0.04);
+      transition: opacity 180ms ease, transform 180ms ease, background 180ms ease;
+    }
+
+    .sky-toggle:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-1px);
+    }
+
+    .sky-toggle svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .language-toggle {
+      position: fixed;
+      right: 22px;
+      top: 22px;
+      z-index: 5;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid rgba(255,255,255,0.54);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.54);
+      padding: 3px;
+      box-shadow: 0 0 14px rgba(255,255,255,0.12), inset 0 0 18px rgba(255,255,255,0.04);
+    }
+
+    .language-toggle button {
+      width: 38px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255,255,255,0.62);
+      font: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .language-toggle button.active {
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+    }
+
+    .sky-note {
+      position: fixed;
+      left: 50%;
+      bottom: 74px;
+      z-index: 4;
+      max-width: min(520px, calc(100vw - 40px));
+      transform: translateX(-50%) translateY(8px);
+      color: rgba(255,255,255,0.86);
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.5;
+      text-align: center;
+      letter-spacing: 0.03em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 360ms ease, transform 360ms ease;
+      text-shadow: 0 0 14px rgba(0,0,0,0.8);
+    }
+
+    .browser {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+      position: relative;
+      z-index: 1;
+      background: transparent;
+      opacity: 1;
+      transition: opacity 520ms ease;
+    }
+
+    body.background-only .browser {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.background-only.show-sky-note .sky-note {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .browser::before {
+      content: none;
+    }
+
+    .topbar {
+      display: none;
+    }
+
+    .traffic {
+      position: absolute;
+      left: 27px;
+      top: 20px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .traffic span {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #8d8d8d;
+      box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4);
+    }
+
+    .address {
+      width: 454px;
+      height: 31px;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 12px;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.07);
+      color: #bfbfbf;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .address-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .spark-corner {
+      position: absolute;
+      right: 30px;
+      top: 21px;
+      color: #aaa;
+      font-size: 18px;
+    }
+
+    .viewport {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(40, 46, 62, 0.28), transparent 43%),
+        linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.48) 72%, rgba(0,0,0,0.7));
+      overflow-x: hidden;
+      box-shadow: inset 0 0 18px rgba(255,255,255,0.035);
+    }
+
+    .stars,
+    .stars::before,
+    .stars::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+      background-repeat: repeat;
+    }
+
+    .stars {
+      display: none;
+    }
+
+    .stars::before {
+      opacity: 0.8;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.85) 0 0.9px, transparent 1.25px);
+      background-size: 170px 130px;
+      background-position: 92px 57px;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: clamp(28px, 4.05vh, 44px) clamp(18px, 3vw, 38px) clamp(22px, 2.35vh, 25px);
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: clamp(150px, 16.5vh, 179px);
+      padding-top: 2px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      margin-bottom: clamp(22px, 2.85vh, 31px);
+      transform: translateX(-2px);
+    }
+
+    .mark {
+      display: none;
+    }
+
+    .mark::before,
+    .mark::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 13px;
+      height: 27px;
+      background: #f4f4f4;
+      transform: skewX(-18deg);
+    }
+
+    .mark::before {
+      left: 5px;
+      clip-path: polygon(0 100%, 33% 100%, 72% 11%, 100% 100%, 100% 100%, 65% 0, 45% 0);
+    }
+
+    .mark::after {
+      left: 24px;
+      clip-path: polygon(0 100%, 31% 100%, 78% 0, 100% 0, 58% 100%);
+    }
+
+    .brand-name,
+    .role,
+    .section-title,
+    .button,
+    .all-projects {
+      text-transform: uppercase;
+      letter-spacing: 0.36em;
+    }
+
+    .brand-name {
+      color: #ececec;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.38em;
+      line-height: 1;
+    }
+
+    .role {
+      display: flex;
+      align-items: center;
+      gap: 21px;
+      color: #c9c9c9;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.55em;
+      margin-bottom: clamp(28px, 3.95vh, 43px);
+      white-space: nowrap;
+    }
+
+    .star {
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      color: #fff;
+      font-size: 20px;
+      line-height: 1;
+      text-shadow: 0 0 8px rgba(255,255,255,0.95);
+    }
+
+    .download {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 0;
+    }
+
+    .content {
+      width: min(1125px, 100%);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 5px;
+      background: rgba(0,0,0,0.74);
+      box-shadow:
+        0 0 16px rgba(255,255,255,0.28),
+        inset 0 0 34px rgba(255,255,255,0.025);
+      padding: 28px 35px 18px;
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 284px 1fr;
+      gap: 27px;
+      min-height: 0;
+    }
+
+    .about {
+      border-right: 1px solid var(--line-soft);
+      padding-right: 31px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      color: #f0f0f0;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.34em;
+      white-space: nowrap;
+    }
+
+    p {
+      margin: 0;
+      color: #c8c8c8;
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 1.9;
+    }
+
+    .about p + p {
+      margin-top: 24px;
+    }
+
+    .button {
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 15px;
+      padding: 0 15px;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 3px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.17em;
+      min-width: 128px;
+    }
+
+    .projects-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+      padding-right: 1px;
+    }
+
+    .all-projects,
+    .back-projects {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: #f4f4f4;
+      background: transparent;
+      border: 0;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+      text-transform: uppercase;
+    }
+
+    .back-projects {
+      display: none;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+
+    .project-card {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.76);
+      border-radius: 5px;
+      min-height: 263px;
+      background: #020202;
+      box-shadow: inset 0 0 22px rgba(255,255,255,0.03);
+    }
+
+    .project-card img {
+      display: block;
+      width: 100%;
+      height: 166px;
+      object-fit: contain;
+      padding: 6px;
+      background: #000;
+      border-bottom: 1px solid rgba(255,255,255,0.55);
+      filter: contrast(1.05) brightness(0.92);
+    }
+
+    .project-meta {
+      position: relative;
+      padding: 22px 18px 18px;
+    }
+
+    .project-title {
+      margin: 0;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .project-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .project-type {
+      color: #bababa;
+      font-size: 13px;
+      font-weight: 300;
+    }
+
+    .project-resource-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      flex: 0 0 auto;
+    }
+
+    .project-resource-link {
+      width: 21px;
+      height: 21px;
+      display: inline-grid;
+      place-items: center;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.84;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .project-resource-link:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .project-resource-link svg,
+    .project-resource-link img {
+      width: 19px;
+      height: 19px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .project-details {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      gap: 12px;
+      transition: opacity 280ms ease, transform 280ms ease;
+    }
+
+    .detail-card {
+      min-height: 0;
+      border: 1px solid rgba(255,255,255,0.64);
+      border-radius: 5px;
+      background: rgba(0,0,0,0.48);
+      padding: 16px 18px;
+      box-shadow: inset 0 0 22px rgba(255,255,255,0.025);
+    }
+
+    .detail-card-head {
+      display: grid;
+      grid-template-columns: 142px 1fr auto;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .detail-logo {
+      width: 142px;
+      height: 92px;
+      object-fit: contain;
+      border: 1px solid rgba(255,255,255,0.34);
+      border-radius: 4px;
+      background: #000;
+      padding: 4px;
+    }
+
+    .detail-card h3 {
+      margin: 0;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+
+    .detail-meta {
+      margin-top: 8px;
+      color: #a9a9a9;
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .detail-summary {
+      margin-top: 12px;
+      max-width: 560px;
+    }
+
+    .project-detail-toggle {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.52);
+      border-radius: 3px;
+      background: rgba(255,255,255,0.03);
+      color: #f5f5f5;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      line-height: 1;
+      padding: 9px 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .detail-card ul {
+      display: none;
+      margin: 14px 0 0;
+      padding-left: 16px;
+      color: #c8c8c8;
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 1.55;
+    }
+
+    .detail-card.active ul {
+      display: block;
+    }
+
+    .detail-card li + li {
+      margin-top: 7px;
+    }
+
+    .projects.projects-open .cards,
+    .projects.projects-open .all-projects {
+      display: none;
+    }
+
+    .projects.projects-open .projects-head {
+      margin-bottom: 18px;
+    }
+
+    .projects.projects-open .back-projects {
+      display: flex;
+    }
+
+    .projects.projects-open .project-details {
+      display: grid;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .content.projects-open .top-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .content.projects-open .about,
+    .content.projects-open .divider,
+    .content.projects-open .bottom-grid {
+      display: none;
+    }
+
+    .content.projects-open .projects {
+      min-height: clamp(430px, 54vh, 620px);
+    }
+
+    .content.projects-open .project-details {
+      align-content: start;
+    }
+
+    .divider {
+      height: 1px;
+      margin: 15px 0 20px;
+      background: rgba(255,255,255,0.72);
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 348px 1fr 276px;
+      gap: 29px;
+    }
+
+    .focus,
+    .experience {
+      border-right: 1px solid rgba(255,255,255,0.72);
+      padding-right: 20px;
+    }
+
+    .focus-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .focus-feature {
+      min-height: 224px;
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    .focus-feature img {
+    width: min(100%, 250px);
+    max-height: 142px;
+    object-fit: contain;
+    /* filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.28)); */
+    margin-left: -10px;
+}
+
+    .focus-item {
+      color: #d7d7d7;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.12;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      text-shadow: 0 0 18px rgba(255,255,255,0.28);
+    }
+
+    .history-tabs {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .history-tab {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,0.42);
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .history-tab .section-title {
+      color: inherit;
+      transition: color 180ms ease, text-shadow 180ms ease;
+    }
+
+    .history-tab.active .section-title {
+      color: #f0f0f0;
+      text-shadow: 0 0 12px rgba(255,255,255,0.18);
+    }
+
+    .history-switch-line {
+      width: 1px;
+      height: 22px;
+      background: rgba(255,255,255,0.5);
+    }
+
+    .history-panel {
+      display: none;
+    }
+
+    .history-panel.active {
+      display: block;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 31px;
+      max-height: 224px;
+      overflow-y: auto;
+      padding-right: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.45) rgba(255,255,255,0.08);
+    }
+
+    .timeline::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .timeline::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .timeline::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.42);
+      border-radius: 999px;
+    }
+
+    .job {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px 20px;
+      margin-bottom: 14px;
+    }
+
+    .job:last-child {
+      margin-bottom: 0;
+    }
+
+    .job::before {
+      content: "";
+      position: absolute;
+      left: -28px;
+      top: 5px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 5px rgba(255,255,255,0.7);
+    }
+
+    .job-title {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .company,
+    .date,
+    .job p {
+      color: #c9c9c9;
+      font-size: 13px;
+      font-weight: 300;
+    }
+
+    .company {
+      margin-bottom: 9px;
+    }
+
+    .company-line {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .education-gpa {
+      color: #f0f0f0;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .date {
+      white-space: nowrap;
+      padding-top: 1px;
+    }
+
+    .job p {
+      grid-column: 1 / -1;
+      line-height: 1.55;
+      max-width: 318px;
+    }
+
+    .contact .section-heading,
+    .focus .section-heading {
+      margin-bottom: 16px;
+    }
+
+    .contact p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 0 18px;
+      color: #d8d8d8;
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .contact-row svg,
+    .download svg,
+    .address svg {
+      flex: 0 0 auto;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-top: 23px;
+    }
+
+    .social {
+      width: 22px;
+      height: 22px;
+      display: inline-grid;
+      place-items: center;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .social svg,
+    .social img {
+      width: 22px;
+      height: 22px;
+      display: block;
+      object-fit: contain;
+      fill: currentColor;
+    }
+
+    .social img.kaggle-logo {
+      filter: brightness(0) invert(1);
+    }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 31px;
+      width: 100%;
+      color: #a7a7a7;
+      font-size: 14px;
+      font-weight: 300;
+      margin-top: auto;
+      padding-bottom: 1px;
+    }
+
+    @media (max-height: 850px) and (min-width: 1051px) {
+      .page {
+        padding-top: 20px;
+        padding-bottom: 14px;
+      }
+
+      .hero {
+        min-height: 118px;
+      }
+
+      .brand {
+        margin-bottom: 14px;
+      }
+
+      .role {
+        margin-bottom: 18px;
+      }
+
+      .content {
+        padding: 18px 34px 14px;
+      }
+
+      .section-heading {
+        margin-bottom: 12px;
+      }
+
+      p {
+        font-size: 11px;
+        line-height: 1.68;
+      }
+
+      .about p + p {
+        margin-top: 16px;
+      }
+
+      .button {
+        height: 36px;
+        margin-top: 12px;
+      }
+
+      .project-card {
+        min-height: 210px;
+      }
+
+      .project-card img {
+        height: 122px;
+      }
+
+      .project-meta {
+        padding-top: 15px;
+        padding-bottom: 12px;
+      }
+
+      .divider {
+        margin: 10px 0 13px;
+      }
+
+      .focus-feature {
+        min-height: 182px;
+      }
+
+      .focus-feature img {
+        max-height: 112px;
+      }
+
+      .focus-item {
+        font-size: 17px;
+      }
+
+      .focus-list {
+        gap: 8px;
+      }
+
+      .contact .section-heading,
+      .focus .section-heading {
+        margin-bottom: 11px;
+      }
+
+      .job {
+        margin-bottom: 8px;
+        gap: 6px 20px;
+      }
+
+      .job-title {
+        margin-bottom: 3px;
+      }
+
+      .company {
+        margin-bottom: 5px;
+      }
+
+      .contact p {
+        margin-bottom: 12px;
+      }
+
+      .contact-row {
+        margin-bottom: 10px;
+        font-size: 13px;
+      }
+
+      .socials {
+        margin-top: 12px;
+      }
+
+      footer {
+        font-size: 12px;
+      }
+    }
+
+    footer .star {
+      transform: scale(0.8);
+    }
+
+    .heart {
+      color: #d7d7d7;
+      font-size: 26px;
+      font-weight: 200;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 1050px) {
+      body {
+        padding: 0;
+      }
+
+      .browser {
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      .page {
+        padding: 36px 22px 22px;
+      }
+
+      .content {
+        padding: 24px;
+      }
+
+      .top-grid,
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about,
+      .focus,
+      .experience {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.48);
+        padding-right: 0;
+        padding-bottom: 24px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .project-details {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card img {
+        height: 210px;
+      }
+
+      .detail-card-head {
+        grid-template-columns: 104px 1fr;
+      }
+
+      .detail-logo {
+        width: 104px;
+        height: 76px;
+      }
+
+      .project-detail-toggle {
+        grid-column: 1 / -1;
+        width: max-content;
+      }
+
+      .timeline {
+        max-height: 320px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .browser {
+        padding-top: 0;
+      }
+
+      .topbar {
+        height: 43px;
+      }
+
+      .traffic {
+        left: 18px;
+        top: 17px;
+        gap: 8px;
+      }
+
+      .traffic span {
+        width: 10px;
+        height: 10px;
+      }
+
+      .address {
+        width: 52%;
+        min-width: 190px;
+        font-size: 11px;
+      }
+
+      .spark-corner {
+        right: 18px;
+        top: 17px;
+      }
+
+      .page {
+        padding: 58px 12px 18px;
+      }
+
+      .language-toggle {
+        top: 14px;
+        right: 12px;
+      }
+
+      .hero {
+        min-height: 174px;
+      }
+
+      .brand {
+        gap: 12px;
+      }
+
+      .role {
+        font-size: 11px;
+        letter-spacing: 0.32em;
+        gap: 12px;
+      }
+
+      .brand-name,
+      .section-title {
+        letter-spacing: 0.24em;
+      }
+
+      .content {
+        padding: 20px 16px;
+      }
+
+      .projects-head {
+        align-items: flex-start;
+        gap: 18px;
+        flex-direction: column;
+      }
+
+      .detail-card {
+        min-height: 0;
+      }
+
+      .job {
+        grid-template-columns: 1fr;
+      }
+
+      .date {
+        padding-top: 0;
+      }
+
+      footer {
+        flex-wrap: wrap;
+        gap: 15px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="sky-canvas" aria-hidden="true"></canvas>
+  <button class="sky-toggle" type="button" aria-label="Show only sky background" aria-pressed="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+  </button>
+  <div class="sky-note" aria-hidden="true">A real-time celestial motion simulation based on Istanbul’s night sky.</div>
+  <div class="language-toggle" aria-label="Language selector">
+    <button type="button" class="lang-btn" data-lang-button="tr">TR</button>
+    <button type="button" class="lang-btn active" data-lang-button="en">EN</button>
+  </div>
+  <main class="browser" aria-label="Portfolio mock browser">
+    <div class="topbar">
+      <div class="traffic" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="address">
+        <span class="address-left">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          https://turabiyildirim.dev
+        </span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+      </div>
+      <div class="spark-corner" aria-hidden="true">✧</div>
+    </div>
+
+    <section class="viewport">
+      <div class="stars" aria-hidden="true"></div>
+      <div class="page">
+        <header class="hero">
+          <div class="brand">
+            <div class="brand-name">Turabi Yıldırım</div>
+          </div>
+          <div class="role"><span data-i18n="role">Software Engineer</span></div>
+          <button class="download" type="button">
+            <span data-i18n="downloadResume">Download Resume</span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          </button>
+        </header>
+
+        <section class="content" aria-label="Portfolio content">
+          <div class="top-grid">
+            <section class="about">
+              <div class="section-heading"><h2 class="section-title" data-i18n="aboutTitle">About Me</h2></div>
+              <p data-i18n="aboutP1">I am a Computer Engineering graduate focused on Visual AI and remote sensing. My work spans 2D visual understanding, vision-language large models, and multimodal AI systems. I also enjoy exploring and testing different AI agent tools.</p>
+              <p data-i18n="aboutP2">Recently, I have worked on satellite-image interpretation models, including both a frontier VLLM-based model and a parameter-efficient alternative.</p>
+            </section>
+
+            <section class="projects">
+              <div class="projects-head">
+                <div class="section-heading" style="margin-bottom:0"><h2 class="section-title" data-i18n="projectsTitle">Featured Projects</h2></div>
+                <button class="all-projects" type="button"><span data-i18n="viewAllProjects">View All Projects</span> <span aria-hidden="true" style="font-size:24px;line-height:0">→</span></button>
+                <button class="back-projects" type="button"><span aria-hidden="true" style="font-size:22px;line-height:0">←</span> <span data-i18n="goBack">Go Back</span></button>
+              </div>
+              <div class="cards">
+                <article class="project-card">
+                  <img src="assets/llava-rs-cropped.png" alt="LLaVa-RS logo">
+                  <div class="project-meta">
+                    <div class="project-title-row">
+                      <h3 class="project-title">LLaVa-RS</h3>
+                      <span class="project-resource-links">
+                        <a class="project-resource-link" href="https://ieeexplore.ieee.org/document/11112506" target="_blank" rel="noopener noreferrer" aria-label="LLaVa-RS paper" title="Paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg></a>
+                        <a class="project-resource-link" href="https://huggingface.co/turabimi4/llava-onevision-qwen2-0.5b-ov-levircc" target="_blank" rel="noopener noreferrer" aria-label="LLaVa-RS Hugging Face model" title="Hugging Face"><img src="assets/huggingface.svg" alt=""></a>
+                      </span>
+                    </div>
+                    <div class="project-type" data-i18n="projectTypeLlava">Frontier Vision-Language Model for Remote Sensing Image Understanding</div>
+                  </div>
+                </article>
+                <article class="project-card">
+                  <img src="assets/mmodalcc-cropped.png" alt="MModalCC logo">
+                  <div class="project-meta">
+                    <div class="project-title-row">
+                      <h3 class="project-title">MModalCC</h3>
+                      <span class="project-resource-links">
+                        <a class="project-resource-link" href="https://ieeexplore.ieee.org/document/11130644" target="_blank" rel="noopener noreferrer" aria-label="MModalCC paper" title="Paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg></a>
+                      </span>
+                    </div>
+                    <div class="project-type" data-i18n="projectTypeMmodal">Parameter Efficient Change Captioning Model</div>
+                  </div>
+                </article>
+                <article class="project-card">
+                  <img src="assets/a-star-cropped.png" alt="Coming Soon project logo">
+                  <div class="project-meta">
+                    <div class="project-title-row"><h3 class="project-title" data-i18n="comingSoonTitle">Coming Soon...</h3></div>
+                    <div class="project-type" data-i18n="projectTypeComingSoon">In Development</div>
+                  </div>
+                </article>
+              </div>
+              <div class="project-details" aria-label="Project details">
+                <article class="detail-card">
+                  <div class="detail-card-head">
+                    <img class="detail-logo" src="assets/llava-rs-cropped.png" alt="LLaVa-RS logo">
+                    <div>
+                      <div class="project-title-row">
+                        <h3>LLaVa-RS</h3>
+                        <span class="project-resource-links">
+                          <a class="project-resource-link" href="https://ieeexplore.ieee.org/document/11112506" target="_blank" rel="noopener noreferrer" aria-label="LLaVa-RS paper" title="Paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg></a>
+                          <a class="project-resource-link" href="https://huggingface.co/turabimi4/llava-onevision-qwen2-0.5b-ov-levircc" target="_blank" rel="noopener noreferrer" aria-label="LLaVa-RS Hugging Face model" title="Hugging Face"><img src="assets/huggingface.svg" alt=""></a>
+                        </span>
+                      </div>
+                      <div class="detail-meta" data-i18n="llavaMeta">2025 · VLLM · Remote Sensing</div>
+                    </div>
+                    <button class="project-detail-toggle" type="button" data-i18n="projectDetailsButton">Details</button>
+                  </div>
+                  <p class="detail-summary" data-i18n="llavaSummary">A remote-sensing VLLM project for interpreting satellite imagery and image-change captions.</p>
+                  <ul>
+                    <li data-i18n="llava1">Built a satellite-image interpretation VLLM based on LLaVa-OneVision.</li>
+                    <li data-i18n="llava2">Experimented with Qwen language models and SigLIP-style visual encoders.</li>
+                    <li data-i18n="llava3">Achieved top performance under current evaluation settings on a remote-sensing change-captioning dataset.</li>
+                    <li data-i18n="llava4">Presented the graduation project at SIU 2025 and published a related Hugging Face model.</li>
+                  </ul>
+                </article>
+                <article class="detail-card">
+                  <div class="detail-card-head">
+                    <img class="detail-logo" src="assets/mmodalcc-cropped.png" alt="MModalCC logo">
+                    <div>
+                      <div class="project-title-row">
+                        <h3>MModalCC</h3>
+                        <span class="project-resource-links">
+                          <a class="project-resource-link" href="https://ieeexplore.ieee.org/document/11130644" target="_blank" rel="noopener noreferrer" aria-label="MModalCC paper" title="Paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg></a>
+                        </span>
+                      </div>
+                      <div class="detail-meta" data-i18n="mmodalMeta">2024 · PyTorch · JSTARS</div>
+                    </div>
+                    <button class="project-detail-toggle" type="button" data-i18n="projectDetailsButton">Details</button>
+                  </div>
+                  <p class="detail-summary" data-i18n="mmodalSummary">Research work around multimodal satellite-image understanding, experiments, and publication support.</p>
+                  <ul>
+                    <li data-i18n="mmodal1">Trained and evaluated vision-to-text models for satellite-image understanding.</li>
+                    <li data-i18n="mmodal2">Tested visual augmentation methods including flipping and color transformations.</li>
+                    <li data-i18n="mmodal3">Worked on creation of SECOND-CC, a visual interpretation dataset for satellite-image understanding.</li>
+                    <li data-i18n="mmodal4">Contributed to research published in IEEE JSTARS, a Q1 journal with IF 5.3.</li>
+                  </ul>
+                </article>
+                <article class="detail-card">
+                  <div class="detail-card-head">
+                    <img class="detail-logo" src="assets/a-star-cropped.png" alt="Coming Soon project logo">
+                    <div>
+                      <h3 data-i18n="comingSoonTitle">Coming Soon...</h3>
+                      <div class="detail-meta" data-i18n="comingSoonMeta">Coming Soon · AI Project</div>
+                    </div>
+                    <button class="project-detail-toggle" type="button" data-i18n="projectDetailsButton">Details</button>
+                  </div>
+                  <p class="detail-summary" data-i18n="comingSoonSummary">A new CUDA-focused project is being prepared and will be added here soon.</p>
+                  <ul>
+                    <li data-i18n="comingSoon1">Project details are currently being finalized.</li>
+                    <li data-i18n="comingSoon2">The work will be published after the first stable prototype.</li>
+                  </ul>
+                </article>
+                <article class="detail-card">
+                  <div class="detail-card-head">
+                    <img class="detail-logo" src="assets/walking-robot-cropped.png" alt="Walking Robot project logo">
+                    <div>
+                      <h3 data-i18n="comingSoonTitle">Coming Soon...</h3>
+                      <div class="detail-meta" data-i18n="comingSoonRobotMeta">Coming Soon · Robotics AI</div>
+                    </div>
+                    <button class="project-detail-toggle" type="button" data-i18n="projectDetailsButton">Details</button>
+                  </div>
+                  <p class="detail-summary" data-i18n="comingSoonRobotSummary">A robotics-oriented AI project is planned for this slot.</p>
+                  <ul>
+                    <li data-i18n="comingSoon1">Project details are currently being finalized.</li>
+                    <li data-i18n="comingSoon2">The work will be published after the first stable prototype.</li>
+                  </ul>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <div class="divider" role="presentation"></div>
+
+          <div class="bottom-grid">
+            <section class="focus">
+              <div class="section-heading"><h2 class="section-title" data-i18n="focusTitle">Current Focus</h2></div>
+              <div class="focus-list" aria-label="Current focus">
+                <div class="focus-feature">
+                  <img src="assets/avatar-video-logo-cropped.png" alt="Avatar video generation logo">
+                  <span class="focus-item" data-i18n="focusOnly">Video Generation</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="experience">
+              <div class="history-tabs" aria-label="Experience and education tabs">
+                <button class="history-tab active" type="button" data-history-tab="experience"><span class="section-title" data-i18n="experienceTitle">Experience</span></button>
+                <span class="history-switch-line" aria-hidden="true"></span>
+                <button class="history-tab" type="button" data-history-tab="education"><span class="section-title" data-i18n="educationTitle">Education</span></button>
+              </div>
+              <div class="history-panel active" data-history-panel="experience">
+                <div class="timeline">
+                <article class="job" data-start="2023-06">
+                  <div>
+                    <div class="job-title" data-i18n="exp1Title">Research Student</div>
+                    <div class="company" data-i18n="exp1Company">Yıldız Technical University · TÜBİTAK Research Group</div>
+                  </div>
+                  <div class="date" data-i18n="exp1Date">Jun 2023 - Feb 2025</div>
+                  <p data-i18n="exp1Text">Developed PyTorch models from scratch, tested data augmentation techniques, and contributed to a JSTARS Q1 publication.</p>
+                </article>
+                <article class="job" data-start="2025-07">
+                  <div>
+                    <div class="job-title" data-i18n="exp2Title">AI Intern</div>
+                    <div class="company">ASELSAN</div>
+                  </div>
+                  <div class="date" data-i18n="exp2Date">Jul 2025 - Aug 2025</div>
+                  <p data-i18n="exp2Text">Worked on AI agent architectures and MCP; built a rapid unit-test generation prototype with LangChain, React, and WebSocket.</p>
+                </article>
+                </div>
+              </div>
+              <div class="history-panel" data-history-panel="education">
+                <div class="timeline">
+                <article class="job" data-start="2026-02">
+                  <div>
+                    <div class="job-title" data-i18n="exp3Title">M.Sc. Computer Engineering</div>
+                    <div class="company company-line">
+                      <span data-i18n="itu">Istanbul Technical University</span>
+                      <span class="education-gpa" data-i18n="ituGpa">Current GPA: 4.0</span>
+                    </div>
+                  </div>
+                  <div class="date" data-i18n="exp3Date">Feb 2026 - Present</div>
+                  <p data-i18n="exp3Text">Graduate study focused on computer engineering and AI-oriented research.</p>
+                </article>
+                <article class="job" data-start="2021-09">
+                  <div>
+                    <div class="job-title" data-i18n="exp4Title">B.Sc. Computer Engineering</div>
+                    <div class="company company-line">
+                      <span data-i18n="ytu">Yıldız Technical University</span>
+                      <span class="education-gpa" data-i18n="ytuGpa">GPA: 3.4/4.0</span>
+                    </div>
+                  </div>
+                  <div class="date" data-i18n="exp4Date">Sep 2021 - Aug 2025</div>
+                  <p data-i18n="exp4Text">Graduated with GPA 3.4/4. Relevant work included machine learning, algorithms, databases, networks, and systems.</p>
+                </article>
+                <article class="job" data-start="2025-01">
+                  <div>
+                    <div class="job-title" data-i18n="exp5Title">Erasmus Exchange</div>
+                    <div class="company" data-i18n="oviedo">University of Oviedo</div>
+                  </div>
+                  <div class="date" data-i18n="exp5Date">Jan 2025 - May 2025</div>
+                  <p data-i18n="exp5Text">Studied C#, Java, Spring Boot, programming paradigms, OOP, and compiler design.</p>
+                </article>
+                </div>
+              </div>
+            </section>
+
+            <section class="contact">
+              <div class="section-heading"><h2 class="section-title" data-i18n="contactTitle">Contact</h2></div>
+              <p data-i18n="contactText">Let's build something great together.</p>
+              <div class="contact-row">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+                <span>engineerturph@gmail.com</span>
+              </div>
+              <div class="contact-row">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>Istanbul, Türkiye</span>
+              </div>
+              <nav class="socials" aria-label="Social links">
+                <a href="https://github.com/engineerturph" class="social" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub"><img src="assets/github.svg" alt=""></a>
+                <a href="https://linkedin.com/in/turabiyldrm" class="social" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0ZM.5 8h4v15h-4V8Zm7.5 0h3.8v2.1h.1c.5-1 1.9-2.4 4-2.4 4.3 0 5.1 2.8 5.1 6.5V23h-4v-7.8c0-1.9 0-4.3-2.6-4.3s-3 2-3 4.1v8H8V8Z"/></svg></a>
+                <a href="https://huggingface.co/turabimi4" class="social" target="_blank" rel="noopener noreferrer" aria-label="Hugging Face" title="Hugging Face"><img src="assets/huggingface.svg" alt=""></a>
+                <a href="https://kaggle.com/turabiyldrm" class="social" target="_blank" rel="noopener noreferrer" aria-label="Kaggle" title="Kaggle"><img class="kaggle-logo" src="kaggle_logo.png" alt=""></a>
+              </nav>
+            </section>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+  <script>
+    /*
+      Stellarium Web Engine note:
+      The upstream project provides a WebGL/WASM planetarium engine, but its repo
+      ships source and expects a generated stellarium-web-engine.js/.wasm build.
+      This background keeps the site static while using the same astronomical
+      coordinate idea: real star coordinates are projected for the observer's sky.
+    */
+    const SKY_STARS = [
+      ["Sirius", 6.7525, -16.7161, -1.46], ["Canopus", 6.3992, -52.6957, -0.74],
+      ["Arcturus", 14.2610, 19.1825, -0.05], ["Vega", 18.6156, 38.7837, 0.03],
+      ["Capella", 5.2782, 45.9980, 0.08], ["Rigel", 5.2423, -8.2016, 0.13],
+      ["Procyon", 7.6550, 5.2250, 0.34], ["Achernar", 1.6286, -57.2368, 0.46],
+      ["Betelgeuse", 5.9195, 7.4071, 0.50], ["Hadar", 14.0637, -60.3730, 0.61],
+      ["Altair", 19.8464, 8.8683, 0.77], ["Acrux", 12.4433, -63.0991, 0.76],
+      ["Aldebaran", 4.5987, 16.5093, 0.85], ["Antares", 16.4901, -26.4320, 1.06],
+      ["Spica", 13.4199, -11.1614, 0.98], ["Pollux", 7.7553, 28.0262, 1.14],
+      ["Fomalhaut", 22.9608, -29.6222, 1.16], ["Deneb", 20.6905, 45.2803, 1.25],
+      ["Mimosa", 12.7953, -59.6888, 1.25], ["Regulus", 10.1395, 11.9672, 1.35],
+      ["Adhara", 6.9771, -28.9721, 1.50], ["Shaula", 17.5601, -37.1038, 1.62],
+      ["Castor", 7.5767, 31.8883, 1.58], ["Gacrux", 12.5194, -57.1132, 1.63],
+      ["Bellatrix", 5.4189, 6.3497, 1.64], ["Elnath", 5.4382, 28.6075, 1.65],
+      ["Miaplacidus", 9.2200, -69.7172, 1.67], ["Alnilam", 5.6036, -1.2019, 1.69],
+      ["Alnair", 22.1372, -46.9609, 1.73], ["Alioth", 12.9005, 55.9598, 1.76],
+      ["Alnitak", 5.6793, -1.9426, 1.77], ["Dubhe", 11.0621, 61.7508, 1.79],
+      ["Mirfak", 3.4054, 49.8612, 1.79], ["Wezen", 7.1399, -26.3932, 1.83],
+      ["Sargas", 17.6219, -42.9978, 1.86], ["Kaus Australis", 18.4029, -34.3846, 1.85],
+      ["Avior", 8.3752, -59.5095, 1.86], ["Alkaid", 13.7923, 49.3133, 1.86],
+      ["Menkalinan", 5.9921, 44.9474, 1.90], ["Atria", 16.8111, -69.0277, 1.91],
+      ["Alhena", 6.6285, 16.3993, 1.93], ["Peacock", 20.4275, -56.7351, 1.94],
+      ["Polaris", 2.5303, 89.2641, 1.98], ["Mirzam", 6.3783, -17.9559, 1.98],
+      ["Alphard", 9.4598, -8.6586, 2.00], ["Hamal", 2.1196, 23.4624, 2.00],
+      ["Diphda", 0.7265, -17.9866, 2.04], ["Nunki", 18.9211, -26.2967, 2.05],
+      ["Mizar", 13.3987, 54.9254, 2.23], ["Merak", 11.0307, 56.3824, 2.37],
+      ["Algol", 3.1361, 40.9556, 2.12], ["Denebola", 11.8177, 14.5721, 2.14],
+      ["Alpheratz", 0.1398, 29.0904, 2.06], ["Sadr", 20.3705, 40.2567, 2.23],
+      ["Rasalhague", 17.5822, 12.5600, 2.08], ["Eltanin", 17.9434, 51.4889, 2.24],
+      ["Kochab", 14.8451, 74.1555, 2.08], ["Markab", 23.0793, 15.2053, 2.49],
+      ["Enif", 21.7364, 9.8750, 2.39], ["Scheat", 23.0629, 28.0828, 2.42],
+      ["Caph", 0.1529, 59.1498, 2.27], ["Ruchbah", 1.4303, 60.2353, 2.68],
+      ["Phecda", 11.8972, 53.6948, 2.44], ["Megrez", 12.2571, 57.0326, 3.31],
+      ["Alcor", 13.4204, 54.9879, 3.99], ["Saiph", 5.7959, -9.6696, 2.07],
+      ["Mintaka", 5.5334, -0.2991, 2.23], ["Meissa", 5.5856, 9.9342, 3.33],
+      ["Aludra", 7.4016, -29.3031, 2.45], ["Thuban", 14.0732, 64.3758, 3.65],
+      ["Unukalhai", 15.7378, 6.4256, 2.63], ["Zubenelgenubi", 14.8479, -16.0418, 2.75],
+      ["Vindemiatrix", 13.0363, 10.9591, 2.83], ["Izar", 14.7498, 27.0742, 2.37],
+      ["Alphecca", 15.5781, 26.7147, 2.23], ["Tarazed", 19.7709, 10.6133, 2.72],
+      ["Rukbat", 19.3981, -40.6162, 3.97], ["Sadalmelik", 22.0964, -0.3199, 2.95],
+      ["Sadalsuud", 21.5260, -5.5712, 2.87], ["Ankaa", 0.4381, -42.3060, 2.40]
+    ];
+
+    const canvas = document.getElementById("sky-canvas");
+    const skyToggle = document.querySelector(".sky-toggle");
+    const contentPanel = document.querySelector(".content");
+    const projectSection = document.querySelector(".projects");
+    const viewAllProjects = document.querySelector(".all-projects");
+    const backProjects = document.querySelector(".back-projects");
+    const cardsContainer = document.querySelector(".cards");
+    const projectDetailsContainer = document.querySelector(".project-details");
+    const historyTabs = document.querySelectorAll("[data-history-tab]");
+    const historyPanels = document.querySelectorAll("[data-history-panel]");
+    const languageButtons = document.querySelectorAll("[data-lang-button]");
+    const ctx = canvas.getContext("2d", { alpha: false });
+    const locationState = { lat: 41.0082, lon: 28.9784 };
+    const skyTimeScale = 450;
+    const siderealDay = 86164;
+    const speedMultiplier = 2000;
+    const targetFrameMs = 1000 / 30;
+    const famousStarWeights = new Map([
+      ["Polaris", 1], ["Sirius", 1], ["Vega", 1], ["Arcturus", 1],
+      ["Capella", 1], ["Rigel", 1], ["Betelgeuse", 1], ["Deneb", 1],
+      ["Altair", 1], ["Aldebaran", 1], ["Antares", 1], ["Spica", 1],
+      ["Procyon", 1], ["Regulus", 1], ["Fomalhaut", 1]
+    ]);
+    const starGroups = [
+      {
+        name: "Orion",
+        weight: 5,
+        minVisible: 5,
+        members: ["Betelgeuse", "Bellatrix", "Mintaka", "Alnilam", "Alnitak", "Rigel", "Saiph"],
+        segments: [["Betelgeuse", "Bellatrix"], ["Betelgeuse", "Alnitak"], ["Bellatrix", "Mintaka"], ["Mintaka", "Alnilam"], ["Alnilam", "Alnitak"], ["Alnitak", "Saiph"], ["Mintaka", "Rigel"], ["Rigel", "Saiph"]]
+      },
+      {
+        name: "Big Dipper",
+        weight: 5,
+        minVisible: 5,
+        members: ["Dubhe", "Merak", "Phecda", "Megrez", "Alioth", "Mizar", "Alkaid"],
+        segments: [["Dubhe", "Merak"], ["Merak", "Phecda"], ["Phecda", "Megrez"], ["Megrez", "Dubhe"], ["Megrez", "Alioth"], ["Alioth", "Mizar"], ["Mizar", "Alkaid"]]
+      },
+      {
+        name: "Little Dipper",
+        weight: 5,
+        minVisible: 7,
+        members: ["Polaris", "Yildun", "22Eps UMi", "16Zet UMi", "Kochab", "Pherkad", "21Eta UMi"],
+        segments: [["Polaris", "Yildun"], ["Yildun", "22Eps UMi"], ["22Eps UMi", "16Zet UMi"], ["16Zet UMi", "Kochab"], ["Kochab", "Pherkad"], ["Pherkad", "21Eta UMi"], ["21Eta UMi", "16Zet UMi"]]
+      },
+      {
+        name: "Summer Triangle",
+        weight: 4,
+        minVisible: 3,
+        members: ["Vega", "Deneb", "Altair"],
+        segments: [["Vega", "Deneb"], ["Deneb", "Altair"], ["Altair", "Vega"]]
+      },
+      {
+        name: "Winter Triangle",
+        weight: 4,
+        minVisible: 3,
+        members: ["Betelgeuse", "Procyon", "Sirius"],
+        segments: [["Betelgeuse", "Procyon"], ["Procyon", "Sirius"], ["Sirius", "Betelgeuse"]]
+      }
+    ];
+    const labeledSkyNames = new Set([
+      ...famousStarWeights.keys(),
+      ...starGroups.flatMap((group) => group.members)
+    ]);
+    let lastSkyFrame = 0;
+    let skyNoteTimer = 0;
+    let skyLabelTimer = 0;
+    let skyLabelInterval = 0;
+    let starLabelActivatedAt = 0;
+    let selectedSkyTarget = null;
+    let visibleNamedStars = new Map();
+    let currentLanguage = "en";
+    let portfolioData = null;
+    let skyCatalog = SKY_STARS.map((star) => ({
+      name: star[0],
+      ra: star[1],
+      dec: star[2],
+      mag: star[3],
+      ci: 0.45
+    }));
+    const deg = Math.PI / 180;
+    const translations = {
+      tr: {
+        role: "Yazılım Mühendisi",
+        downloadResume: "Özgeçmişi İndir",
+        aboutTitle: "Hakkımda",
+        aboutP1: "Görsel Yapay Zekâ ve uzaktan algılama alanlarına odaklanan bir Bilgisayar Mühendisliği mezunuyum. Çalışmalarım 2D görsel anlama, görsel-dil büyük modelleri ve multimodal yapay zekâ sistemlerini kapsıyor. Ayrıca farklı yapay zekâ agent araçlarını keşfetmekten ve test etmekten keyif alıyorum.",
+        aboutP2: "Son dönemde, frontier VLLM tabanlı bir model ve parametre verimli bir alternatif dahil olmak üzere uydu görüntüsü yorumlama modelleri üzerinde çalıştım.",
+        projectsTitle: "Öne Çıkan Projeler",
+        viewAllProjects: "Tüm Projeler",
+        goBack: "Geri Dön",
+        projectDetailsButton: "Detay",
+        projectTypeLlava: "Uzaktan Algılama Görüntülerini Anlamak için Frontier Görsel-Dil Modeli",
+        projectTypeMmodal: "Parametre Verimli Değişim Açıklama Modeli",
+        projectTypeHunter: "Pekiştirmeli Öğrenme",
+        projectTypeComingSoon: "Geliştiriliyor",
+        comingSoonTitle: "Yakında...",
+        llavaMeta: "2025 · VLLM · Uzaktan Algılama",
+        llavaSummary: "Uydu görüntülerini ve görüntü değişimi açıklamalarını yorumlamaya yönelik bir uzaktan algılama VLLM projesi.",
+        llava1: "LLaVa-OneVision tabanlı, uydu görüntülerini yorumlayabilen bir VLLM geliştirdim.",
+        llava2: "Qwen dil modelleri ve SigLIP tarzı görsel kodlayıcılarla deneyler yaptım.",
+        llava3: "Güncel değerlendirme parametreleri altında uzaktan algılama değişim özetleme verisetinde en yüksek skoru elde ettim.",
+        llava4: "Bitirme projemi SIU 2025'te sundum ve ilgili bir modeli Hugging Face üzerinde yayınladım.",
+        mmodalMeta: "2024 · PyTorch · JSTARS",
+        mmodalSummary: "Multimodal uydu görüntüsü anlama, deney süreçleri ve yayın katkısı etrafında yürütülen araştırma çalışması.",
+        mmodal1: "Uydu görüntülerini anlamaya yönelik vision-to-text modellerini eğittim ve değerlendirdim.",
+        mmodal2: "Çevirme ve renk dönüşümleri gibi görsel veri arttırma tekniklerini test ettim.",
+        mmodal3: "Uydu görüntülerini anlamaya yönelik bir görsel yorumlama veri seti olan SECOND-CC'nin oluşturulmasında çalıştım.",
+        mmodal4: "IEEE JSTARS Q1, IF 5.3 dergisinde yayınlanan çalışmaya katkı sağladım.",
+        hunterMeta: "2023 · Unity · C#",
+        hunterSummary: "Avcı ve av ajanlarının kovalamaca ve kaçış davranışlarını öğrendiği Unity tabanlı bir simülasyon.",
+        hunter1: "Avcıların avları kovaladığı, avların kaçmayı öğrendiği 2D bir simülasyon geliştirdim.",
+        hunter2: "Unity içinde ortamı kurdum ve öğrenmeye yönelik ajan davranışları uyguladım.",
+        hunter3: "Pekiştirmeli öğrenme iş akışları ve C# oyun mantığı konusunda pratik deneyim kazandım.",
+        comingSoonMeta: "Yakında · AI Projesi",
+        comingSoonSummary: "Yeni bir CUDA odaklı proje hazırlanıyor ve yakında burada yer alacak.",
+        comingSoonRobotMeta: "Yakında · Robotik AI",
+        comingSoonRobotSummary: "Robotik odaklı bir yapay zekâ projesi bu alan için planlanıyor.",
+        comingSoon1: "Proje detayları şu anda son haline getiriliyor.",
+        comingSoon2: "Çalışma ilk kararlı prototipten sonra yayınlanacak.",
+        focusTitle: "Ana Odak",
+        focusOnly: "Video generation",
+        experienceTitle: "Deneyim",
+        educationTitle: "Eğitim",
+        exp1Title: "Araştırma Öğrencisi",
+        exp1Company: "Yıldız Teknik Üniversitesi · TÜBİTAK Araştırma Grubu",
+        exp1Date: "Haz 2023 - Şub 2025",
+        exp1Text: "PyTorch ile sıfırdan modeller geliştirdim, veri arttırma tekniklerini test ettim ve JSTARS Q1 yayın sürecine katkı sağladım.",
+        exp2Title: "AI Stajyeri",
+        exp2Date: "Tem 2025 - Ağu 2025",
+        exp2Text: "AI agent mimarileri ve MCP üzerine çalıştım; LangChain, React ve WebSocket ile hızlı unit test üretimi prototipi geliştirdim.",
+        exp3Title: "Bilgisayar Mühendisliği Yüksek Lisans",
+        itu: "İstanbul Teknik Üniversitesi",
+        ituGpa: "Güncel GNO: 4.0",
+        exp3Date: "Şub 2026 - Halen",
+        exp3Text: "Bilgisayar mühendisliği ve yapay zekâ odaklı araştırmalar üzerine yüksek lisans çalışmaları.",
+        exp4Title: "Bilgisayar Mühendisliği Lisans",
+        ytu: "Yıldız Teknik Üniversitesi",
+        ytuGpa: "GNO: 3.4/4.0",
+        exp4Date: "Eyl 2021 - Ağu 2025",
+        exp4Text: "3.4/4 GNO ile mezun oldum. Makine öğrenmesi, algoritmalar, veritabanları, ağlar ve sistemler üzerine çalıştım.",
+        exp5Title: "Erasmus Değişim Programı",
+        oviedo: "Oviedo Üniversitesi",
+        exp5Date: "Oca 2025 - May 2025",
+        exp5Text: "C#, Java, Spring Boot, programlama paradigmaları, OOP ve derleyici tasarımı dersleri aldım.",
+        contactTitle: "İletişim",
+        contactText: "Birlikte iyi bir şey inşa edelim."
+      },
+      en: {
+        role: "Software Engineer",
+        downloadResume: "Download Resume",
+        aboutTitle: "About Me",
+        aboutP1: "I am a Computer Engineering graduate focused on Visual AI and remote sensing. My work spans 2D visual understanding, vision-language large models, and multimodal AI systems. I also enjoy exploring and testing different AI agent tools.",
+        aboutP2: "Recently, I have worked on satellite-image interpretation models, including both a frontier VLLM-based model and a parameter-efficient alternative.",
+        projectsTitle: "Featured Projects",
+        viewAllProjects: "View All Projects",
+        goBack: "Go Back",
+        projectDetailsButton: "Details",
+        projectTypeLlava: "Frontier Vision-Language Model for Remote Sensing Image Understanding",
+        projectTypeMmodal: "Parameter Efficient Change Captioning Model",
+        projectTypeHunter: "Reinforcement Learning",
+        projectTypeComingSoon: "In Development",
+        comingSoonTitle: "Coming Soon...",
+        llavaMeta: "2025 · VLLM · Remote Sensing",
+        llavaSummary: "A remote-sensing VLLM project for interpreting satellite imagery and image-change captions.",
+        llava1: "Built a satellite-image interpretation VLLM based on LLaVa-OneVision.",
+        llava2: "Experimented with Qwen language models and SigLIP-style visual encoders.",
+        llava3: "Achieved top performance under current evaluation settings on a remote-sensing change-captioning dataset.",
+        llava4: "Presented the graduation project at SIU 2025 and published a related Hugging Face model.",
+        mmodalMeta: "2024 · PyTorch · JSTARS",
+        mmodalSummary: "Research work around multimodal satellite-image understanding, experiments, and publication support.",
+        mmodal1: "Trained and evaluated vision-to-text models for satellite-image understanding.",
+        mmodal2: "Tested visual augmentation methods including flipping and color transformations.",
+        mmodal3: "Worked on creation of SECOND-CC, a visual interpretation dataset for satellite-image understanding.",
+        mmodal4: "Contributed to research published in IEEE JSTARS, a Q1 journal with IF 5.3.",
+        hunterMeta: "2023 · Unity · C#",
+        hunterSummary: "A Unity simulation where predator and prey agents learn chase-and-escape behaviors.",
+        hunter1: "Developed a 2D simulation where predators learn to chase and prey learn to escape.",
+        hunter2: "Built the environment in Unity and implemented learning-oriented agent behavior.",
+        hunter3: "Gained practical experience with reinforcement learning workflows and C# game logic.",
+        comingSoonMeta: "Coming Soon · AI Project",
+        comingSoonSummary: "A new CUDA-focused project is being prepared and will be added here soon.",
+        comingSoonRobotMeta: "Coming Soon · Robotics AI",
+        comingSoonRobotSummary: "A robotics-oriented AI project is planned for this slot.",
+        comingSoon1: "Project details are currently being finalized.",
+        comingSoon2: "The work will be published after the first stable prototype.",
+        focusTitle: "Current Focus",
+        focusOnly: "Video Generation",
+        experienceTitle: "Experience",
+        educationTitle: "Education",
+        exp1Title: "Research Student",
+        exp1Company: "Yıldız Technical University · TÜBİTAK Research Group",
+        exp1Date: "Jun 2023 - Feb 2025",
+        exp1Text: "Developed PyTorch models from scratch, tested data augmentation techniques, and contributed to a JSTARS Q1 publication.",
+        exp2Title: "AI Intern",
+        exp2Date: "Jul 2025 - Aug 2025",
+        exp2Text: "Worked on AI agent architectures and MCP; built a rapid unit-test generation prototype with LangChain, React, and WebSocket.",
+        exp3Title: "M.Sc. Computer Engineering",
+        itu: "Istanbul Technical University",
+        ituGpa: "Current GPA: 4.0",
+        exp3Date: "Feb 2026 - Present",
+        exp3Text: "Graduate study focused on computer engineering and AI-oriented research.",
+        exp4Title: "B.Sc. Computer Engineering",
+        ytu: "Yıldız Technical University",
+        ytuGpa: "GPA: 3.4/4.0",
+        exp4Date: "Sep 2021 - Aug 2025",
+        exp4Text: "Graduated with GPA 3.4/4. Relevant work included machine learning, algorithms, databases, networks, and systems.",
+        exp5Title: "Erasmus Exchange",
+        oviedo: "University of Oviedo",
+        exp5Date: "Jan 2025 - May 2025",
+        exp5Text: "Studied C#, Java, Spring Boot, programming paradigms, OOP, and compiler design.",
+        contactTitle: "Contact",
+        contactText: "Let's build something great together."
+      }
+    };
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function safeExternalUrl(value) {
+      try {
+        const url = new URL(String(value));
+        return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+      } catch {
+        return "";
+      }
+    }
+
+    function safeImageSource(value) {
+      const source = String(value || "");
+      if (source.startsWith("data:image/")) return source;
+      if (/^https?:\/\//i.test(source)) return source;
+      if (!source.includes("..") && !source.startsWith("javascript:")) return source;
+      return "assets/a-star-cropped.png";
+    }
+
+    function localized(value, lang) {
+      if (typeof value === "string") return value;
+      return (value && (value[lang] || value.en || value.tr)) || "";
+    }
+
+    function paperIconMarkup() {
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>';
+    }
+
+    function projectResourceLinks(project) {
+      const paperUrl = safeExternalUrl(project.paperUrl);
+      const huggingFaceUrl = safeExternalUrl(project.huggingFaceUrl);
+      const links = [];
+      if (paperUrl) {
+        links.push(`<a class="project-resource-link" href="${escapeHtml(paperUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(project.title)} paper" title="Paper">${paperIconMarkup()}</a>`);
+      }
+      if (huggingFaceUrl) {
+        links.push(`<a class="project-resource-link" href="${escapeHtml(huggingFaceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(project.title)} Hugging Face model" title="Hugging Face"><img src="assets/huggingface.svg" alt=""></a>`);
+      }
+      return links.length ? `<span class="project-resource-links">${links.join("")}</span>` : "";
+    }
+
+    function renderPortfolioProjects(lang) {
+      if (!portfolioData || !Array.isArray(portfolioData.projects)) return;
+      const detailsLabel = translations[lang].projectDetailsButton;
+      const featured = portfolioData.projects.filter((project) => project.featured).slice(0, 3);
+
+      cardsContainer.innerHTML = featured.map((project) => `
+        <article class="project-card" data-project-id="${escapeHtml(project.id)}">
+          <img src="${escapeHtml(safeImageSource(project.image))}" alt="${escapeHtml(project.title)} logo">
+          <div class="project-meta">
+            <div class="project-title-row">
+              <h3 class="project-title">${escapeHtml(project.title)}</h3>
+              ${projectResourceLinks(project)}
+            </div>
+            <div class="project-type">${escapeHtml(localized(project.subtitle, lang))}</div>
+          </div>
+        </article>`).join("");
+
+      projectDetailsContainer.innerHTML = portfolioData.projects.map((project) => {
+        const details = localized(project.details, lang);
+        const items = Array.isArray(details) ? details : [];
+        return `
+          <article class="detail-card" data-project-id="${escapeHtml(project.id)}">
+            <div class="detail-card-head">
+              <img class="detail-logo" src="${escapeHtml(safeImageSource(project.image))}" alt="${escapeHtml(project.title)} logo">
+              <div>
+                <div class="project-title-row">
+                  <h3>${escapeHtml(project.title)}</h3>
+                  ${projectResourceLinks(project)}
+                </div>
+                <div class="detail-meta">${escapeHtml(localized(project.meta, lang))}</div>
+              </div>
+              <button class="project-detail-toggle" type="button">${escapeHtml(detailsLabel)}</button>
+            </div>
+            <p class="detail-summary">${escapeHtml(localized(project.summary, lang))}</p>
+            <ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          </article>`;
+      }).join("");
+    }
+
+    async function loadPortfolioData() {
+      if (location.protocol === "file:") return;
+      const sources = ["/api/portfolio", "portfolio-data.json"];
+      for (const source of sources) {
+        try {
+          const response = await fetch(source, { cache: "no-store" });
+          if (!response.ok) continue;
+          portfolioData = await response.json();
+          if (portfolioData.about) {
+            ["en", "tr"].forEach((lang) => {
+              if (!portfolioData.about[lang]) return;
+              translations[lang].aboutP1 = portfolioData.about[lang].p1 || translations[lang].aboutP1;
+              translations[lang].aboutP2 = portfolioData.about[lang].p2 || translations[lang].aboutP2;
+            });
+          }
+          setLanguage(currentLanguage);
+          return;
+        } catch {
+          // Try the next source; static HTML remains the final fallback.
+        }
+      }
+    }
+
+    function resizeSky() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function julianDate(date) {
+      return date.getTime() / 86400000 + 2440587.5;
+    }
+
+    function localSiderealDegrees(date, longitude) {
+      const jd = julianDate(date);
+      const d = jd - 2451545.0;
+      let gmst = 280.46061837 + 360.98564736629 * d;
+      return ((gmst + longitude) % 360 + 360) % 360;
+    }
+
+    function starToAltAz(star, lst, lat) {
+      const ra = star.ra * 15;
+      const dec = star.dec;
+      const ha = (((lst - ra + 540) % 360) - 180) * deg;
+      const decRad = dec * deg;
+      const latRad = lat * deg;
+      const sinAlt = Math.sin(decRad) * Math.sin(latRad) +
+        Math.cos(decRad) * Math.cos(latRad) * Math.cos(ha);
+      const alt = Math.asin(Math.max(-1, Math.min(1, sinAlt)));
+      const az = Math.atan2(
+        -Math.sin(ha),
+        Math.tan(decRad) * Math.cos(latRad) - Math.sin(latRad) * Math.cos(ha)
+      );
+      return { alt: alt / deg, az };
+    }
+
+    function drawSky(time) {
+      if (time - lastSkyFrame < targetFrameMs) {
+        requestAnimationFrame(drawSky);
+        return;
+      }
+      lastSkyFrame = time;
+
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const now = new Date();
+      const acceleratedNow = new Date(now.getTime() + time * skyTimeScale);
+      const lst = localSiderealDegrees(acceleratedNow, locationState.lon);
+      const gradient = ctx.createLinearGradient(0, 0, 0, h);
+
+      gradient.addColorStop(0, "#02040a");
+      gradient.addColorStop(0.42, "#010208");
+      gradient.addColorStop(0.76, "#000104");
+      gradient.addColorStop(1, "#000000");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, w, h);
+
+      drawAtmosphere(w, h);
+
+      const centerX = w / 2;
+      const centerY = h / 2;
+      const skyRadius = Math.min(w, h) * 0.48;
+      const latRad = locationState.lat * deg;
+      const sinLat = Math.sin(latRad);
+      const cosLat = Math.cos(latRad);
+      const visibleThisFrame = new Map();
+
+      for (const star of skyCatalog) {
+        const ha = (((lst - star.raDeg + 540) % 360) - 180) * deg;
+        const decRad = star.decRad;
+        const sinAlt = Math.sin(decRad) * sinLat + Math.cos(decRad) * cosLat * Math.cos(ha);
+        const alt = Math.asin(Math.max(-1, Math.min(1, sinAlt)));
+        if (alt <= 0.02) continue;
+
+        const az = Math.atan2(-Math.sin(ha), Math.tan(decRad) * cosLat - sinLat * Math.cos(ha));
+        const altDeg = alt / deg;
+        const r = ((90 - altDeg) / 90) * skyRadius;
+        const x = centerX - r * Math.sin(az);
+        const y = centerY - r * Math.cos(az);
+        if (x < -6 || x > w + 6 || y < -6 || y > h + 6) continue;
+
+        const mag = star.mag;
+        const altitudeFade = Math.min(1, altDeg / 22);
+        const base = Math.max(0.55, 3.1 - mag * 0.3) * altitudeFade;
+        const twinkle = star.twinkle ? 0.9 + Math.sin(time * 0.0012 + star.phase) * 0.1 : 1;
+        const size = Math.max(0.7, base * twinkle);
+        const alpha = Math.min(0.95, Math.max(0.22, 0.9 - mag * 0.1) * altitudeFade);
+
+        ctx.beginPath();
+        ctx.fillStyle = starColor(star.ci, alpha);
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (labeledSkyNames.has(star.name)) {
+          visibleThisFrame.set(star.name, { name: star.name, x, y, size });
+        }
+
+        if (mag < 1.2) {
+          const glow = ctx.createRadialGradient(x, y, 0, x, y, size * 7);
+          glow.addColorStop(0, `rgba(255,255,255,${0.28 * alpha})`);
+          glow.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(x, y, size * 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      visibleNamedStars = visibleThisFrame;
+      drawSelectedSkyTarget(time, w, h);
+
+      requestAnimationFrame(drawSky);
+    }
+
+    function drawSelectedSkyTarget(time, w, h) {
+      if (!document.body.classList.contains("background-only") || !selectedSkyTarget) return;
+      const alpha = Math.min(1, Math.max(0, (time - starLabelActivatedAt) / 500));
+
+      ctx.save();
+      ctx.font = "500 11px Inter, ui-sans-serif, system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = `rgba(0,0,0,${0.82 * alpha})`;
+      ctx.fillStyle = `rgba(245,247,250,${0.94 * alpha})`;
+      ctx.shadowColor = `rgba(0,0,0,${0.9 * alpha})`;
+      ctx.shadowBlur = 8;
+
+      if (selectedSkyTarget.type === "star") {
+        const star = visibleNamedStars.get(selectedSkyTarget.name);
+        if (!star) {
+          ctx.restore();
+          return;
+        }
+        const offset = 12 + star.size;
+        const labelX = Math.max(42, Math.min(w - 42, star.x));
+        const labelY = Math.max(18, Math.min(h - 16, star.y - offset));
+
+        ctx.beginPath();
+        ctx.moveTo(star.x, star.y - star.size - 2);
+        ctx.lineTo(labelX, labelY + 4);
+        ctx.strokeStyle = `rgba(210,218,230,${0.34 * alpha})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = `rgba(0,0,0,${0.82 * alpha})`;
+        ctx.strokeText(selectedSkyTarget.name, labelX, labelY);
+        ctx.fillText(selectedSkyTarget.name, labelX, labelY);
+      } else {
+        const group = starGroups.find((item) => item.name === selectedSkyTarget.name);
+        if (!group) {
+          ctx.restore();
+          return;
+        }
+        const visibleMembers = group.members.map((name) => visibleNamedStars.get(name)).filter(Boolean);
+        if (visibleMembers.length < group.minVisible) {
+          ctx.restore();
+          return;
+        }
+
+        ctx.shadowBlur = 4;
+        ctx.strokeStyle = `rgba(205,218,236,${0.48 * alpha})`;
+        ctx.lineWidth = 1;
+        group.segments.forEach(([fromName, toName]) => {
+          const from = visibleNamedStars.get(fromName);
+          const to = visibleNamedStars.get(toName);
+          if (!from || !to) return;
+          ctx.beginPath();
+          ctx.moveTo(from.x, from.y);
+          ctx.lineTo(to.x, to.y);
+          ctx.stroke();
+        });
+
+        visibleMembers.forEach((star) => {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(240,245,255,${0.72 * alpha})`;
+          ctx.lineWidth = 1;
+          ctx.arc(star.x, star.y, Math.max(3, star.size + 2), 0, Math.PI * 2);
+          ctx.stroke();
+        });
+
+        const centerX = visibleMembers.reduce((sum, star) => sum + star.x, 0) / visibleMembers.length;
+        const topY = Math.min(...visibleMembers.map((star) => star.y));
+        const labelX = Math.max(58, Math.min(w - 58, centerX));
+        const labelY = Math.max(20, topY - 14);
+        ctx.shadowBlur = 8;
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = `rgba(0,0,0,${0.82 * alpha})`;
+        ctx.fillStyle = `rgba(245,247,250,${0.94 * alpha})`;
+        ctx.strokeText(group.name, labelX, labelY);
+        ctx.fillText(group.name, labelX, labelY);
+      }
+      ctx.restore();
+    }
+
+    function chooseVisibleSkyTarget() {
+      const starCandidates = Array.from(visibleNamedStars.values())
+        .filter((star) => famousStarWeights.has(star.name))
+        .map((star) => ({ type: "star", name: star.name, weight: famousStarWeights.get(star.name) || 1 }));
+      const groupCandidates = starGroups
+        .filter((group) => group.members.filter((name) => visibleNamedStars.has(name)).length >= group.minVisible)
+        .map((group) => ({ type: "group", name: group.name, weight: group.weight }));
+      let candidates = [...starCandidates, ...groupCandidates];
+
+      if (selectedSkyTarget && candidates.length > 1) {
+        candidates = candidates.filter((candidate) => candidate.type !== selectedSkyTarget.type || candidate.name !== selectedSkyTarget.name);
+      }
+      if (!candidates.length) {
+        selectedSkyTarget = null;
+        return;
+      }
+
+      const totalWeight = candidates.reduce((sum, candidate) => sum + candidate.weight, 0);
+      let pick = Math.random() * totalWeight;
+      selectedSkyTarget = candidates.at(-1);
+      for (const candidate of candidates) {
+        pick -= candidate.weight;
+        if (pick <= 0) {
+          selectedSkyTarget = candidate;
+          break;
+        }
+      }
+      starLabelActivatedAt = performance.now();
+    }
+
+    function drawAtmosphere(w, h) {
+      const horizon = ctx.createLinearGradient(0, h * 0.52, 0, h);
+      horizon.addColorStop(0, "rgba(0,0,0,0)");
+      horizon.addColorStop(0.58, "rgba(18,22,30,0.10)");
+      horizon.addColorStop(0.82, "rgba(7,9,13,0.22)");
+      horizon.addColorStop(1, "rgba(0,0,0,0.62)");
+      ctx.fillStyle = horizon;
+      ctx.fillRect(0, 0, w, h);
+
+      const zenithGlow = ctx.createRadialGradient(w * 0.5, 0, 0, w * 0.5, 0, Math.max(w, h) * 0.62);
+      zenithGlow.addColorStop(0, "rgba(36,44,64,0.13)");
+      zenithGlow.addColorStop(0.42, "rgba(16,22,34,0.06)");
+      zenithGlow.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = zenithGlow;
+      ctx.fillRect(0, 0, w, h);
+
+      const lowGlow = ctx.createRadialGradient(w * 0.72, h * 0.94, 0, w * 0.72, h * 0.94, Math.max(w, h) * 0.48);
+      lowGlow.addColorStop(0, "rgba(58,50,42,0.08)");
+      lowGlow.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = lowGlow;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    function projectPoleRotation(star, time, introEase, w, h) {
+      const poleX = w * 0.5;
+      const poleY = h * 0.5;
+      const radius = star.polarRadius * Math.min(w, h) * 0.47;
+      const angle = -((time / 1000) * (Math.PI * 2 / siderealDay) * speedMultiplier) + introEase * 0.22;
+      const theta = star.polarTheta + angle;
+      const x = poleX + Math.cos(theta) * radius;
+      const y = poleY + Math.sin(theta) * radius;
+      return { x, y };
+    }
+
+    function starColor(ci, alpha) {
+      if (ci == null) return `rgba(255,255,255,${alpha})`;
+      const t = Math.max(-0.4, Math.min(1.8, ci));
+      let r = 255;
+      let g = 245;
+      let b = 235;
+      if (t < 0.2) {
+        r = 210; g = 228; b = 255;
+      } else if (t < 0.6) {
+        r = 242; g = 245; b = 255;
+      } else if (t < 1.1) {
+        r = 255; g = 244; b = 220;
+      } else {
+        r = 255; g = 220; b = 178;
+      }
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    function loadStarCatalog() {
+      return fetch("assets/hyg-visible-stars.json")
+        .then((response) => response.ok ? response.json() : Promise.reject(response))
+        .then((rows) => {
+          skyCatalog = prepareCatalog(rows.map((row) => ({
+            ra: row[0],
+            dec: row[1],
+            mag: row[2],
+            ci: row[3],
+            name: row[4]
+          })));
+        })
+        .catch(() => {
+          skyCatalog = prepareCatalog(SKY_STARS.map((star) => ({
+            name: star[0],
+            ra: star[1],
+            dec: star[2],
+            mag: star[3],
+            ci: 0.45
+          })));
+        });
+    }
+
+    function prepareCatalog(stars) {
+      const maxStars = window.innerWidth < 700 ? 2500 : 5347;
+      return stars
+        .sort((a, b) => a.mag - b.mag)
+        .slice(0, maxStars)
+        .map((star, index) => ({
+          ...star,
+          raDeg: star.ra * 15,
+          decRad: star.dec * deg,
+          polarTheta: (star.ra * 15 - 38) * deg,
+          polarRadius: Math.max(0.004, Math.min(1, (90 - star.dec) / 180)),
+          phase: (star.ra * 12.9898 + star.dec * 78.233) % (Math.PI * 2),
+          twinkle: index < 90
+        }));
+    }
+
+    resizeSky();
+    window.addEventListener("resize", resizeSky);
+
+    skyToggle.addEventListener("click", () => {
+      const active = document.body.classList.toggle("background-only");
+      document.body.classList.remove("show-sky-note");
+      window.clearTimeout(skyNoteTimer);
+      window.clearTimeout(skyLabelTimer);
+      window.clearInterval(skyLabelInterval);
+      selectedSkyTarget = null;
+      if (active) {
+        skyNoteTimer = window.setTimeout(() => {
+          if (document.body.classList.contains("background-only")) {
+            document.body.classList.add("show-sky-note");
+          }
+        }, 1000);
+        skyLabelTimer = window.setTimeout(() => {
+          if (document.body.classList.contains("background-only")) {
+            chooseVisibleSkyTarget();
+            skyLabelInterval = window.setInterval(() => {
+              if (document.body.classList.contains("background-only")) {
+                chooseVisibleSkyTarget();
+              }
+            }, 2000);
+          }
+        }, 2000);
+      }
+      skyToggle.setAttribute("aria-pressed", String(active));
+      skyToggle.setAttribute("aria-label", active ? "Show portfolio content" : "Show only sky background");
+    });
+
+    viewAllProjects.addEventListener("click", () => {
+      contentPanel.classList.add("projects-open");
+      projectSection.classList.add("projects-open");
+      projectDetailsContainer.querySelectorAll(".detail-card").forEach((card) => card.classList.remove("active"));
+    });
+
+    backProjects.addEventListener("click", () => {
+      contentPanel.classList.remove("projects-open");
+      projectSection.classList.remove("projects-open");
+      projectDetailsContainer.querySelectorAll(".detail-card").forEach((card) => card.classList.remove("active"));
+    });
+
+    projectDetailsContainer.addEventListener("click", (event) => {
+      const button = event.target.closest(".project-detail-toggle");
+      if (!button) return;
+      const card = button.closest(".detail-card");
+      const willOpen = !card.classList.contains("active");
+      projectDetailsContainer.querySelectorAll(".detail-card").forEach((item) => item.classList.remove("active"));
+      card.classList.toggle("active", willOpen);
+    });
+
+    historyTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.historyTab;
+        historyTabs.forEach((item) => item.classList.toggle("active", item === tab));
+        historyPanels.forEach((panel) => {
+          panel.classList.toggle("active", panel.dataset.historyPanel === target);
+        });
+      });
+    });
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      const dictionary = translations[lang] || translations.en;
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        if (dictionary[key]) node.textContent = dictionary[key];
+      });
+      languageButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.langButton === lang);
+      });
+      renderPortfolioProjects(lang);
+    }
+
+    function sortTimelines() {
+      document.querySelectorAll(".timeline").forEach((timeline) => {
+        Array.from(timeline.querySelectorAll(".job"))
+          .sort((a, b) => b.dataset.start.localeCompare(a.dataset.start))
+          .forEach((item) => timeline.appendChild(item));
+      });
+    }
+
+    languageButtons.forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.langButton));
+    });
+
+    sortTimelines();
+    setLanguage("en");
+    loadPortfolioData();
+    skyCatalog = prepareCatalog(skyCatalog);
+    requestAnimationFrame(drawSky);
+    loadStarCatalog();
+  </script>
+</body>
+</html>
