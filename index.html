@@ -1538,6 +1538,8 @@
     const historyTabs = document.querySelectorAll("[data-history-tab]");
     const historyPanels = document.querySelectorAll("[data-history-panel]");
     const languageButtons = document.querySelectorAll("[data-lang-button]");
+    const downloadButton = document.querySelector(".download");
+    const resumeFiles = { en: "CVs/CV_english.pdf", tr: "CVs/CV_turkish.pdf" };
     const ctx = canvas.getContext("2d", { alpha: false });
     const locationState = { lat: 41.0082, lon: 28.9784 };
     const skyTimeScale = 450;
@@ -2256,6 +2258,16 @@
 
     languageButtons.forEach((button) => {
       button.addEventListener("click", () => setLanguage(button.dataset.langButton));
+    });
+
+    downloadButton.addEventListener("click", () => {
+      const file = resumeFiles[currentLanguage] || resumeFiles.en;
+      const link = document.createElement("a");
+      link.href = file;
+      link.download = file.split("/").pop();
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     });
 
     sortTimelines();
