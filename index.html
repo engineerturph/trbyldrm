@@ -923,6 +923,93 @@
       padding-bottom: 1px;
     }
 
+    .blog-toggle-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      padding: 18px 0 34px;
+    }
+
+    .blog-toggle {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.42);
+      color: #f5f5f5;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 24px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.34em;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(255,255,255,0.12), inset 0 0 18px rgba(255,255,255,0.03);
+      transition: background 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .blog-toggle:hover {
+      background: rgba(255,255,255,0.09);
+      transform: translateY(2px);
+    }
+
+    .blog-toggle .blog-arrow {
+      display: block;
+      animation: blogArrowBounce 2.4s ease-in-out infinite;
+      transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .blog-toggle[aria-expanded="true"] .blog-arrow {
+      animation: none;
+      transform: rotate(180deg);
+    }
+
+    @keyframes blogArrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    .blog-section {
+      position: relative;
+      z-index: 1;
+      width: min(1125px, calc(100% - 2 * clamp(18px, 3vw, 38px)));
+      margin: 0 auto clamp(40px, 6vh, 72px);
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 640ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease;
+    }
+
+    .blog-section.expanded {
+      max-height: 640px;
+      opacity: 1;
+    }
+
+    .blog-inner {
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 5px;
+      background: rgba(0,0,0,0.74);
+      box-shadow: 0 0 16px rgba(255,255,255,0.28), inset 0 0 34px rgba(255,255,255,0.025);
+      padding: 30px 35px 34px;
+      transform: translateY(-14px);
+      opacity: 0;
+      transition: transform 560ms cubic-bezier(0.22, 1, 0.36, 1) 80ms, opacity 520ms ease 80ms;
+    }
+
+    .blog-section.expanded .blog-inner {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 1050px) {
+      .blog-inner {
+        padding: 24px;
+      }
+    }
+
     @media (max-height: 850px) and (min-width: 1051px) {
       .page {
         padding-top: 20px;
@@ -1477,6 +1564,20 @@
       </div>
     </section>
   </main>
+
+  <div class="blog-toggle-wrap">
+    <button class="blog-toggle" type="button" aria-expanded="false" aria-controls="blog-section">
+      <span data-i18n="blogLabel">Blog</span>
+      <svg class="blog-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </div>
+
+  <section class="blog-section" id="blog-section" aria-label="Blog" aria-hidden="true">
+    <div class="blog-inner">
+      <div class="section-heading"><h2 class="section-title" data-i18n="blogTitle">Blog</h2></div>
+      <p data-i18n="blogComingSoon">Coming soon...</p>
+    </div>
+  </section>
   <script>
     /*
       Stellarium Web Engine note:
@@ -1540,6 +1641,8 @@
     const historyPanels = document.querySelectorAll("[data-history-panel]");
     const languageButtons = document.querySelectorAll("[data-lang-button]");
     const downloadButton = document.querySelector(".download");
+    const blogToggle = document.querySelector(".blog-toggle");
+    const blogSection = document.querySelector(".blog-section");
     const resumeFiles = { en: "CVs/CV_english.pdf", tr: "CVs/CV_turkish.pdf" };
     const ctx = canvas.getContext("2d", { alpha: false });
     const locationState = { lat: 41.0082, lon: 28.9784 };
@@ -1676,7 +1779,10 @@
         exp5Date: "Oca 2025 - May 2025",
         exp5Text: "C#, Java, Spring Boot, programlama paradigmaları, OOP ve derleyici tasarımı dersleri aldım.",
         contactTitle: "İletişim",
-        contactText: "Birlikte iyi bir şey inşa edelim."
+        contactText: "Birlikte iyi bir şey inşa edelim.",
+        blogLabel: "Blog",
+        blogTitle: "Blog",
+        blogComingSoon: "Yakında..."
       },
       en: {
         role: "Software Engineer",
@@ -1742,7 +1848,10 @@
         exp5Date: "Jan 2025 - May 2025",
         exp5Text: "Studied C#, Java, Spring Boot, programming paradigms, OOP, and compiler design.",
         contactTitle: "Contact",
-        contactText: "Let's build something great together."
+        contactText: "Let's build something great together.",
+        blogLabel: "Blog",
+        blogTitle: "Blog",
+        blogComingSoon: "Coming soon..."
       }
     };
 
@@ -2269,6 +2378,17 @@
       document.body.appendChild(link);
       link.click();
       link.remove();
+    });
+
+    blogToggle.addEventListener("click", () => {
+      const expanded = blogSection.classList.toggle("expanded");
+      blogToggle.setAttribute("aria-expanded", String(expanded));
+      blogSection.setAttribute("aria-hidden", String(!expanded));
+      if (expanded) {
+        setTimeout(() => {
+          blogSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 150);
+      }
     });
 
     sortTimelines();
