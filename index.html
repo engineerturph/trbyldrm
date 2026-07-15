@@ -926,9 +926,10 @@
     .blog-toggle-wrap {
       position: relative;
       z-index: 1;
+      width: 100%;
       display: flex;
       justify-content: center;
-      padding: 18px 0 34px;
+      padding: 16px 0 0;
     }
 
     .blog-toggle {
@@ -975,8 +976,8 @@
     .blog-section {
       position: relative;
       z-index: 1;
-      width: min(1125px, calc(100% - 2 * clamp(18px, 3vw, 38px)));
-      margin: 0 auto clamp(40px, 6vh, 72px);
+      width: min(1125px, 100%);
+      margin-top: 18px;
       max-height: 0;
       opacity: 0;
       overflow: hidden;
@@ -1561,23 +1562,23 @@
           </div>
         </section>
 
+        <div class="blog-toggle-wrap">
+          <button class="blog-toggle" type="button" aria-expanded="false" aria-controls="blog-section">
+            <span data-i18n="blogLabel">Blog</span>
+            <svg class="blog-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+
+        <section class="blog-section" id="blog-section" aria-label="Blog" aria-hidden="true">
+          <div class="blog-inner">
+            <div class="section-heading"><h2 class="section-title" data-i18n="blogTitle">Blog</h2></div>
+            <p data-i18n="blogComingSoon">Coming soon...</p>
+          </div>
+        </section>
+
       </div>
     </section>
   </main>
-
-  <div class="blog-toggle-wrap">
-    <button class="blog-toggle" type="button" aria-expanded="false" aria-controls="blog-section">
-      <span data-i18n="blogLabel">Blog</span>
-      <svg class="blog-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-    </button>
-  </div>
-
-  <section class="blog-section" id="blog-section" aria-label="Blog" aria-hidden="true">
-    <div class="blog-inner">
-      <div class="section-heading"><h2 class="section-title" data-i18n="blogTitle">Blog</h2></div>
-      <p data-i18n="blogComingSoon">Coming soon...</p>
-    </div>
-  </section>
   <script>
     /*
       Stellarium Web Engine note:
