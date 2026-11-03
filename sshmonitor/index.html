@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="sshmon-mode" content="static">
+<meta name="sshmon-data" content="https://raw.githubusercontent.com/engineerturph/trbyldrm/sshmonitor-data/">
+<meta name="sshmon-publish-sec" content="300">
+<title>SSH GPU Monitor</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b; --nodata: #e1e0d9;
+  --wash: rgba(11,11,11,0.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+    --nodata: #2c2c2a; --wash: rgba(255,255,255,0.06);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+  --nodata: #2c2c2a; --wash: rgba(255,255,255,0.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1320px; margin: 0 auto; padding: 20px 16px 48px; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 16px; }
+h1 { font-size: 20px; margin: 0; font-weight: 650; }
+.sub { color: var(--muted); font-size: 13px; }
+.spacer { flex: 1; }
+.seg { display: inline-flex; border: 1px solid var(--ring); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: none; color: var(--ink-2); padding: 6px 12px; font: inherit; cursor: pointer; }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); font-weight: 600; }
+.icon-btn { border: 1px solid var(--ring); background: var(--surface); color: var(--ink-2);
+  border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px; padding: 16px; }
+.card h2 { font-size: 15px; margin: 0 0 4px; font-weight: 650; }
+.overview { margin-bottom: 16px; }
+.avail-row { display: grid; grid-template-columns: 90px 1fr 64px; align-items: center; gap: 10px; margin: 6px 0; }
+.avail-row .nm { font-weight: 600; font-size: 13px; }
+.avail-row .pct { text-align: right; color: var(--ink-2); font-variant-numeric: tabular-nums; font-size: 13px; }
+.strip { height: 18px; display: block; width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--ink-2); font-size: 12px; margin-top: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.key-rect { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.key-line { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+.hosts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 600px), 1fr)); gap: 16px; }
+.host-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+  padding: 2px 9px; border-radius: 999px; border: 1px solid var(--ring); color: var(--ink); }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.meta { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.err { color: var(--ink-2); font-size: 12px; margin-top: 6px; word-break: break-word; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 12px 0 4px; }
+.tile { border: 1px solid var(--ring); border-radius: 8px; padding: 8px 10px; }
+.tile .lab { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.tile .val { font-size: 20px; font-weight: 650; }
+.tile .val small { font-size: 12px; color: var(--ink-2); font-weight: 500; }
+@media (max-width: 520px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.chart { position: relative; margin-top: 14px; }
+.seg.sm button { padding: 3px 9px; font-size: 12px; }
+.gpu-pick { margin-left: auto; align-self: center; }
+.chart .ttl { font-size: 12px; font-weight: 600; color: var(--ink-2); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.chart svg { display: block; width: 100%; overflow: visible; touch-action: pan-y; }
+.chart text { fill: var(--muted); font-size: 10.5px; font-variant-numeric: tabular-nums; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--ring);
+  border-radius: 8px; padding: 6px 9px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.12);
+  white-space: nowrap; z-index: 5; display: none; }
+.tip .tt { color: var(--muted); margin-bottom: 3px; }
+.tip .row { display: flex; align-items: center; gap: 6px; }
+.tip .row b { font-variant-numeric: tabular-nums; min-width: 44px; }
+.tip .row span.nm { color: var(--ink-2); }
+.loading { opacity: .55; transition: opacity .2s; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>SSH GPU Monitor</h1>
+      <div class="sub" id="updated">Waiting for first poll…</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="seg" id="ranges" role="group" aria-label="Time range">
+      <button data-r="3600">1h</button><button data-r="21600">6h</button><button data-r="86400">24h</button><button data-r="604800">7d</button><button data-r="2592000">30d</button>
+    </div>
+    <button class="icon-btn" id="theme" title="Toggle theme">◐</button>
+  </header>
+
+  <section class="card overview">
+    <h2>Availability</h2>
+    <div class="sub" id="avail-sub"></div>
+    <div id="avail"></div>
+    <div class="legend">
+      <span><i class="key-rect" style="background:var(--good)"></i>✓ OK</span>
+      <span><i class="key-rect" style="background:var(--warning)"></i>⚠ GPU stalled (work stopped, memory still held)</span>
+      <span><i class="key-rect" style="background:var(--serious)"></i>! No GPU data (SSH or driver failure)</span>
+      <span><i class="key-rect" style="background:var(--critical)"></i>✕ Down / crashed</span>
+      <span><i class="key-rect" style="background:var(--nodata)"></i>No data / unknown</span>
+    </div>
+  </section>
+
+  <section class="hosts" id="hosts"></section>
+</main>
+
+<script>
+const SERIES = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8'];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => {
+  const e = tag.startsWith('svg:') ? document.createElementNS(NS, tag.slice(4)) : document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'text') e.textContent = v; else if (k === 'cls') e.setAttribute('class', v); else e.setAttribute(k, v);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+};
+let range = 3600;
+try { range = +localStorage.getItem('sshmon.range') || 3600; } catch {}
+try { const t = localStorage.getItem('sshmon.theme'); if (t) document.documentElement.dataset.theme = t; } catch {}
+
+let status = null, hist = null;
+let gpuSel = {};  // host name -> selected GPU index, or absent for "All"
+try { gpuSel = JSON.parse(localStorage.getItem('sshmon.gpuSel') || '{}'); } catch {}
+// "api": served by monitor.py locally; "static": published copy reading pushed JSON files.
+const STATIC_MODE = document.querySelector('meta[name="sshmon-mode"]').content === 'static';
+// Optional per-copy settings: where the JSON lives, and how often that copy is refreshed
+// (ITU copy: data/ every 30 s; GitHub backup: raw.githubusercontent.com every ~5 min + 5 min CDN cache).
+const meta = n => document.querySelector(`meta[name="${n}"]`)?.content;
+const DATA_BASE = meta('sshmon-data') || 'data/';
+const PUBLISH_SEC = +(meta('sshmon-publish-sec') || 0);
+const url = {
+  status: () => STATIC_MODE ? `${DATA_BASE}status.json?t=${Date.now()}` : '/api/status',
+  history: r => STATIC_MODE ? `${DATA_BASE}history_${r}.json?t=${Date.now()}` : '/api/history?range=' + r,
+};
+
+// One entry per backend state (monitor.py STATES). Color never carries meaning alone: icon + label too.
+const STATE = {
+  ok:        { label: 'Online',              icon: '✓', color: 'var(--good)' },
+  unknown:   { label: 'Unknown (monitor issue)', icon: '?', color: 'var(--nodata)' },
+  stalled:   { label: 'GPU stalled',         icon: '⚠', color: 'var(--warning)' },
+  gpu_error: { label: 'GPU query failed',    icon: '!', color: 'var(--serious)' },
+  ssh_fail:  { label: 'SSH failed',          icon: '!', color: 'var(--serious)' },
+  down:      { label: 'Unreachable',         icon: '✕', color: 'var(--critical)' },
+  crashed:   { label: 'Crashed (confirmed)', icon: '✕', color: 'var(--critical)' },
+};
+function statusOf(h) {
+  if (!h || h.pending) return { key: 'pending', label: 'Pending', icon: '…', color: 'var(--nodata)' };
+  const key = h.state || (h.ssh_ok ? 'ok' : h.reachable ? 'ssh_fail' : 'down');
+  return { key, ...(STATE[key] || STATE.gpu_error) };
+}
+const fmtTime = (ts, span) => {
+  const d = new Date(ts * 1000);
+  if (span > 2 * 86400) return d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+const fmtAgo = s => s < 60 ? `${Math.round(s)}s ago` : s < 3600 ? `${Math.round(s/60)}m ago` : `${(s/3600).toFixed(1)}h ago`;
+
+/* ---------- availability strips ---------- */
+function renderAvail() {
+  const box = document.getElementById('avail');
+  box.textContent = '';
+  if (!hist) return;
+  const { start, end, bucket } = hist;
+  document.getElementById('avail-sub').textContent = `Last ${labelOf(range)} · ${bucket}s buckets`;
+  for (const [name, h] of Object.entries(hist.hosts)) {
+    const row = el('div', { cls: 'avail-row' }, box);
+    el('div', { cls: 'nm', text: name }, row);
+    const W = 1000, svg = el('svg:svg', { cls: 'strip', viewBox: `0 0 ${W} 18`, preserveAspectRatio: 'none', role: 'img' }, row);
+    el('svg:rect', { x: 0, y: 0, width: W, height: 18, rx: 3, fill: 'var(--nodata)' }, svg);
+    let ok = 0, judged = 0;  // buckets with only 'unknown' samples don't count toward uptime
+    const x = t => (t - start) / (end - start) * W;
+    h.t.forEach((t, i) => {
+      // a bucket shows the worst state seen in it; % = share of samples that were fully OK
+      const st = STATE[h.state[i]] || { label: 'unknown', color: 'var(--nodata)' };
+      if (h.ok[i] != null) { ok += h.ok[i]; judged++; }
+      const r = el('svg:rect', { x: x(t), y: 0, width: Math.max(1, x(t + bucket) - x(t)) + 0.4, height: 18, fill: st.color }, svg);
+      el('svg:title', { text: `${fmtTime(t, range)} · ${st.label}` }, r);
+    });
+    el('div', { cls: 'pct', text: judged ? `${(100 * ok / judged).toFixed(1)}%` : '—' }, row);
+  }
+}
+const labelOf = r => ({3600:'1 hour',21600:'6 hours',86400:'24 hours',604800:'7 days',2592000:'30 days'})[r] || `${r}s`;
+
+/* ---------- line chart with crosshair tooltip ---------- */
+function lineChart(container, { title, series, yMax, unit, start, end, bucket, bands, height = 140 }) {
+  const wrap = el('div', { cls: 'chart' }, container);
+  const ttl = el('div', { cls: 'ttl' }, wrap);
+  el('span', { text: title }, ttl);
+  if (series.length > 1) {
+    const lg = el('span', { cls: 'legend' }, ttl);
+    lg.style.marginTop = '0';
+    series.forEach(s => { const sp = el('span', {}, lg); const k = el('i', { cls: 'key-line' }, sp); k.style.background = s.color; sp.append(s.label); });
+  }
+  const W = Math.max(280, container.clientWidth || 560), H = height, L = 36, R = 8, T = 8, B = 20;
+  const svg = el('svg:svg', { viewBox: `0 0 ${W} ${H}`, height: H, role: 'img', 'aria-label': title }, wrap);
+  const allVals = series.flatMap(s => s.v).filter(v => v != null);
+  const top = yMax ?? niceMax(Math.max(1, ...allVals));
+  const x = t => L + (t - start) / (end - start) * (W - L - R);
+  const y = v => T + (1 - v / top) * (H - T - B);
+  // grid + y ticks
+  for (let i = 0; i <= 4; i++) {
+    const v = top * i / 4, yy = y(v);
+    el('svg:line', { x1: L, x2: W - R, y1: yy, y2: yy, stroke: i === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1 }, svg);
+    el('svg:text', { x: L - 6, y: yy + 3.5, 'text-anchor': 'end', text: fmtNum(v) + (i === 4 ? unit : '') }, svg);
+  }
+  // x ticks
+  const nt = W < 420 ? 3 : 5;
+  for (let i = 0; i <= nt; i++) {
+    const t = start + (end - start) * i / nt;
+    el('svg:text', { x: x(t), y: H - 5, 'text-anchor': i === 0 ? 'start' : i === nt ? 'end' : 'middle', text: fmtTime(t, end - start) }, svg);
+  }
+  // shade non-OK periods so a flat 0% line is never mistaken for "idle"
+  const bandAt = new Map();
+  if (bands) bands.t.forEach((t, i) => {
+    const st = bands.state[i];
+    if (!st || st === 'ok') return;
+    bandAt.set(t, st);
+    el('svg:rect', { x: x(t), y: T, width: Math.max(1, x(t + bucket) - x(t)) + 0.4, height: H - T - B,
+      fill: (STATE[st] || STATE.gpu_error).color, 'fill-opacity': 0.16 }, svg);
+  });
+  // lines (break on nulls and time gaps)
+  const gap = bucket * 2.5;
+  series.forEach(s => {
+    let d = '', prev = null;
+    s.t.forEach((t, i) => {
+      const v = s.v[i];
+      if (v == null) { prev = null; return; }
+      d += (prev == null || t - prev > gap ? 'M' : 'L') + x(t).toFixed(1) + ',' + y(Math.min(v, top)).toFixed(1);
+      prev = t;
+    });
+    el('svg:path', { d, fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+  });
+  if (!allVals.length) el('svg:text', { x: (L + W - R) / 2, y: H / 2, 'text-anchor': 'middle', text: 'No data in range' }, svg);
+  // hover
+  const cross = el('svg:line', { y1: T, y2: H - B, stroke: 'var(--muted)', 'stroke-width': 1, visibility: 'hidden' }, svg);
+  const dots = series.map(s => el('svg:circle', { r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden' }, svg));
+  const tip = el('div', { cls: 'tip' }, wrap);
+  const times = [...new Set([...series.flatMap(s => s.t), ...bandAt.keys()])].sort((a, b) => a - b);
+  const hit = el('svg:rect', { x: L, y: T, width: W - L - R, height: H - T - B, fill: 'transparent', tabindex: 0 }, svg);
+  const show = px => {
+    if (!times.length) return;
+    const tt = start + (px - L) / (W - L - R) * (end - start);
+    let best = times[0];
+    for (const t of times) if (Math.abs(t - tt) < Math.abs(best - tt)) best = t;
+    const cx = x(best);
+    cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility', 'visible');
+    tip.textContent = '';
+    el('div', { cls: 'tt', text: new Date(best * 1000).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }, tip);
+    if (bandAt.has(best)) {
+      const st = STATE[bandAt.get(best)] || STATE.gpu_error;
+      const r = el('div', { cls: 'row' }, tip);
+      const k = el('i', { cls: 'key-rect' }, r); k.style.background = st.color;
+      el('b', { text: `${st.icon} ${st.label}` }, r);
+    }
+    series.forEach((s, i) => {
+      const k = s.t.indexOf(best), v = k >= 0 ? s.v[k] : null;
+      if (v == null) { dots[i].setAttribute('visibility', 'hidden'); }
+      else { dots[i].setAttribute('cx', cx); dots[i].setAttribute('cy', y(Math.min(v, top))); dots[i].setAttribute('visibility', 'visible'); }
+      const r = el('div', { cls: 'row' }, tip);
+      const k2 = el('i', { cls: 'key-line' }, r); k2.style.background = s.color;
+      el('b', { text: v == null ? '—' : fmtNum(v) + unit }, r);
+      el('span', { cls: 'nm', text: s.label }, r);
+    });
+    tip.style.display = 'block';
+    const scale = svg.getBoundingClientRect().width / W;
+    let left = cx * scale + 12;
+    if (left + tip.offsetWidth > wrap.clientWidth) left = cx * scale - tip.offsetWidth - 12;
+    tip.style.left = Math.max(0, left) + 'px';
+    tip.style.top = '18px';
+  };
+  const hide = () => { cross.setAttribute('visibility', 'hidden'); dots.forEach(d => d.setAttribute('visibility', 'hidden')); tip.style.display = 'none'; };
+  hit.addEventListener('pointermove', e => { const r = svg.getBoundingClientRect(); show((e.clientX - r.left) * W / r.width); });
+  hit.addEventListener('pointerleave', hide);
+  hit.addEventListener('focus', () => show(W - R - 1));
+  hit.addEventListener('blur', hide);
+}
+const niceMax = v => { const p = 10 ** Math.floor(Math.log10(v)); for (const m of [1, 2, 2.5, 5, 10]) if (v <= m * p) return m * p; return 10 * p; };
+const fmtNum = v => v >= 100 ? Math.round(v).toString() : v >= 10 ? v.toFixed(0) : v.toFixed(1).replace(/\.0$/, '');
+
+/* ---------- host cards ---------- */
+function tile(parent, lab, val, small) {
+  const t = el('div', { cls: 'tile' }, parent);
+  el('div', { cls: 'lab', text: lab }, t);
+  const v = el('div', { cls: 'val', text: val }, t);
+  if (small) { v.append(' '); el('small', { text: small }, v); }
+}
+
+function renderHosts() {
+  const root = document.getElementById('hosts');
+  // hold the current height + scroll while cards are rebuilt, so clicks/refreshes don't jump the page
+  const scrollY = window.scrollY;
+  root.style.minHeight = root.offsetHeight + 'px';
+  try { buildHosts(root); } finally {
+    root.style.minHeight = '';
+    window.scrollTo(0, scrollY);
+  }
+}
+
+function buildHosts(root) {
+  root.textContent = '';
+  if (!status) return;
+  const now = Date.now() / 1000;
+  const charts = [];  // drawn after every card exists, so widths are final
+  for (const h of status.hosts) {
+    const st = statusOf(h);
+    const card = el('article', { cls: 'card' }, root);
+    const head = el('div', { cls: 'host-head' }, card);
+    el('h2', { text: h.name }, head);
+    const pill = el('span', { cls: 'pill' }, head);
+    const dot = el('i', { cls: 'dot' }, pill); dot.style.background = st.color;
+    pill.append(`${st.icon} ${st.label}`);
+    if (!h.pending) el('span', { cls: 'meta', text: [h.user ? `${h.user}@${h.host}:${h.port}` : null,
+      h.latency_ms != null ? `${h.latency_ms.toFixed(1)} ms` : null, fmtAgo(now - h.ts)].filter(Boolean).join(' · ') }, head);
+    if (!h.pending && st.key !== 'ok') {
+      el('div', { cls: 'err', text: `${st.icon} ${h.reason || st.label}` }, card);
+      // local dashboard only: raw error text (never published)
+      if (h.error && h.user) el('div', { cls: 'err', text: 'raw: ' + h.error }, card);
+    }
+
+    const allGpus = h.gpus || [];
+    const hh = hist && hist.hosts[h.name];
+    // GPU picker: only for multi-GPU hosts; colors stay keyed to the GPU, not its position in the filtered view
+    const idxs = [...new Set([...allGpus.map(g => g.idx), ...(hh ? hh.gpus.map(g => g.idx) : [])])].sort((a, b) => a - b);
+    let sel = gpuSel[h.name];
+    if (sel != null && !idxs.includes(sel)) sel = null;
+    if (idxs.length > 1) {
+      const seg = el('div', { cls: 'seg sm gpu-pick', role: 'group', 'aria-label': `GPU filter for ${h.name}` }, head);
+      [null, ...idxs].forEach(i => {
+        const b = el('button', { text: i == null ? 'All' : `GPU ${i}`, 'aria-pressed': String(sel === i) }, seg);
+        b.addEventListener('click', () => {
+          if (i == null) delete gpuSel[h.name]; else gpuSel[h.name] = i;
+          try { localStorage.setItem('sshmon.gpuSel', JSON.stringify(gpuSel)); } catch {}
+          renderHosts();
+        });
+      });
+    }
+    const colorOf = idx => css(SERIES[Math.min(Math.max(0, idxs.indexOf(idx)), 7)]);
+    const gpus = sel == null ? allGpus : allGpus.filter(g => g.idx === sel);
+
+    const tiles = el('div', { cls: 'tiles' }, card);
+    // unknown values (nvidia-smi "[N/A]") stay unknown: never shown as 0 / idle
+    const known = k => gpus.map(g => g[k]).filter(v => v != null);
+    const stalledSet = new Set(h.stalled_gpus || []);
+    const isFree = g => g.util != null && g.mem_used != null && g.util < 5 && g.mem_used < 1024 && !stalledSet.has(g.idx);
+    if (gpus.length === 1 && allGpus.length > 1) {
+      const g = gpus[0];
+      tile(tiles, 'GPU util', g.util != null ? `${Math.round(g.util)}%` : 'N/A', `GPU ${g.idx}`);
+      tile(tiles, 'Memory', g.mem_used != null ? `${(g.mem_used / 1024).toFixed(1)}` : 'N/A', g.mem_total != null ? `/ ${(g.mem_total / 1024).toFixed(0)} GB` : '');
+      tile(tiles, 'State', stalledSet.has(g.idx) ? '⚠ Stalled' : g.util == null ? 'Unknown' : isFree(g) ? 'Free' : 'In use', '');
+      tile(tiles, 'Temp', g.temp != null ? `${g.temp}°C` : 'N/A', '');
+    } else if (gpus.length) {
+      const u = known('util'), mu = known('mem_used'), mt = known('mem_total'), tp = known('temp');
+      tile(tiles, 'GPU util', u.length ? `${Math.round(u.reduce((a, b) => a + b, 0) / u.length)}%` : 'N/A',
+        u.length < gpus.length ? `${gpus.length - u.length} N/A` : gpus.length > 1 ? `avg of ${gpus.length}` : '');
+      tile(tiles, 'Memory', mu.length ? `${(mu.reduce((a, b) => a + b, 0) / 1024).toFixed(1)}` : 'N/A', mt.length ? `/ ${(mt.reduce((a, b) => a + b, 0) / 1024).toFixed(0)} GB` : '');
+      tile(tiles, stalledSet.size ? 'Stalled GPUs' : 'Free GPUs', `${stalledSet.size ? '⚠ ' + stalledSet.size : gpus.filter(isFree).length}`, `/ ${gpus.length}`);
+      tile(tiles, 'Max temp', tp.length ? `${Math.max(...tp)}°C` : 'N/A', '');
+    } else {
+      tile(tiles, 'GPU util', '—'); tile(tiles, 'Memory', '—'); tile(tiles, 'Free GPUs', '—'); tile(tiles, 'Max temp', '—');
+    }
+    if (gpus.length) el('div', { cls: 'meta', text: [...new Set(gpus.map(g => g.name))].map(n => `${gpus.filter(g => g.name === n).length}× ${n}`).join(', ') }, card);
+
+    const chartBox = el('div', {}, card);
+    if (hh) charts.push(() => {
+      const opts = { start: hist.start, end: hist.end, bucket: hist.bucket };
+      const hg = sel == null ? hh.gpus : hh.gpus.filter(g => g.idx === sel);
+      const mk = key => hg.map(g => ({ label: `GPU ${g.idx}`, color: colorOf(g.idx), t: g.t, v: g[key] }));
+      const bands = { t: hh.t, state: hh.state };
+      lineChart(chartBox, { ...opts, bands, title: 'GPU utilization', unit: '%', yMax: 100, series: mk('util') });
+      lineChart(chartBox, { ...opts, bands, title: 'GPU memory used', unit: '%', yMax: 100, series: mk('mem') });
+      lineChart(chartBox, { ...opts, bands, title: 'GPU temperature', unit: '°C', yMax: 100, series: mk('temp') });
+    });
+
+  }
+  charts.forEach(f => f());
+}
+
+/* ---------- data loading ---------- */
+let fails = 0;
+async function load(full) {
+  const hostsEl = document.getElementById('hosts');
+  if (full) hostsEl.classList.add('loading');
+  try {
+    const [s, hi] = await Promise.all([
+      fetch(url.status(), { cache: 'no-store' }).then(r => r.json()),
+      fetch(url.history(range), { cache: 'no-store' }).then(r => r.json()),
+    ]);
+    status = s; hist = hi;
+    const ts = Math.max(0, ...s.hosts.map(h => h.ts || 0));
+    const stale = ts && Date.now() / 1000 - ts > Math.max(180, 4 * s.interval, 3 * PUBLISH_SEC);
+    document.getElementById('updated').textContent = !ts ? 'Waiting for first poll…'
+      : `Last poll ${new Date(ts * 1000).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} · every ${s.interval}s`
+        + (PUBLISH_SEC > s.interval ? ` · this copy updates every ~${Math.round(PUBLISH_SEC / 60)} min` : '')
+        + (stale ? ` · ⚠ no fresh data for ${fmtAgo(Date.now() / 1000 - ts)} (monitor backend offline?)` : '');
+    renderAvail(); renderHosts();
+    fails = 0;
+  } catch (e) {
+    // keep the last render; a single miss (e.g. file mid-replace on the web host) is not an outage
+    if (++fails >= 3 || !status) document.getElementById('updated').textContent = 'Data source not responding — ' + e.message;
+  } finally { hostsEl.classList.remove('loading'); }
+}
+function setRange(r) {
+  range = r;
+  try { localStorage.setItem('sshmon.range', r); } catch {}
+  document.querySelectorAll('#ranges button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.r === r)));
+  load(true);
+}
+document.querySelectorAll('#ranges button').forEach(b => b.addEventListener('click', () => setRange(+b.dataset.r)));
+document.getElementById('theme').addEventListener('click', () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('sshmon.theme', next); } catch {}
+  renderAvail(); renderHosts();
+});
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(renderHosts, 150); });
+setRange(range);
+setInterval(() => load(false), 15000);
+</script>
+</body>
+</html>
