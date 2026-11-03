@@ -1,0 +1,9 @@
+{
+ "sources": [
+  {
+   "id": "rtx5090",
+   "label": "RTX 5090 workstation",
+   "file": "rtx5090.json"
+  }
+ ]
+}
