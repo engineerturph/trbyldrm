@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-03T22:41+03:00",
+ "updated": "2026-11-03T23:11+03:00",
  "gpu": {
-  "util": 76,
+  "util": 36,
   "mem_used_gb": 12.3,
   "mem_total_gb": 31.8
  },
@@ -15,27 +15,107 @@
    "title": "Latent split: both",
    "description": "Teacher: ablation 4 @100k. Neutral FLAME: gap (slow emotional drift removed except half the lip opening), anchored on the reference frame. Audio-only student with a split head after block 4 (h = h_neu + h_emo): h_neu is pulled toward the teacher's block-4 features under neutral FLAME (cosine + L2), and a VA detective reads h_neu through gradient reversal. The method.",
    "status": "training",
-   "step": 600,
+   "step": 10550,
    "max_steps": 50000,
    "branch_step": 0,
-   "last_checkpoint": null,
-   "skipped_steps": 0,
+   "last_checkpoint": 10000,
+   "skipped_steps": 39,
    "curve": [
     {
      "step": 0,
-     "loss": 1.86555,
-     "gnorm": 0.09045,
-     "fm_full": 0.01662,
+     "loss": 1.95939,
+     "gnorm": 0.10253,
+     "fm_full": 0.01696,
      "fm_mask": null,
-     "cons": 0.02933
+     "cons": 0.02852
+    },
+    {
+     "step": 1000,
+     "loss": 2.08322,
+     "gnorm": 0.12421,
+     "fm_full": 0.01754,
+     "fm_mask": null,
+     "cons": 0.02358
+    },
+    {
+     "step": 2000,
+     "loss": 2.0553,
+     "gnorm": 0.13682,
+     "fm_full": 0.01751,
+     "fm_mask": null,
+     "cons": 0.02255
+    },
+    {
+     "step": 3000,
+     "loss": 2.07653,
+     "gnorm": 0.25518,
+     "fm_full": 0.01801,
+     "fm_mask": null,
+     "cons": 0.02334
+    },
+    {
+     "step": 4000,
+     "loss": 2.06634,
+     "gnorm": 0.28251,
+     "fm_full": 0.01801,
+     "fm_mask": null,
+     "cons": 0.02365
+    },
+    {
+     "step": 5000,
+     "loss": 2.09058,
+     "gnorm": 0.23544,
+     "fm_full": 0.01772,
+     "fm_mask": null,
+     "cons": 0.02232
+    },
+    {
+     "step": 6000,
+     "loss": 2.09964,
+     "gnorm": 0.32699,
+     "fm_full": 0.01782,
+     "fm_mask": null,
+     "cons": 0.02244
+    },
+    {
+     "step": 7000,
+     "loss": 2.10446,
+     "gnorm": 0.31271,
+     "fm_full": 0.01759,
+     "fm_mask": null,
+     "cons": 0.02185
+    },
+    {
+     "step": 8000,
+     "loss": 2.11362,
+     "gnorm": 0.30813,
+     "fm_full": 0.01749,
+     "fm_mask": null,
+     "cons": 0.02171
+    },
+    {
+     "step": 9000,
+     "loss": 2.12169,
+     "gnorm": 0.38172,
+     "fm_full": 0.01762,
+     "fm_mask": null,
+     "cons": 0.02164
+    },
+    {
+     "step": 10000,
+     "loss": 2.12863,
+     "gnorm": 0.3495,
+     "fm_full": 0.01744,
+     "fm_mask": null,
+     "cons": 0.02151
     }
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 23.3,
-   "eta": "2026-11-03T23:16+03:00",
+   "rate_it_s": 21.72,
+   "eta": "2026-11-03T23:41+03:00",
    "est_start": null,
-   "loss": 1.86555
+   "loss": 2.12863
   },
   {
    "name": "va_both",
@@ -51,8 +131,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-03T23:59+03:00",
-   "est_start": "2026-11-03T23:16+03:00"
+   "eta": "2026-11-04T00:24+03:00",
+   "est_start": "2026-11-03T23:41+03:00"
   },
   {
    "name": "plain",
@@ -68,8 +148,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T00:38+03:00",
-   "est_start": "2026-11-03T23:59+03:00"
+   "eta": "2026-11-04T01:03+03:00",
+   "est_start": "2026-11-04T00:24+03:00"
   },
   {
    "name": "cos_only",
@@ -85,8 +165,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T01:17+03:00",
-   "est_start": "2026-11-04T00:38+03:00"
+   "eta": "2026-11-04T01:42+03:00",
+   "est_start": "2026-11-04T01:03+03:00"
   },
   {
    "name": "det_only",
@@ -102,8 +182,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T01:56+03:00",
-   "est_start": "2026-11-04T01:17+03:00"
+   "eta": "2026-11-04T02:21+03:00",
+   "est_start": "2026-11-04T01:42+03:00"
   },
   {
    "name": "va_cos_only",
@@ -119,8 +199,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T02:39+03:00",
-   "est_start": "2026-11-04T01:56+03:00"
+   "eta": "2026-11-04T03:04+03:00",
+   "est_start": "2026-11-04T02:21+03:00"
   },
   {
    "name": "va_det_only",
@@ -136,8 +216,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T03:22+03:00",
-   "est_start": "2026-11-04T02:39+03:00"
+   "eta": "2026-11-04T03:47+03:00",
+   "est_start": "2026-11-04T03:04+03:00"
   },
   {
    "name": "both_frozen",
@@ -153,8 +233,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T03:47+03:00",
-   "est_start": "2026-11-04T03:22+03:00"
+   "eta": "2026-11-04T04:12+03:00",
+   "est_start": "2026-11-04T03:47+03:00"
   },
   {
    "name": "cos_only_frozen",
@@ -170,8 +250,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T04:12+03:00",
-   "est_start": "2026-11-04T03:47+03:00"
+   "eta": "2026-11-04T04:37+03:00",
+   "est_start": "2026-11-04T04:12+03:00"
   },
   {
    "name": "det_only_frozen",
@@ -187,8 +267,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T04:37+03:00",
-   "est_start": "2026-11-04T04:12+03:00"
+   "eta": "2026-11-04T05:02+03:00",
+   "est_start": "2026-11-04T04:37+03:00"
   },
   {
    "name": "va_both_frozen",
@@ -204,8 +284,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T05:20+03:00",
-   "est_start": "2026-11-04T04:37+03:00"
+   "eta": "2026-11-04T05:45+03:00",
+   "est_start": "2026-11-04T05:02+03:00"
   },
   {
    "name": "flame_v3_abl2b_afcrop",
