@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations on Avatar Forcing crops",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only).",
- "updated": "2026-11-03T12:08+03:00",
+ "updated": "2026-11-03T12:38+03:00",
  "gpu": {
-  "util": 92,
-  "mem_used_gb": 15.1,
+  "util": 96,
+  "mem_used_gb": 16.5,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -14,11 +14,11 @@
    "name": "flame_v3_abl2b_afcrop",
    "title": "Ablation 2b",
    "description": "As ablation 2, but the 75 % share removes a growing top fraction of one FLAME parameter's most-moving points: 10 % at 25k, +10 % every ~6.1k steps, all points from 80k. Mouth + jaw is removed on the other 25 %.",
-   "status": "training",
-   "step": 96002,
+   "status": "finished",
+   "step": 100000,
    "max_steps": 100000,
    "branch_step": 25000,
-   "last_checkpoint": 95000,
+   "last_checkpoint": 100000,
    "skipped_steps": 3,
    "curve": [
     {
@@ -591,11 +591,43 @@
     },
     {
      "step": 96000,
-     "loss": 0.0157,
-     "gnorm": 0.083,
-     "fm_full": 0.0141,
-     "fm_mask": 0.0154,
-     "cons": 0.00098
+     "loss": 0.01632,
+     "gnorm": 0.06523,
+     "fm_full": 0.01336,
+     "fm_mask": 0.01558,
+     "cons": 0.00185
+    },
+    {
+     "step": 97000,
+     "loss": 0.01631,
+     "gnorm": 0.06588,
+     "fm_full": 0.01338,
+     "fm_mask": 0.01549,
+     "cons": 0.00187
+    },
+    {
+     "step": 98000,
+     "loss": 0.01657,
+     "gnorm": 0.06794,
+     "fm_full": 0.01352,
+     "fm_mask": 0.01573,
+     "cons": 0.00194
+    },
+    {
+     "step": 99000,
+     "loss": 0.01623,
+     "gnorm": 0.06442,
+     "fm_full": 0.01334,
+     "fm_mask": 0.01547,
+     "cons": 0.00183
+    },
+    {
+     "step": 100000,
+     "loss": 0.0183,
+     "gnorm": 0.058,
+     "fm_full": 0.0158,
+     "fm_mask": 0.0177,
+     "cons": 0.00159
     }
    ],
    "evals": [
@@ -625,30 +657,97 @@
      "CSIM": 0.924,
      "LSE-D": 9.321,
      "LSE-C": 5.984
+    },
+    {
+     "step": 100000,
+     "mode": "full FLAME",
+     "FID": 24.368,
+     "FVD": 121.6,
+     "CSIM": 0.906,
+     "LSE-D": 7.666,
+     "LSE-C": 7.781
     }
    ],
    "note": null,
-   "rate_it_s": 6.65,
-   "eta": "2026-11-03T12:18+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.0157
+   "loss": 0.0183
   },
   {
    "name": "flame_v3_abl4_afcrop",
    "title": "Ablation 4",
    "description": "Only the mouth + jaw is masked, on 25 % of samples; the other 75 % train unmasked.",
-   "status": "queued",
-   "step": 0,
+   "status": "training",
+   "step": 31205,
    "max_steps": 100000,
    "branch_step": 25000,
-   "last_checkpoint": null,
-   "skipped_steps": 0,
-   "curve": [],
+   "last_checkpoint": 30000,
+   "skipped_steps": 3,
+   "curve": [
+    {
+     "step": 25000,
+     "loss": 0.01848,
+     "gnorm": 0.09532,
+     "fm_full": 0.01815,
+     "fm_mask": 0.01841,
+     "cons": 0.0002
+    },
+    {
+     "step": 26000,
+     "loss": 0.01833,
+     "gnorm": 0.10143,
+     "fm_full": 0.01809,
+     "fm_mask": 0.01828,
+     "cons": 0.00015
+    },
+    {
+     "step": 27000,
+     "loss": 0.01768,
+     "gnorm": 0.10158,
+     "fm_full": 0.0175,
+     "fm_mask": 0.01765,
+     "cons": 0.00011
+    },
+    {
+     "step": 28000,
+     "loss": 0.01773,
+     "gnorm": 0.10368,
+     "fm_full": 0.01756,
+     "fm_mask": 0.01769,
+     "cons": 0.0001
+    },
+    {
+     "step": 29000,
+     "loss": 0.01728,
+     "gnorm": 0.09773,
+     "fm_full": 0.01711,
+     "fm_mask": 0.01726,
+     "cons": 9e-05
+    },
+    {
+     "step": 30000,
+     "loss": 0.01727,
+     "gnorm": 0.09937,
+     "fm_full": 0.01713,
+     "fm_mask": 0.01725,
+     "cons": 8e-05
+    },
+    {
+     "step": 31000,
+     "loss": 0.01755,
+     "gnorm": 0.09848,
+     "fm_full": 0.01742,
+     "fm_mask": 0.01753,
+     "cons": 8e-05
+    }
+   ],
    "evals": [],
    "note": null,
-   "rate_it_s": null,
-   "eta": "2026-11-03T15:36+03:00",
-   "est_start": "2026-11-03T12:18+03:00"
+   "rate_it_s": 4.39,
+   "eta": "2026-11-03T16:59+03:00",
+   "est_start": null,
+   "loss": 0.01755
   },
   {
    "name": "flame_v3_abl2_afcrop",
