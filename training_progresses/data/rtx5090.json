@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations on Avatar Forcing crops",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only).",
- "updated": "2026-11-03T09:37+03:00",
+ "updated": "2026-11-03T09:38+03:00",
  "gpu": {
-  "util": 92,
+  "util": 93,
   "mem_used_gb": 15.2,
   "mem_total_gb": 31.8
  },
@@ -15,7 +15,7 @@
    "title": "Ablation 2b",
    "description": "As ablation 2, but the 75 % share removes a growing top fraction of one FLAME parameter's most-moving points: 10 % at 25k, +10 % every ~6.1k steps, all points from 80k. Mouth + jaw is removed on the other 25 %.",
    "status": "training",
-   "step": 39427,
+   "step": 39624,
    "max_steps": 100000,
    "branch_step": 25000,
    "last_checkpoint": 35000,
@@ -135,19 +135,19 @@
     },
     {
      "step": 39000,
-     "loss": 0.01641,
-     "gnorm": 0.11628,
-     "fm_full": 0.01612,
-     "fm_mask": 0.01634,
-     "cons": 0.00018
+     "loss": 0.01631,
+     "gnorm": 0.11292,
+     "fm_full": 0.01603,
+     "fm_mask": 0.01625,
+     "cons": 0.00017
     }
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 6.72,
-   "eta": "2026-11-03T12:08+03:00",
+   "rate_it_s": 6.61,
+   "eta": "2026-11-03T12:10+03:00",
    "est_start": null,
-   "loss": 0.01641
+   "loss": 0.01631
   },
   {
    "name": "flame_v3_abl4_afcrop",
@@ -163,8 +163,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-03T15:26+03:00",
-   "est_start": "2026-11-03T12:08+03:00"
+   "eta": "2026-11-03T15:28+03:00",
+   "est_start": "2026-11-03T12:10+03:00"
   },
   {
    "name": "flame_v3_abl2_afcrop",
