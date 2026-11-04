@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-04T09:20+03:00",
+ "updated": "2026-11-04T09:51+03:00",
  "gpu": {
-  "util": 0,
+  "util": 66,
   "mem_used_gb": 12.3,
   "mem_total_gb": 31.8
  },
@@ -15,11 +15,11 @@
    "title": "Latent split: both, neutral-target adversarial",
    "description": "Adversarial network with a neutral-VA target (it learns the real VA from h_neu; the student is pulled so the network reads h_neu as neutral), weight 0.1, plus the neutral-FLAME pull (cosine + L2). The method (full student).",
    "status": "paused",
-   "step": 5850,
+   "step": 24000,
    "max_steps": 50000,
    "branch_step": 0,
-   "last_checkpoint": null,
-   "skipped_steps": 14,
+   "last_checkpoint": 20000,
+   "skipped_steps": 154,
    "curve": [
     {
      "step": 0,
@@ -63,11 +63,163 @@
     },
     {
      "step": 5000,
-     "loss": 1.00254,
-     "gnorm": 0.24262,
-     "fm_full": 0.01709,
+     "loss": 0.99603,
+     "gnorm": 0.23652,
+     "fm_full": 0.01708,
      "fm_mask": null,
-     "cons": 0.0158
+     "cons": 0.01567
+    },
+    {
+     "step": 6000,
+     "loss": 0.94304,
+     "gnorm": 0.18596,
+     "fm_full": 0.01701,
+     "fm_mask": null,
+     "cons": 0.01461
+    },
+    {
+     "step": 7000,
+     "loss": 0.92927,
+     "gnorm": 0.22109,
+     "fm_full": 0.01687,
+     "fm_mask": null,
+     "cons": 0.01437
+    },
+    {
+     "step": 8000,
+     "loss": 0.93409,
+     "gnorm": 0.27105,
+     "fm_full": 0.01691,
+     "fm_mask": null,
+     "cons": 0.01422
+    },
+    {
+     "step": 9000,
+     "loss": 0.93006,
+     "gnorm": 0.22289,
+     "fm_full": 0.01682,
+     "fm_mask": null,
+     "cons": 0.01401
+    },
+    {
+     "step": 10000,
+     "loss": 0.92578,
+     "gnorm": 0.23819,
+     "fm_full": 0.01674,
+     "fm_mask": null,
+     "cons": 0.01388
+    },
+    {
+     "step": 11000,
+     "loss": 0.92876,
+     "gnorm": 0.274,
+     "fm_full": 0.01669,
+     "fm_mask": null,
+     "cons": 0.01371
+    },
+    {
+     "step": 12000,
+     "loss": 0.90028,
+     "gnorm": 0.30904,
+     "fm_full": 0.01667,
+     "fm_mask": null,
+     "cons": 0.01372
+    },
+    {
+     "step": 13000,
+     "loss": 0.89267,
+     "gnorm": 0.29536,
+     "fm_full": 0.01658,
+     "fm_mask": null,
+     "cons": 0.01358
+    },
+    {
+     "step": 14000,
+     "loss": 0.88122,
+     "gnorm": 0.27024,
+     "fm_full": 0.0167,
+     "fm_mask": null,
+     "cons": 0.0136
+    },
+    {
+     "step": 15000,
+     "loss": 0.86826,
+     "gnorm": 0.2462,
+     "fm_full": 0.0165,
+     "fm_mask": null,
+     "cons": 0.01325
+    },
+    {
+     "step": 16000,
+     "loss": 0.86111,
+     "gnorm": 0.23053,
+     "fm_full": 0.01641,
+     "fm_mask": null,
+     "cons": 0.01324
+    },
+    {
+     "step": 17000,
+     "loss": 0.85392,
+     "gnorm": 0.25044,
+     "fm_full": 0.01641,
+     "fm_mask": null,
+     "cons": 0.01323
+    },
+    {
+     "step": 18000,
+     "loss": 0.84947,
+     "gnorm": 0.25256,
+     "fm_full": 0.01618,
+     "fm_mask": null,
+     "cons": 0.01292
+    },
+    {
+     "step": 19000,
+     "loss": 0.85117,
+     "gnorm": 0.23536,
+     "fm_full": 0.01616,
+     "fm_mask": null,
+     "cons": 0.013
+    },
+    {
+     "step": 20000,
+     "loss": 0.82976,
+     "gnorm": 0.21848,
+     "fm_full": 0.01624,
+     "fm_mask": null,
+     "cons": 0.01296
+    },
+    {
+     "step": 21000,
+     "loss": 0.81977,
+     "gnorm": 0.25623,
+     "fm_full": 0.0162,
+     "fm_mask": null,
+     "cons": 0.01274
+    },
+    {
+     "step": 22000,
+     "loss": 0.81915,
+     "gnorm": 0.31409,
+     "fm_full": 0.01606,
+     "fm_mask": null,
+     "cons": 0.01268
+    },
+    {
+     "step": 23000,
+     "loss": 0.80395,
+     "gnorm": 0.24776,
+     "fm_full": 0.01608,
+     "fm_mask": null,
+     "cons": 0.01259
+    },
+    {
+     "step": 24000,
+     "loss": 0.82384,
+     "gnorm": 0.42257,
+     "fm_full": 0.01584,
+     "fm_mask": null,
+     "cons": 0.01222
     }
    ],
    "evals": [],
@@ -75,7 +227,7 @@
    "rate_it_s": null,
    "eta": null,
    "est_start": null,
-   "loss": 1.00254
+   "loss": 0.82384
   },
   {
    "name": "va_both_nadv",
