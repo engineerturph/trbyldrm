@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-04T02:45+03:00",
+ "updated": "2026-11-04T03:16+03:00",
  "gpu": {
-  "util": 0,
+  "util": 62,
   "mem_used_gb": 12.3,
   "mem_total_gb": 31.8
  },
@@ -1295,12 +1295,12 @@
    "name": "cos_only",
    "title": "Latent split: cosine only",
    "description": "Ablation: the neutral-FLAME pull (cosine + L2) without the detective.",
-   "status": "training",
-   "step": 33250,
+   "status": "finished",
+   "step": 50000,
    "max_steps": 50000,
    "branch_step": 0,
-   "last_checkpoint": 30000,
-   "skipped_steps": 214,
+   "last_checkpoint": 50000,
+   "skipped_steps": 321,
    "curve": [
     {
      "step": 0,
@@ -1568,36 +1568,206 @@
     },
     {
      "step": 33000,
-     "loss": 0.59615,
-     "gnorm": 0.18001,
-     "fm_full": 0.01543,
+     "loss": 0.59548,
+     "gnorm": 0.21272,
+     "fm_full": 0.01535,
      "fm_mask": null,
-     "cons": 0.01013
+     "cons": 0.0101
+    },
+    {
+     "step": 34000,
+     "loss": 0.59548,
+     "gnorm": 0.21926,
+     "fm_full": 0.01539,
+     "fm_mask": null,
+     "cons": 0.01006
+    },
+    {
+     "step": 35000,
+     "loss": 0.59407,
+     "gnorm": 0.22072,
+     "fm_full": 0.01541,
+     "fm_mask": null,
+     "cons": 0.01004
+    },
+    {
+     "step": 36000,
+     "loss": 0.57796,
+     "gnorm": 0.19685,
+     "fm_full": 0.01529,
+     "fm_mask": null,
+     "cons": 0.00991
+    },
+    {
+     "step": 37000,
+     "loss": 0.58431,
+     "gnorm": 0.24806,
+     "fm_full": 0.01526,
+     "fm_mask": null,
+     "cons": 0.00998
+    },
+    {
+     "step": 38000,
+     "loss": 0.57295,
+     "gnorm": 0.20814,
+     "fm_full": 0.01524,
+     "fm_mask": null,
+     "cons": 0.00992
+    },
+    {
+     "step": 39000,
+     "loss": 0.5723,
+     "gnorm": 0.25671,
+     "fm_full": 0.01516,
+     "fm_mask": null,
+     "cons": 0.00981
+    },
+    {
+     "step": 40000,
+     "loss": 0.57417,
+     "gnorm": 0.22201,
+     "fm_full": 0.01528,
+     "fm_mask": null,
+     "cons": 0.00985
+    },
+    {
+     "step": 41000,
+     "loss": 0.57229,
+     "gnorm": 0.23521,
+     "fm_full": 0.01519,
+     "fm_mask": null,
+     "cons": 0.00983
+    },
+    {
+     "step": 42000,
+     "loss": 0.55556,
+     "gnorm": 0.209,
+     "fm_full": 0.01516,
+     "fm_mask": null,
+     "cons": 0.00983
+    },
+    {
+     "step": 43000,
+     "loss": 0.56358,
+     "gnorm": 0.22393,
+     "fm_full": 0.01518,
+     "fm_mask": null,
+     "cons": 0.00972
+    },
+    {
+     "step": 44000,
+     "loss": 0.56299,
+     "gnorm": 0.21034,
+     "fm_full": 0.01516,
+     "fm_mask": null,
+     "cons": 0.00976
+    },
+    {
+     "step": 45000,
+     "loss": 0.56493,
+     "gnorm": 0.20657,
+     "fm_full": 0.01507,
+     "fm_mask": null,
+     "cons": 0.00973
+    },
+    {
+     "step": 46000,
+     "loss": 0.55172,
+     "gnorm": 0.2053,
+     "fm_full": 0.01505,
+     "fm_mask": null,
+     "cons": 0.00965
+    },
+    {
+     "step": 47000,
+     "loss": 0.54671,
+     "gnorm": 0.2101,
+     "fm_full": 0.01493,
+     "fm_mask": null,
+     "cons": 0.00956
+    },
+    {
+     "step": 48000,
+     "loss": 0.5627,
+     "gnorm": 0.18909,
+     "fm_full": 0.01495,
+     "fm_mask": null,
+     "cons": 0.00961
+    },
+    {
+     "step": 49000,
+     "loss": 0.55118,
+     "gnorm": 0.21382,
+     "fm_full": 0.01501,
+     "fm_mask": null,
+     "cons": 0.0096
+    },
+    {
+     "step": 50000,
+     "loss": 0.51214,
+     "gnorm": 0.184,
+     "fm_full": 0.01458,
+     "fm_mask": null,
+     "cons": 0.00936
     }
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 21.94,
-   "eta": "2026-11-04T02:58+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.59615
+   "loss": 0.51214
   },
   {
    "name": "det_only",
    "title": "Latent split: detective only",
    "description": "Ablation: the VA detective without the neutral-FLAME pull.",
-   "status": "queued",
-   "step": 0,
+   "status": "training",
+   "step": 3800,
    "max_steps": 50000,
    "branch_step": 0,
    "last_checkpoint": null,
    "skipped_steps": 0,
-   "curve": [],
+   "curve": [
+    {
+     "step": 0,
+     "loss": 2.18936,
+     "gnorm": 0.07048,
+     "fm_full": 0.01757,
+     "fm_mask": null,
+     "cons": 0.51383
+    },
+    {
+     "step": 1000,
+     "loss": 2.49484,
+     "gnorm": 0.08266,
+     "fm_full": 0.01928,
+     "fm_mask": null,
+     "cons": 0.95374
+    },
+    {
+     "step": 2000,
+     "loss": 2.63919,
+     "gnorm": 0.10272,
+     "fm_full": 0.02063,
+     "fm_mask": null,
+     "cons": 0.99159
+    },
+    {
+     "step": 3000,
+     "loss": 2.51068,
+     "gnorm": 0.12039,
+     "fm_full": 0.0195,
+     "fm_mask": null,
+     "cons": 0.99429
+    }
+   ],
    "evals": [],
    "note": null,
-   "rate_it_s": null,
-   "eta": "2026-11-04T03:37+03:00",
-   "est_start": "2026-11-04T02:58+03:00"
+   "rate_it_s": 22.71,
+   "eta": "2026-11-04T03:50+03:00",
+   "est_start": null,
+   "loss": 2.51068
   },
   {
    "name": "va_cos_only",
@@ -1613,8 +1783,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T04:20+03:00",
-   "est_start": "2026-11-04T03:37+03:00"
+   "eta": "2026-11-04T04:33+03:00",
+   "est_start": "2026-11-04T03:50+03:00"
   },
   {
    "name": "va_det_only",
@@ -1630,8 +1800,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T05:03+03:00",
-   "est_start": "2026-11-04T04:20+03:00"
+   "eta": "2026-11-04T05:16+03:00",
+   "est_start": "2026-11-04T04:33+03:00"
   },
   {
    "name": "both_frozen",
@@ -1647,8 +1817,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T05:28+03:00",
-   "est_start": "2026-11-04T05:03+03:00"
+   "eta": "2026-11-04T05:41+03:00",
+   "est_start": "2026-11-04T05:16+03:00"
   },
   {
    "name": "cos_only_frozen",
@@ -1664,8 +1834,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T05:53+03:00",
-   "est_start": "2026-11-04T05:28+03:00"
+   "eta": "2026-11-04T06:06+03:00",
+   "est_start": "2026-11-04T05:41+03:00"
   },
   {
    "name": "det_only_frozen",
@@ -1681,8 +1851,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T06:18+03:00",
-   "est_start": "2026-11-04T05:53+03:00"
+   "eta": "2026-11-04T06:31+03:00",
+   "est_start": "2026-11-04T06:06+03:00"
   },
   {
    "name": "va_both_frozen",
@@ -1698,8 +1868,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T07:01+03:00",
-   "est_start": "2026-11-04T06:18+03:00"
+   "eta": "2026-11-04T07:14+03:00",
+   "est_start": "2026-11-04T06:31+03:00"
   },
   {
    "name": "flame_v3_abl2b_afcrop",
