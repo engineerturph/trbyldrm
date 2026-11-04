@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-04T10:52+03:00",
+ "updated": "2026-11-04T11:22+03:00",
  "gpu": {
-  "util": 61,
-  "mem_used_gb": 14.7,
+  "util": 97,
+  "mem_used_gb": 14.9,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -441,11 +441,11 @@
    "name": "va_both_nadv",
    "title": "Latent split: VA -> latent on both (neutral-target)",
    "description": "VA -> latent model on the frozen both_nadv student.",
-   "status": "training",
-   "step": 20100,
+   "status": "paused",
+   "step": 33100,
    "max_steps": 50000,
    "branch_step": 0,
-   "last_checkpoint": 20000,
+   "last_checkpoint": 30000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -610,19 +610,123 @@
     },
     {
      "step": 20000,
-     "loss": 0.0248,
-     "gnorm": 0.02191,
-     "fm_full": 0.0248,
+     "loss": 0.02478,
+     "gnorm": 0.02161,
+     "fm_full": 0.02478,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 21000,
+     "loss": 0.02477,
+     "gnorm": 0.02063,
+     "fm_full": 0.02477,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 22000,
+     "loss": 0.02466,
+     "gnorm": 0.01992,
+     "fm_full": 0.02466,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 23000,
+     "loss": 0.02466,
+     "gnorm": 0.01912,
+     "fm_full": 0.02466,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 24000,
+     "loss": 0.02464,
+     "gnorm": 0.01872,
+     "fm_full": 0.02464,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 25000,
+     "loss": 0.02457,
+     "gnorm": 0.01814,
+     "fm_full": 0.02457,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 26000,
+     "loss": 0.02456,
+     "gnorm": 0.01769,
+     "fm_full": 0.02456,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 27000,
+     "loss": 0.02446,
+     "gnorm": 0.01736,
+     "fm_full": 0.02446,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 28000,
+     "loss": 0.02464,
+     "gnorm": 0.01691,
+     "fm_full": 0.02464,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 29000,
+     "loss": 0.02446,
+     "gnorm": 0.01664,
+     "fm_full": 0.02446,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 30000,
+     "loss": 0.02442,
+     "gnorm": 0.01648,
+     "fm_full": 0.02442,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 31000,
+     "loss": 0.02437,
+     "gnorm": 0.01616,
+     "fm_full": 0.02437,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 32000,
+     "loss": 0.02431,
+     "gnorm": 0.01584,
+     "fm_full": 0.02431,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 33000,
+     "loss": 0.02461,
+     "gnorm": 0.01587,
+     "fm_full": 0.02461,
      "fm_mask": null,
      "cons": null
     }
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 27.9,
-   "eta": "2026-11-04T11:09+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.0248
+   "loss": 0.02461
   },
   {
    "name": "both_frozen_nadv",
@@ -638,8 +742,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T11:52+03:00",
-   "est_start": "2026-11-04T11:09+03:00"
+   "eta": null,
+   "est_start": null
   },
   {
    "name": "adv_only_nadv",
@@ -655,8 +759,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T12:31+03:00",
-   "est_start": "2026-11-04T11:52+03:00"
+   "eta": null,
+   "est_start": null
   },
   {
    "name": "adv_only_frozen_nadv",
@@ -672,8 +776,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T13:14+03:00",
-   "est_start": "2026-11-04T12:31+03:00"
+   "eta": null,
+   "est_start": null
   },
   {
    "name": "va_both_frozen_nadv",
@@ -689,8 +793,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-04T13:57+03:00",
-   "est_start": "2026-11-04T13:14+03:00"
+   "eta": null,
+   "est_start": null
   },
   {
    "name": "both",
