@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-04T10:21+03:00",
+ "updated": "2026-11-04T10:52+03:00",
  "gpu": {
-  "util": 0,
-  "mem_used_gb": 12.3,
+  "util": 61,
+  "mem_used_gb": 14.7,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -14,12 +14,12 @@
    "name": "both_nadv",
    "title": "Latent split: both, neutral-target adversarial",
    "description": "Adversarial network with a neutral-VA target (it learns the real VA from h_neu; the student is pulled so the network reads h_neu as neutral), weight 0.1, plus the neutral-FLAME pull (cosine + L2). The method (full student).",
-   "status": "paused",
-   "step": 46050,
+   "status": "finished",
+   "step": 50000,
    "max_steps": 50000,
    "branch_step": 0,
-   "last_checkpoint": 40000,
-   "skipped_steps": 330,
+   "last_checkpoint": 50000,
+   "skipped_steps": 357,
    "curve": [
     {
      "step": 0,
@@ -391,11 +391,43 @@
     },
     {
      "step": 46000,
-     "loss": 0.73194,
-     "gnorm": 0.20098,
-     "fm_full": 0.01509,
+     "loss": 0.70858,
+     "gnorm": 0.1927,
+     "fm_full": 0.01507,
+     "fm_mask": null,
+     "cons": 0.01168
+    },
+    {
+     "step": 47000,
+     "loss": 0.70025,
+     "gnorm": 0.22787,
+     "fm_full": 0.01496,
      "fm_mask": null,
      "cons": 0.01155
+    },
+    {
+     "step": 48000,
+     "loss": 0.71406,
+     "gnorm": 0.21351,
+     "fm_full": 0.01498,
+     "fm_mask": null,
+     "cons": 0.01158
+    },
+    {
+     "step": 49000,
+     "loss": 0.70577,
+     "gnorm": 0.20951,
+     "fm_full": 0.01505,
+     "fm_mask": null,
+     "cons": 0.01161
+    },
+    {
+     "step": 50000,
+     "loss": 0.67479,
+     "gnorm": 0.20771,
+     "fm_full": 0.01461,
+     "fm_mask": null,
+     "cons": 0.01134
     }
    ],
    "evals": [],
@@ -403,24 +435,194 @@
    "rate_it_s": null,
    "eta": null,
    "est_start": null,
-   "loss": 0.73194
+   "loss": 0.67479
   },
   {
    "name": "va_both_nadv",
    "title": "Latent split: VA -> latent on both (neutral-target)",
    "description": "VA -> latent model on the frozen both_nadv student.",
-   "status": "queued",
-   "step": 0,
+   "status": "training",
+   "step": 20100,
    "max_steps": 50000,
    "branch_step": 0,
-   "last_checkpoint": null,
+   "last_checkpoint": 20000,
    "skipped_steps": 0,
-   "curve": [],
+   "curve": [
+    {
+     "step": 0,
+     "loss": 0.03872,
+     "gnorm": 0.15782,
+     "fm_full": 0.03872,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 1000,
+     "loss": 0.02883,
+     "gnorm": 0.12622,
+     "fm_full": 0.02883,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 2000,
+     "loss": 0.02694,
+     "gnorm": 0.10516,
+     "fm_full": 0.02694,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 3000,
+     "loss": 0.02632,
+     "gnorm": 0.09209,
+     "fm_full": 0.02632,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 4000,
+     "loss": 0.02598,
+     "gnorm": 0.08023,
+     "fm_full": 0.02598,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 5000,
+     "loss": 0.02588,
+     "gnorm": 0.07133,
+     "fm_full": 0.02588,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 6000,
+     "loss": 0.02566,
+     "gnorm": 0.06394,
+     "fm_full": 0.02566,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 7000,
+     "loss": 0.02539,
+     "gnorm": 0.05811,
+     "fm_full": 0.02539,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 8000,
+     "loss": 0.02544,
+     "gnorm": 0.0521,
+     "fm_full": 0.02544,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 9000,
+     "loss": 0.02529,
+     "gnorm": 0.04707,
+     "fm_full": 0.02529,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 10000,
+     "loss": 0.02521,
+     "gnorm": 0.04284,
+     "fm_full": 0.02521,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 11000,
+     "loss": 0.02504,
+     "gnorm": 0.03902,
+     "fm_full": 0.02504,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 12000,
+     "loss": 0.02503,
+     "gnorm": 0.0354,
+     "fm_full": 0.02503,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 13000,
+     "loss": 0.02496,
+     "gnorm": 0.03291,
+     "fm_full": 0.02496,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 14000,
+     "loss": 0.02502,
+     "gnorm": 0.03024,
+     "fm_full": 0.02502,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 15000,
+     "loss": 0.02493,
+     "gnorm": 0.02785,
+     "fm_full": 0.02493,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 16000,
+     "loss": 0.02499,
+     "gnorm": 0.02656,
+     "fm_full": 0.02499,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 17000,
+     "loss": 0.02491,
+     "gnorm": 0.02502,
+     "fm_full": 0.02491,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 18000,
+     "loss": 0.02468,
+     "gnorm": 0.02367,
+     "fm_full": 0.02468,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 19000,
+     "loss": 0.02468,
+     "gnorm": 0.0225,
+     "fm_full": 0.02468,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 20000,
+     "loss": 0.0248,
+     "gnorm": 0.02191,
+     "fm_full": 0.0248,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
    "evals": [],
    "note": null,
-   "rate_it_s": null,
-   "eta": null,
-   "est_start": null
+   "rate_it_s": 27.9,
+   "eta": "2026-11-04T11:09+03:00",
+   "est_start": null,
+   "loss": 0.0248
   },
   {
    "name": "both_frozen_nadv",
@@ -436,8 +638,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": null,
-   "est_start": null
+   "eta": "2026-11-04T11:52+03:00",
+   "est_start": "2026-11-04T11:09+03:00"
   },
   {
    "name": "adv_only_nadv",
@@ -453,8 +655,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": null,
-   "est_start": null
+   "eta": "2026-11-04T12:31+03:00",
+   "est_start": "2026-11-04T11:52+03:00"
   },
   {
    "name": "adv_only_frozen_nadv",
@@ -470,8 +672,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": null,
-   "est_start": null
+   "eta": "2026-11-04T13:14+03:00",
+   "est_start": "2026-11-04T12:31+03:00"
   },
   {
    "name": "va_both_frozen_nadv",
@@ -487,8 +689,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": null,
-   "est_start": null
+   "eta": "2026-11-04T13:57+03:00",
+   "est_start": "2026-11-04T13:14+03:00"
   },
   {
    "name": "both",
