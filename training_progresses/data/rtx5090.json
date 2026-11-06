@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-07T01:58+03:00",
+ "updated": "2026-11-07T02:28+03:00",
  "gpu": {
   "util": 93,
-  "mem_used_gb": 18.3,
+  "mem_used_gb": 19.6,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -6008,10 +6008,10 @@
    "title": "Ablation 2",
    "description": "Masked consistency: mouth + jaw removed on 25 % of samples, otherwise the top-300 moving points of one of 55 FLAME parameters (expressions 1-50, jaw, eyelids). Resumed 2026-11-06 from 170k to 500k (checkpoints every 50k).",
    "status": "training",
-   "step": 249262,
+   "step": 258818,
    "max_steps": 500000,
    "branch_step": 25000,
-   "last_checkpoint": 200000,
+   "last_checkpoint": 250000,
    "skipped_steps": 5,
    "curve": [
     {
@@ -8008,10 +8008,82 @@
     },
     {
      "step": 249000,
-     "loss": 0.01231,
-     "gnorm": 0.043,
-     "fm_full": 0.01223,
-     "fm_mask": 0.01229,
+     "loss": 0.01253,
+     "gnorm": 0.04414,
+     "fm_full": 0.01244,
+     "fm_mask": 0.0125,
+     "cons": 6e-05
+    },
+    {
+     "step": 250000,
+     "loss": 0.01256,
+     "gnorm": 0.04231,
+     "fm_full": 0.01247,
+     "fm_mask": 0.01254,
+     "cons": 6e-05
+    },
+    {
+     "step": 251000,
+     "loss": 0.01243,
+     "gnorm": 0.04391,
+     "fm_full": 0.01233,
+     "fm_mask": 0.0124,
+     "cons": 6e-05
+    },
+    {
+     "step": 252000,
+     "loss": 0.01263,
+     "gnorm": 0.04467,
+     "fm_full": 0.01253,
+     "fm_mask": 0.0126,
+     "cons": 6e-05
+    },
+    {
+     "step": 253000,
+     "loss": 0.01256,
+     "gnorm": 0.04224,
+     "fm_full": 0.01247,
+     "fm_mask": 0.01255,
+     "cons": 6e-05
+    },
+    {
+     "step": 254000,
+     "loss": 0.01244,
+     "gnorm": 0.04275,
+     "fm_full": 0.01234,
+     "fm_mask": 0.01242,
+     "cons": 6e-05
+    },
+    {
+     "step": 255000,
+     "loss": 0.01262,
+     "gnorm": 0.04296,
+     "fm_full": 0.01253,
+     "fm_mask": 0.01259,
+     "cons": 6e-05
+    },
+    {
+     "step": 256000,
+     "loss": 0.01261,
+     "gnorm": 0.04444,
+     "fm_full": 0.01252,
+     "fm_mask": 0.01259,
+     "cons": 6e-05
+    },
+    {
+     "step": 257000,
+     "loss": 0.01251,
+     "gnorm": 0.04354,
+     "fm_full": 0.01241,
+     "fm_mask": 0.01248,
+     "cons": 6e-05
+    },
+    {
+     "step": 258000,
+     "loss": 0.01251,
+     "gnorm": 0.04382,
+     "fm_full": 0.01242,
+     "fm_mask": 0.01249,
      "cons": 6e-05
     }
    ],
@@ -8123,13 +8195,31 @@
      "CSIM": 0.93,
      "LSE-D": 8.875,
      "LSE-C": 6.397
+    },
+    {
+     "step": 250000,
+     "mode": "full FLAME",
+     "FID": 18.253,
+     "FVD": 92.6,
+     "CSIM": 0.906,
+     "LSE-D": 7.586,
+     "LSE-C": 7.787
+    },
+    {
+     "step": 250000,
+     "mode": "no mouth + jaw",
+     "FID": 18.017,
+     "FVD": 93.9,
+     "CSIM": 0.906,
+     "LSE-D": 7.551,
+     "LSE-C": 7.819
     }
    ],
    "note": null,
-   "rate_it_s": 6.7,
-   "eta": "2026-11-07T12:21+03:00",
+   "rate_it_s": 5.49,
+   "eta": "2026-11-07T14:40+03:00",
    "est_start": null,
-   "loss": 0.01231
+   "loss": 0.01251
   },
   {
    "name": "flame_v3_abl2_prep50k_afcrop",
@@ -8162,8 +8252,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-07T15:39+03:00",
-   "est_start": "2026-11-07T12:21+03:00"
+   "eta": "2026-11-07T17:58+03:00",
+   "est_start": "2026-11-07T14:40+03:00"
   }
  ],
  "references": [
