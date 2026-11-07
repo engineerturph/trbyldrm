@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-07T23:49+03:00",
+ "updated": "2026-11-08T00:19+03:00",
  "gpu": {
-  "util": 93,
-  "mem_used_gb": 27.4,
+  "util": 95,
+  "mem_used_gb": 26.0,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -10306,7 +10306,7 @@
    "title": "Ablation 2, 50k audio-free prep",
    "description": "Ablation 2's recipe after a 50k landmark-only (audio-free) prep instead of 25k, to 125k. Evaluated at 50k, 100k, 125k.",
    "status": "training",
-   "step": 106676,
+   "step": 114554,
    "max_steps": 125000,
    "branch_step": 50000,
    "last_checkpoint": 100000,
@@ -10762,10 +10762,74 @@
     },
     {
      "step": 106000,
-     "loss": 0.01315,
-     "gnorm": 0.05353,
-     "fm_full": 0.01303,
-     "fm_mask": 0.01312,
+     "loss": 0.01318,
+     "gnorm": 0.05316,
+     "fm_full": 0.01306,
+     "fm_mask": 0.01316,
+     "cons": 7e-05
+    },
+    {
+     "step": 107000,
+     "loss": 0.01336,
+     "gnorm": 0.0525,
+     "fm_full": 0.01323,
+     "fm_mask": 0.01333,
+     "cons": 8e-05
+    },
+    {
+     "step": 108000,
+     "loss": 0.01317,
+     "gnorm": 0.05192,
+     "fm_full": 0.01304,
+     "fm_mask": 0.01314,
+     "cons": 8e-05
+    },
+    {
+     "step": 109000,
+     "loss": 0.01289,
+     "gnorm": 0.05185,
+     "fm_full": 0.01276,
+     "fm_mask": 0.01286,
+     "cons": 8e-05
+    },
+    {
+     "step": 110000,
+     "loss": 0.0131,
+     "gnorm": 0.05151,
+     "fm_full": 0.01298,
+     "fm_mask": 0.01306,
+     "cons": 8e-05
+    },
+    {
+     "step": 111000,
+     "loss": 0.01297,
+     "gnorm": 0.05202,
+     "fm_full": 0.01284,
+     "fm_mask": 0.01294,
+     "cons": 8e-05
+    },
+    {
+     "step": 112000,
+     "loss": 0.01308,
+     "gnorm": 0.05117,
+     "fm_full": 0.01296,
+     "fm_mask": 0.01305,
+     "cons": 8e-05
+    },
+    {
+     "step": 113000,
+     "loss": 0.01304,
+     "gnorm": 0.04775,
+     "fm_full": 0.01292,
+     "fm_mask": 0.01301,
+     "cons": 8e-05
+    },
+    {
+     "step": 114000,
+     "loss": 0.0129,
+     "gnorm": 0.04936,
+     "fm_full": 0.01279,
+     "fm_mask": 0.01287,
      "cons": 7e-05
     }
    ],
@@ -10796,13 +10860,22 @@
      "CSIM": 0.9,
      "LSE-D": 7.761,
      "LSE-C": 7.751
+    },
+    {
+     "step": 100000,
+     "mode": "audio only",
+     "FID": 20.08,
+     "FVD": 135.9,
+     "CSIM": 0.926,
+     "LSE-D": 8.654,
+     "LSE-C": 6.826
     }
    ],
    "note": null,
-   "rate_it_s": 5.89,
-   "eta": "2026-11-08T00:40+03:00",
+   "rate_it_s": 6.7,
+   "eta": "2026-11-08T00:45+03:00",
    "est_start": null,
-   "loss": 0.01315
+   "loss": 0.0129
   },
   {
    "name": "flame_v3_noflame_afcrop",
