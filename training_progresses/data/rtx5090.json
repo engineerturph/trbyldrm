@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-07T06:31+03:00",
+ "updated": "2026-11-07T07:01+03:00",
  "gpu": {
   "util": 95,
-  "mem_used_gb": 18.3,
+  "mem_used_gb": 18.2,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -6008,10 +6008,10 @@
    "title": "Ablation 2",
    "description": "Masked consistency: mouth + jaw removed on 25 % of samples, otherwise the top-300 moving points of one of 55 FLAME parameters (expressions 1-50, jaw, eyelids). Resumed 2026-11-06 from 170k to 500k (checkpoints every 50k).",
    "status": "training",
-   "step": 338342,
+   "step": 350064,
    "max_steps": 500000,
    "branch_step": 25000,
-   "last_checkpoint": 300000,
+   "last_checkpoint": 350000,
    "skipped_steps": 9,
    "curve": [
     {
@@ -8720,11 +8720,107 @@
     },
     {
      "step": 338000,
+     "loss": 0.01198,
+     "gnorm": 0.03707,
+     "fm_full": 0.0119,
+     "fm_mask": 0.01196,
+     "cons": 5e-05
+    },
+    {
+     "step": 339000,
+     "loss": 0.01193,
+     "gnorm": 0.03682,
+     "fm_full": 0.01184,
+     "fm_mask": 0.01191,
+     "cons": 6e-05
+    },
+    {
+     "step": 340000,
      "loss": 0.01209,
-     "gnorm": 0.03823,
-     "fm_full": 0.012,
+     "gnorm": 0.03914,
+     "fm_full": 0.01199,
      "fm_mask": 0.01207,
      "cons": 5e-05
+    },
+    {
+     "step": 341000,
+     "loss": 0.01198,
+     "gnorm": 0.03699,
+     "fm_full": 0.01189,
+     "fm_mask": 0.01196,
+     "cons": 5e-05
+    },
+    {
+     "step": 342000,
+     "loss": 0.012,
+     "gnorm": 0.03794,
+     "fm_full": 0.0119,
+     "fm_mask": 0.01198,
+     "cons": 5e-05
+    },
+    {
+     "step": 343000,
+     "loss": 0.01208,
+     "gnorm": 0.0371,
+     "fm_full": 0.01199,
+     "fm_mask": 0.01206,
+     "cons": 5e-05
+    },
+    {
+     "step": 344000,
+     "loss": 0.01197,
+     "gnorm": 0.03849,
+     "fm_full": 0.01188,
+     "fm_mask": 0.01195,
+     "cons": 6e-05
+    },
+    {
+     "step": 345000,
+     "loss": 0.0117,
+     "gnorm": 0.03744,
+     "fm_full": 0.01162,
+     "fm_mask": 0.01168,
+     "cons": 5e-05
+    },
+    {
+     "step": 346000,
+     "loss": 0.01217,
+     "gnorm": 0.03885,
+     "fm_full": 0.01208,
+     "fm_mask": 0.01215,
+     "cons": 6e-05
+    },
+    {
+     "step": 347000,
+     "loss": 0.01199,
+     "gnorm": 0.03643,
+     "fm_full": 0.0119,
+     "fm_mask": 0.01196,
+     "cons": 5e-05
+    },
+    {
+     "step": 348000,
+     "loss": 0.01183,
+     "gnorm": 0.03936,
+     "fm_full": 0.01175,
+     "fm_mask": 0.01181,
+     "cons": 6e-05
+    },
+    {
+     "step": 349000,
+     "loss": 0.01187,
+     "gnorm": 0.03713,
+     "fm_full": 0.01179,
+     "fm_mask": 0.01185,
+     "cons": 5e-05
+    },
+    {
+     "step": 350000,
+     "loss": 0.01146,
+     "gnorm": 0.04114,
+     "fm_full": 0.01137,
+     "fm_mask": 0.01143,
+     "cons": 6e-05
     }
    ],
    "evals": [
@@ -8892,10 +8988,10 @@
     }
    ],
    "note": null,
-   "rate_it_s": 6.66,
-   "eta": "2026-11-07T13:16+03:00",
+   "rate_it_s": 3.66,
+   "eta": "2026-11-07T18:24+03:00",
    "est_start": null,
-   "loss": 0.01209
+   "loss": 0.01146
   },
   {
    "name": "flame_v3_abl2_prep50k_afcrop",
@@ -8928,8 +9024,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-07T16:34+03:00",
-   "est_start": "2026-11-07T13:16+03:00"
+   "eta": "2026-11-07T21:42+03:00",
+   "est_start": "2026-11-07T18:24+03:00"
   }
  ],
  "references": [
