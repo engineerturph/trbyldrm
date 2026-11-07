@@ -2,7 +2,7 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-08T00:49+03:00",
+ "updated": "2026-11-08T01:19+03:00",
  "gpu": {
   "util": 0,
   "mem_used_gb": 11.4,
@@ -10957,6 +10957,33 @@
      "CSIM": 0.926,
      "LSE-D": 8.654,
      "LSE-C": 6.826
+    },
+    {
+     "step": 125000,
+     "mode": "full FLAME",
+     "FID": 17.579,
+     "FVD": 95.0,
+     "CSIM": 0.912,
+     "LSE-D": 7.628,
+     "LSE-C": 7.818
+    },
+    {
+     "step": 125000,
+     "mode": "no mouth + jaw",
+     "FID": 17.662,
+     "FVD": 99.4,
+     "CSIM": 0.91,
+     "LSE-D": 7.671,
+     "LSE-C": 7.747
+    },
+    {
+     "step": 125000,
+     "mode": "audio only",
+     "FID": 19.791,
+     "FVD": 138.1,
+     "CSIM": 0.931,
+     "LSE-D": 8.598,
+     "LSE-C": 6.733
     }
    ],
    "note": null,
