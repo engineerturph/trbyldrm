@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-07T03:58+03:00",
+ "updated": "2026-11-07T04:28+03:00",
  "gpu": {
-  "util": 93,
-  "mem_used_gb": 18.4,
+  "util": 92,
+  "mem_used_gb": 18.3,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -6008,10 +6008,10 @@
    "title": "Ablation 2",
    "description": "Masked consistency: mouth + jaw removed on 25 % of samples, otherwise the top-300 moving points of one of 55 FLAME parameters (expressions 1-50, jaw, eyelids). Resumed 2026-11-06 from 170k to 500k (checkpoints every 50k).",
    "status": "training",
-   "step": 293978,
+   "step": 304518,
    "max_steps": 500000,
    "branch_step": 25000,
-   "last_checkpoint": 250000,
+   "last_checkpoint": 300000,
    "skipped_steps": 7,
    "curve": [
     {
@@ -8360,11 +8360,99 @@
     },
     {
      "step": 293000,
+     "loss": 0.01213,
+     "gnorm": 0.04073,
+     "fm_full": 0.01205,
+     "fm_mask": 0.01211,
+     "cons": 6e-05
+    },
+    {
+     "step": 294000,
+     "loss": 0.01243,
+     "gnorm": 0.04223,
+     "fm_full": 0.01235,
+     "fm_mask": 0.01242,
+     "cons": 6e-05
+    },
+    {
+     "step": 295000,
+     "loss": 0.0122,
+     "gnorm": 0.04213,
+     "fm_full": 0.01211,
+     "fm_mask": 0.01218,
+     "cons": 6e-05
+    },
+    {
+     "step": 296000,
+     "loss": 0.0123,
+     "gnorm": 0.04255,
+     "fm_full": 0.01222,
+     "fm_mask": 0.01228,
+     "cons": 5e-05
+    },
+    {
+     "step": 297000,
      "loss": 0.01214,
-     "gnorm": 0.04087,
+     "gnorm": 0.03973,
      "fm_full": 0.01205,
      "fm_mask": 0.01212,
+     "cons": 5e-05
+    },
+    {
+     "step": 298000,
+     "loss": 0.01243,
+     "gnorm": 0.04076,
+     "fm_full": 0.01234,
+     "fm_mask": 0.0124,
      "cons": 6e-05
+    },
+    {
+     "step": 299000,
+     "loss": 0.01217,
+     "gnorm": 0.04003,
+     "fm_full": 0.01208,
+     "fm_mask": 0.01215,
+     "cons": 6e-05
+    },
+    {
+     "step": 300000,
+     "loss": 0.01205,
+     "gnorm": 0.03958,
+     "fm_full": 0.01196,
+     "fm_mask": 0.01202,
+     "cons": 6e-05
+    },
+    {
+     "step": 301000,
+     "loss": 0.01234,
+     "gnorm": 0.04174,
+     "fm_full": 0.01224,
+     "fm_mask": 0.01232,
+     "cons": 6e-05
+    },
+    {
+     "step": 302000,
+     "loss": 0.01211,
+     "gnorm": 0.0398,
+     "fm_full": 0.01202,
+     "fm_mask": 0.01208,
+     "cons": 5e-05
+    },
+    {
+     "step": 303000,
+     "loss": 0.0122,
+     "gnorm": 0.03825,
+     "fm_full": 0.01212,
+     "fm_mask": 0.01218,
+     "cons": 5e-05
+    },
+    {
+     "step": 304000,
+     "loss": 0.01219,
+     "gnorm": 0.04075,
+     "fm_full": 0.0121,
+     "fm_mask": 0.01219,
+     "cons": 5e-05
     }
    ],
    "evals": [
@@ -8502,13 +8590,22 @@
      "CSIM": 0.919,
      "LSE-D": 8.684,
      "LSE-C": 6.655
+    },
+    {
+     "step": 300000,
+     "mode": "full FLAME",
+     "FID": 17.994,
+     "FVD": null,
+     "CSIM": 0.912,
+     "LSE-D": 7.572,
+     "LSE-C": 7.744
     }
    ],
    "note": null,
-   "rate_it_s": 6.65,
-   "eta": "2026-11-07T12:34+03:00",
+   "rate_it_s": 6.58,
+   "eta": "2026-11-07T12:43+03:00",
    "est_start": null,
-   "loss": 0.01214
+   "loss": 0.01219
   },
   {
    "name": "flame_v3_abl2_prep50k_afcrop",
@@ -8541,8 +8638,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-07T15:52+03:00",
-   "est_start": "2026-11-07T12:34+03:00"
+   "eta": "2026-11-07T16:01+03:00",
+   "est_start": "2026-11-07T12:43+03:00"
   }
  ],
  "references": [
