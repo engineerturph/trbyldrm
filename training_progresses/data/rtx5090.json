@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-08T19:22+03:00",
+ "updated": "2026-11-08T19:29+03:00",
  "gpu": {
-  "util": 88,
-  "mem_used_gb": 23.2,
+  "util": 0,
+  "mem_used_gb": 11.4,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -11651,11 +11651,11 @@
    "name": "flame_v3_nocondprep_afcrop",
    "title": "No-condition prep, then audio only (control)",
    "description": "Control for the 25k FLAME prep: the same schedule as '25k prep, then no FLAME' but the first 25k steps get no condition at all (no audio, no FLAME); then audio only to 100k. Scored audio-only at 50k, 75k, 100k.",
-   "status": "training",
-   "step": 98438,
+   "status": "finished",
+   "step": 100000,
    "max_steps": 100000,
    "branch_step": 0,
-   "last_checkpoint": 75000,
+   "last_checkpoint": 100000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -12444,8 +12444,24 @@
     },
     {
      "step": 98000,
-     "loss": 0.01567,
-     "gnorm": 0.04214,
+     "loss": 0.01564,
+     "gnorm": 0.04159,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 99000,
+     "loss": 0.01558,
+     "gnorm": 0.04171,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 100000,
+     "loss": 0.015,
+     "gnorm": 0.04,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -12472,10 +12488,10 @@
     }
    ],
    "note": null,
-   "rate_it_s": 11.25,
-   "eta": "2026-11-08T19:25+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.01567
+   "loss": 0.015
   }
  ],
  "references": [
