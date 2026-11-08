@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-09T00:00+03:00",
+ "updated": "2026-11-09T00:31+03:00",
  "gpu": {
-  "util": 0,
+  "util": 88,
   "mem_used_gb": 23.2,
   "mem_total_gb": 31.8
  },
@@ -12734,10 +12734,10 @@
    "title": "Seed 2: 25k prep, then no FLAME",
    "description": "Second seed of '25k prep, then no FLAME' (audio only after the prep). Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
    "status": "training",
-   "step": 63123,
+   "step": 74064,
    "max_steps": 100000,
    "branch_step": 25000,
-   "last_checkpoint": 60000,
+   "last_checkpoint": 70000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -13046,8 +13046,96 @@
     },
     {
      "step": 63000,
-     "loss": 0.01725,
-     "gnorm": 0.05346,
+     "loss": 0.01664,
+     "gnorm": 0.05507,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 64000,
+     "loss": 0.01675,
+     "gnorm": 0.05485,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 65000,
+     "loss": 0.01657,
+     "gnorm": 0.05736,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 66000,
+     "loss": 0.0164,
+     "gnorm": 0.05393,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 67000,
+     "loss": 0.01655,
+     "gnorm": 0.05219,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 68000,
+     "loss": 0.01642,
+     "gnorm": 0.05175,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 69000,
+     "loss": 0.01682,
+     "gnorm": 0.05323,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 70000,
+     "loss": 0.01657,
+     "gnorm": 0.05178,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 71000,
+     "loss": 0.01645,
+     "gnorm": 0.04991,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 72000,
+     "loss": 0.01653,
+     "gnorm": 0.05033,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 73000,
+     "loss": 0.01633,
+     "gnorm": 0.05023,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 74000,
+     "loss": 0.01554,
+     "gnorm": 0.04629,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -13065,10 +13153,10 @@
     }
    ],
    "note": null,
-   "rate_it_s": 0.4,
-   "eta": "2026-11-10T01:33+03:00",
+   "rate_it_s": 11.51,
+   "eta": "2026-11-09T01:09+03:00",
    "est_start": null,
-   "loss": 0.01725
+   "loss": 0.01554
   },
   {
    "name": "flame_v3_nocondprep_s43_afcrop",
@@ -13084,8 +13172,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-10T04:51+03:00",
-   "est_start": "2026-11-10T01:33+03:00"
+   "eta": "2026-11-09T04:27+03:00",
+   "est_start": "2026-11-09T01:09+03:00"
   },
   {
    "name": "flame_v3_small_trunk_afcrop",
@@ -13101,8 +13189,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-10T05:58+03:00",
-   "est_start": "2026-11-10T04:51+03:00"
+   "eta": "2026-11-09T05:34+03:00",
+   "est_start": "2026-11-09T04:27+03:00"
   },
   {
    "name": "flame_v3_small_afcrop",
@@ -13118,8 +13206,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-10T09:16+03:00",
-   "est_start": "2026-11-10T05:58+03:00"
+   "eta": "2026-11-09T08:52+03:00",
+   "est_start": "2026-11-09T05:34+03:00"
   }
  ],
  "references": [
