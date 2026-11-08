@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-09T00:31+03:00",
+ "updated": "2026-11-09T01:01+03:00",
  "gpu": {
-  "util": 88,
-  "mem_used_gb": 23.2,
+  "util": 92,
+  "mem_used_gb": 23.1,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -12734,10 +12734,10 @@
    "title": "Seed 2: 25k prep, then no FLAME",
    "description": "Second seed of '25k prep, then no FLAME' (audio only after the prep). Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
    "status": "training",
-   "step": 74064,
+   "step": 83213,
    "max_steps": 100000,
    "branch_step": 25000,
-   "last_checkpoint": 70000,
+   "last_checkpoint": 80000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -13134,8 +13134,80 @@
     },
     {
      "step": 74000,
-     "loss": 0.01554,
-     "gnorm": 0.04629,
+     "loss": 0.01623,
+     "gnorm": 0.04818,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 75000,
+     "loss": 0.01617,
+     "gnorm": 0.04883,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 76000,
+     "loss": 0.01603,
+     "gnorm": 0.04758,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 77000,
+     "loss": 0.01605,
+     "gnorm": 0.04645,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 78000,
+     "loss": 0.01618,
+     "gnorm": 0.04557,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 79000,
+     "loss": 0.0159,
+     "gnorm": 0.04499,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 80000,
+     "loss": 0.01602,
+     "gnorm": 0.0456,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 81000,
+     "loss": 0.01632,
+     "gnorm": 0.04542,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 82000,
+     "loss": 0.0162,
+     "gnorm": 0.04531,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 83000,
+     "loss": 0.01559,
+     "gnorm": 0.04255,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -13150,13 +13222,22 @@
      "CSIM": 0.93,
      "LSE-D": 8.628,
      "LSE-C": 6.847
+    },
+    {
+     "step": 75000,
+     "mode": "audio only",
+     "FID": 18.937,
+     "FVD": 141.8,
+     "CSIM": 0.93,
+     "LSE-D": 8.416,
+     "LSE-C": 7.017
     }
    ],
    "note": null,
-   "rate_it_s": 11.51,
-   "eta": "2026-11-09T01:09+03:00",
+   "rate_it_s": 11.57,
+   "eta": "2026-11-09T01:26+03:00",
    "est_start": null,
-   "loss": 0.01554
+   "loss": 0.01559
   },
   {
    "name": "flame_v3_nocondprep_s43_afcrop",
@@ -13172,8 +13253,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T04:27+03:00",
-   "est_start": "2026-11-09T01:09+03:00"
+   "eta": "2026-11-09T04:44+03:00",
+   "est_start": "2026-11-09T01:26+03:00"
   },
   {
    "name": "flame_v3_small_trunk_afcrop",
@@ -13189,8 +13270,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T05:34+03:00",
-   "est_start": "2026-11-09T04:27+03:00"
+   "eta": "2026-11-09T05:51+03:00",
+   "est_start": "2026-11-09T04:44+03:00"
   },
   {
    "name": "flame_v3_small_afcrop",
@@ -13206,8 +13287,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T08:52+03:00",
-   "est_start": "2026-11-09T05:34+03:00"
+   "eta": "2026-11-09T09:09+03:00",
+   "est_start": "2026-11-09T05:51+03:00"
   }
  ],
  "references": [
