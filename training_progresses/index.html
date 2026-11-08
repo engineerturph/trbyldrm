@@ -83,6 +83,12 @@
     td.best { color: var(--text); font-weight: 600; }
     td.ref-label { color: var(--muted); }
     .empty { color: var(--dim); font-size: 13px; margin: 8px 0 0; }
+    th.sortable { cursor: pointer; user-select: none; }
+    th.sortable:hover { color: var(--text); }
+    th.sorted { color: var(--text); }
+    td.score { font-weight: 600; }
+    tr.ref td { color: var(--muted); font-style: italic; }
+    .sub { color: var(--dim); font-size: 12px; }
     footer { color: var(--dim); font-size: 12px; line-height: 1.6; margin-top: 36px; border-top: 1px solid var(--line-soft); padding-top: 16px; }
     .error { border: 1px solid var(--line-mid); border-radius: 10px; padding: 16px; color: var(--muted); }
     @media (max-width: 560px) {
@@ -201,6 +207,74 @@
     return h + '</tbody></table></div>';
   }
 
+  // Audio-only comparison: every run's audio-only evaluations + the audio-driven reference models (no GT).
+  // Score per metric = 0..100 over the rows shown (100 = best, lower-better metrics flipped); Average = mean of the
+  // available metric scores. Default order: Average, best first; a click on a header sorts by that column.
+  let audioSort = {key: 'avg', dir: -1};
+  let audioRows = [];
+  function audioCollect(sources) {
+    const rows = [];
+    for (const d of sources) {
+      for (const r of d.runs) for (const e of r.evals) if (e.mode === 'audio only')
+        rows.push({label: r.title, name: r.name, step: e.step, ref: false, ...Object.fromEntries(METRICS.map(m => [m, e[m]]))});
+      for (const f of d.references || []) if (f.FID != null || f.FVD != null)
+        rows.push({label: f.label, name: 'reference', step: null, ref: true, ...Object.fromEntries(METRICS.map(m => [m, f[m]]))});
+    }
+    for (const m of METRICS) {
+      const v = rows.map(r => r[m]).filter(x => x != null);
+      const lo = Math.min(...v), hi = Math.max(...v);
+      for (const r of rows) r['s_' + m] = r[m] == null || !v.length ? null
+        : hi === lo ? 100 : 100 * (LOWER[m] ? (hi - r[m]) / (hi - lo) : (r[m] - lo) / (hi - lo));
+    }
+    for (const r of rows) {
+      const sc = METRICS.map(m => r['s_' + m]).filter(x => x != null);
+      r.avg = sc.length ? sc.reduce((a, b) => a + b, 0) / sc.length : null;
+      r.n = sc.length;
+    }
+    return rows;
+  }
+  function audioTable() {
+    if (!audioRows.length) return '<p class="empty">No audio-only evaluation yet.</p>';
+    const {key, dir} = audioSort;
+    // dir -1 = best first. For raw metrics "best" means low for lower-better ones.
+    const val = r => key === 'avg' ? r.avg : r[key];
+    const better = key === 'avg' ? -1 : (LOWER[key] ? 1 : -1);
+    const rows = [...audioRows].sort((a, b) => {
+      const x = val(a), y = val(b);
+      if (x == null) return 1; if (y == null) return -1;
+      return (x - y) * better * (dir === -1 ? 1 : -1);
+    });
+    const best = {};
+    for (const m of METRICS) { const v = audioRows.map(r => r[m]).filter(x => x != null);
+      if (v.length) best[m] = LOWER[m] ? Math.min(...v) : Math.max(...v); }
+    const arrow = c => c === key ? (dir === -1 ? ' ▾' : ' ▴') : '';
+    let h = '<div class="table-wrap"><table><thead><tr><th>#</th><th>Model</th><th>Step</th>' +
+      `<th class="sortable ${key === 'avg' ? 'sorted' : ''}" data-sort="avg">Average${arrow('avg')}</th>` +
+      METRICS.map(m => `<th class="sortable ${key === m ? 'sorted' : ''}" data-sort="${m}">${m} ${LOWER[m] ? '↓' : '↑'}${arrow(m)}</th>`).join('') +
+      '</tr></thead><tbody>';
+    rows.forEach((r, i) => {
+      h += `<tr class="${r.ref ? 'ref' : ''}"><td>${i + 1}</td><td>${esc(r.label)}<div class="sub">${esc(r.name)}</div></td>` +
+        `<td>${r.step == null ? '—' : k(r.step)}</td><td class="score">${r.avg == null ? '—' : r.avg.toFixed(0)}` +
+        `${r.n < METRICS.length ? `<span class="sub"> (${r.n}/${METRICS.length})</span>` : ''}</td>` +
+        METRICS.map(m => `<td class="${r[m] != null && r[m] === best[m] ? 'best' : ''}">${num(r[m], DEC[m])}</td>`).join('') + '</tr>';
+    });
+    return h + '</tbody></table></div>';
+  }
+  function audioSection() {
+    return `<div class="source-title">Audio-only comparison</div>
+      <p class="note">Every run's audio-only evaluation (each checkpoint) next to the audio-driven reference models (italic).
+      Average = mean of the per-metric scores, each scaled 0–100 over the rows shown (100 = best; FID, FVD, LSE-D lower
+      is better). Sorted by Average; click a column to sort by it, click again to reverse.</p>
+      <div id="audio-table" style="margin-top:12px">${audioTable()}</div>`;
+  }
+  document.addEventListener('click', ev => {
+    const th = ev.target.closest('#audio-table th[data-sort]');
+    if (!th) return;
+    const key = th.dataset.sort;
+    audioSort = audioSort.key === key ? {key, dir: -audioSort.dir} : {key, dir: -1};
+    document.getElementById('audio-table').innerHTML = audioTable();
+  });
+
   function runCard(r, evalEvery) {
     const pct = Math.min(100, 100 * r.step / r.max_steps);
     const trunkPct = Math.min(100, 100 * (r.branch_step || 0) / r.max_steps);
@@ -249,6 +323,8 @@
       h += `<div class="source-title">Runs</div>` + runs.map(r => runCard(r, d.eval_every)).join('');
       h += refTable(d.references);
     }
+    audioRows = audioCollect(sources);
+    if (sources.length) h += audioSection();
     app.innerHTML = h || '<p class="note">No training sources yet.</p>';
     drawCharts();
   }
