@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-08T21:38+03:00",
+ "updated": "2026-11-08T21:59+03:00",
  "gpu": {
-  "util": 85,
-  "mem_used_gb": 22.9,
+  "util": 93,
+  "mem_used_gb": 23.1,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -12507,7 +12507,7 @@
    "title": "Seed 2: FLAME-only prep (25k)",
    "description": "Second training seed (43) of the 25k landmark-only prep, for the FLAME-prep recipe.",
    "status": "training",
-   "step": 950,
+   "step": 10808,
    "max_steps": 25000,
    "branch_step": 0,
    "last_checkpoint": null,
@@ -12515,8 +12515,88 @@
    "curve": [
     {
      "step": 0,
-     "loss": 0.04495,
-     "gnorm": 0.52355,
+     "loss": 0.04414,
+     "gnorm": 0.5146,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 1000,
+     "loss": 0.02209,
+     "gnorm": 0.23032,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 2000,
+     "loss": 0.06092,
+     "gnorm": 0.44254,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 3000,
+     "loss": 0.03455,
+     "gnorm": 0.27005,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 4000,
+     "loss": 0.03035,
+     "gnorm": 0.22593,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 5000,
+     "loss": 0.028,
+     "gnorm": 0.19504,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 6000,
+     "loss": 0.02574,
+     "gnorm": 0.17175,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 7000,
+     "loss": 0.02423,
+     "gnorm": 0.15855,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 8000,
+     "loss": 0.02301,
+     "gnorm": 0.15118,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 9000,
+     "loss": 0.02198,
+     "gnorm": 0.14091,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 10000,
+     "loss": 0.02137,
+     "gnorm": 0.13696,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -12524,10 +12604,10 @@
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 11.63,
-   "eta": "2026-11-08T22:12+03:00",
+   "rate_it_s": 11.56,
+   "eta": "2026-11-08T22:20+03:00",
    "est_start": null,
-   "loss": 0.04495
+   "loss": 0.02137
   },
   {
    "name": "flame_v3_noflame_s43_afcrop",
@@ -12543,8 +12623,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T01:30+03:00",
-   "est_start": "2026-11-08T22:12+03:00"
+   "eta": "2026-11-09T01:38+03:00",
+   "est_start": "2026-11-08T22:20+03:00"
   },
   {
    "name": "flame_v3_nocondprep_s43_afcrop",
@@ -12560,8 +12640,42 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T04:48+03:00",
-   "est_start": "2026-11-09T01:30+03:00"
+   "eta": "2026-11-09T04:56+03:00",
+   "est_start": "2026-11-09T01:38+03:00"
+  },
+  {
+   "name": "flame_v3_small_trunk_afcrop",
+   "title": "Small model: FLAME-only prep (25k)",
+   "description": "Smaller flow transformer (6 blocks x 768 instead of 8 x 1024), 25k landmark-only prep with the FLAME-prep recipe. Starts after the second-seed runs.",
+   "status": "queued",
+   "step": 0,
+   "max_steps": 25000,
+   "branch_step": 0,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [],
+   "evals": [],
+   "note": null,
+   "rate_it_s": null,
+   "eta": "2026-11-09T06:03+03:00",
+   "est_start": "2026-11-09T04:56+03:00"
+  },
+  {
+   "name": "flame_v3_small_afcrop",
+   "title": "Small model: FLAME branch deleted, audio only",
+   "description": "The small model after its prep with the FLAME branch removed (its constant audio-only output folded into a bias, exact), trained audio only to 100k. Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
+   "status": "queued",
+   "step": 0,
+   "max_steps": 100000,
+   "branch_step": 25000,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [],
+   "evals": [],
+   "note": null,
+   "rate_it_s": null,
+   "eta": "2026-11-09T09:21+03:00",
+   "est_start": "2026-11-09T06:03+03:00"
   }
  ],
  "references": [
