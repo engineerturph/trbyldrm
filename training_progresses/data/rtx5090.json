@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-09T12:19+03:00",
+ "updated": "2026-11-09T12:49+03:00",
  "gpu": {
-  "util": 92,
+  "util": 0,
   "mem_used_gb": 23.9,
   "mem_total_gb": 31.8
  },
@@ -15207,7 +15207,7 @@
    "title": "FLAME block cross-attention: FLAME-only prep (25k)",
    "description": "Every transformer block gets its own FLAME cross-attention before the audio cross-attention; FLAME is no longer mixed into the audio condition. 25k landmark-only prep, full size.",
    "status": "training",
-   "step": 6407,
+   "step": 20765,
    "max_steps": 25000,
    "branch_step": 0,
    "last_checkpoint": null,
@@ -15263,8 +15263,120 @@
     },
     {
      "step": 6000,
-     "loss": 0.02615,
-     "gnorm": 0.887,
+     "loss": 0.02594,
+     "gnorm": 0.8312,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 7000,
+     "loss": 0.02471,
+     "gnorm": 0.67599,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 8000,
+     "loss": 0.02312,
+     "gnorm": 0.58013,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 9000,
+     "loss": 0.02227,
+     "gnorm": 0.47495,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 10000,
+     "loss": 0.02171,
+     "gnorm": 0.40885,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 11000,
+     "loss": 0.02091,
+     "gnorm": 0.34876,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 12000,
+     "loss": 0.02031,
+     "gnorm": 0.29875,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 13000,
+     "loss": 0.01996,
+     "gnorm": 0.2674,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 14000,
+     "loss": 0.01936,
+     "gnorm": 0.24028,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 15000,
+     "loss": 0.01901,
+     "gnorm": 0.21242,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 16000,
+     "loss": 0.01887,
+     "gnorm": 0.18867,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 17000,
+     "loss": 0.01844,
+     "gnorm": 0.16998,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 18000,
+     "loss": 0.01833,
+     "gnorm": 0.15464,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 19000,
+     "loss": 0.01782,
+     "gnorm": 0.14037,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 20000,
+     "loss": 0.01795,
+     "gnorm": 0.13396,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -15272,10 +15384,10 @@
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 5.63,
-   "eta": "2026-11-09T13:14+03:00",
+   "rate_it_s": 0.98,
+   "eta": "2026-11-09T14:01+03:00",
    "est_start": null,
-   "loss": 0.02615
+   "loss": 0.01795
   },
   {
    "name": "flame_v3_bx_noflame_afcrop",
@@ -15291,8 +15403,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T16:32+03:00",
-   "est_start": "2026-11-09T13:14+03:00"
+   "eta": "2026-11-09T17:19+03:00",
+   "est_start": "2026-11-09T14:01+03:00"
   }
  ],
  "references": [
