@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-09T05:06+03:00",
+ "updated": "2026-11-09T05:38+03:00",
  "gpu": {
-  "util": 53,
-  "mem_used_gb": 23.1,
+  "util": 0,
+  "mem_used_gb": 23.2,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -13416,10 +13416,10 @@
    "title": "Seed 2: no-condition prep, then audio only",
    "description": "Second seed of the control (no condition 0-25k, then audio only). Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
    "status": "training",
-   "step": 59680,
+   "step": 73327,
    "max_steps": 100000,
    "branch_step": 25000,
-   "last_checkpoint": 55000,
+   "last_checkpoint": 70000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -13896,8 +13896,120 @@
     },
     {
      "step": 59000,
-     "loss": 0.01731,
-     "gnorm": 0.06701,
+     "loss": 0.01727,
+     "gnorm": 0.06486,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 60000,
+     "loss": 0.01673,
+     "gnorm": 0.06291,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 61000,
+     "loss": 0.01683,
+     "gnorm": 0.06327,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 62000,
+     "loss": 0.01667,
+     "gnorm": 0.06014,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 63000,
+     "loss": 0.01691,
+     "gnorm": 0.06111,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 64000,
+     "loss": 0.01672,
+     "gnorm": 0.06067,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 65000,
+     "loss": 0.01643,
+     "gnorm": 0.05555,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 66000,
+     "loss": 0.01636,
+     "gnorm": 0.05822,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 67000,
+     "loss": 0.01637,
+     "gnorm": 0.05804,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 68000,
+     "loss": 0.01648,
+     "gnorm": 0.05845,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 69000,
+     "loss": 0.01655,
+     "gnorm": 0.05624,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 70000,
+     "loss": 0.01656,
+     "gnorm": 0.05364,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 71000,
+     "loss": 0.01631,
+     "gnorm": 0.05112,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 72000,
+     "loss": 0.01619,
+     "gnorm": 0.0517,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 73000,
+     "loss": 0.01574,
+     "gnorm": 0.05494,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -13915,10 +14027,10 @@
     }
    ],
    "note": null,
-   "rate_it_s": 3.67,
-   "eta": "2026-11-09T08:09+03:00",
+   "rate_it_s": 1.06,
+   "eta": "2026-11-09T12:37+03:00",
    "est_start": null,
-   "loss": 0.01731
+   "loss": 0.01574
   },
   {
    "name": "flame_v3_small_trunk_afcrop",
@@ -13934,8 +14046,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T09:16+03:00",
-   "est_start": "2026-11-09T08:09+03:00"
+   "eta": "2026-11-09T13:44+03:00",
+   "est_start": "2026-11-09T12:37+03:00"
   },
   {
    "name": "flame_v3_small_afcrop",
@@ -13951,8 +14063,8 @@
    "evals": [],
    "note": null,
    "rate_it_s": null,
-   "eta": "2026-11-09T12:34+03:00",
-   "est_start": "2026-11-09T09:16+03:00"
+   "eta": "2026-11-09T17:02+03:00",
+   "est_start": "2026-11-09T13:44+03:00"
   }
  ],
  "references": [
