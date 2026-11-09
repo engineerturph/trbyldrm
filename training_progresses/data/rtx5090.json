@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-09T17:24+03:00",
+ "updated": "2026-11-09T17:54+03:00",
  "gpu": {
-  "util": 93,
-  "mem_used_gb": 24.1,
+  "util": 0,
+  "mem_used_gb": 11.4,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -15443,11 +15443,11 @@
    "name": "flame_v3_bx_noflame_afcrop",
    "title": "FLAME block cross-attention: then audio only",
    "description": "The block cross-attention model after its prep, trained audio only to 100k (FLAME dropped). Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
-   "status": "training",
-   "step": 99690,
+   "status": "finished",
+   "step": 100000,
    "max_steps": 100000,
    "branch_step": 25000,
-   "last_checkpoint": 95000,
+   "last_checkpoint": 100000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -16044,8 +16044,16 @@
     },
     {
      "step": 99000,
-     "loss": 0.01556,
-     "gnorm": 0.03954,
+     "loss": 0.01567,
+     "gnorm": 0.04073,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 100000,
+     "loss": 0.0153,
+     "gnorm": 0.042,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -16096,13 +16104,22 @@
      "CSIM": 0.919,
      "LSE-D": 8.414,
      "LSE-C": 7.003
+    },
+    {
+     "step": 100000,
+     "mode": "audio only",
+     "FID": 20.459,
+     "FVD": 136.8,
+     "CSIM": 0.921,
+     "LSE-D": 8.428,
+     "LSE-C": 7.043
     }
    ],
    "note": null,
-   "rate_it_s": 10.62,
-   "eta": "2026-11-09T17:25+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.01556
+   "loss": 0.0153
   }
  ],
  "references": [
