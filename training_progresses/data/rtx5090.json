@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-09T08:41+03:00",
+ "updated": "2026-11-09T09:13+03:00",
  "gpu": {
   "util": 0,
-  "mem_used_gb": 21.3,
+  "mem_used_gb": 14.7,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -14297,11 +14297,11 @@
    "name": "flame_v3_small_trunk_afcrop",
    "title": "Small model: FLAME-only prep (25k)",
    "description": "Smaller flow transformer (6 blocks x 768 instead of 8 x 1024), 25k landmark-only prep with the FLAME-prep recipe. Starts after the second-seed runs.",
-   "status": "training",
-   "step": 22448,
+   "status": "finished",
+   "step": 25000,
    "max_steps": 25000,
    "branch_step": 0,
-   "last_checkpoint": 20000,
+   "last_checkpoint": 25000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -14482,8 +14482,32 @@
     },
     {
      "step": 22000,
-     "loss": 0.01901,
-     "gnorm": 0.12436,
+     "loss": 0.01888,
+     "gnorm": 0.12071,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 23000,
+     "loss": 0.0186,
+     "gnorm": 0.11704,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 24000,
+     "loss": 0.01846,
+     "gnorm": 0.11452,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 25000,
+     "loss": 0.0168,
+     "gnorm": 0.097,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -14491,27 +14515,93 @@
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 3.34,
-   "eta": "2026-11-09T08:54+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.01901
+   "loss": 0.0168
   },
   {
    "name": "flame_v3_small_afcrop",
    "title": "Small model: FLAME branch deleted, audio only",
    "description": "The small model after its prep with the FLAME branch removed (its constant audio-only output folded into a bias, exact), trained audio only to 100k. Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
-   "status": "queued",
-   "step": 0,
+   "status": "training",
+   "step": 32720,
    "max_steps": 100000,
    "branch_step": 25000,
-   "last_checkpoint": null,
+   "last_checkpoint": 30000,
    "skipped_steps": 0,
-   "curve": [],
+   "curve": [
+    {
+     "step": 25000,
+     "loss": 0.0219,
+     "gnorm": 0.11058,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 26000,
+     "loss": 0.02178,
+     "gnorm": 0.10366,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 27000,
+     "loss": 0.02121,
+     "gnorm": 0.10306,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 28000,
+     "loss": 0.02092,
+     "gnorm": 0.10523,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 29000,
+     "loss": 0.02094,
+     "gnorm": 0.10181,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 30000,
+     "loss": 0.02058,
+     "gnorm": 0.10101,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 31000,
+     "loss": 0.02051,
+     "gnorm": 0.09669,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 32000,
+     "loss": 0.02029,
+     "gnorm": 0.09732,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
    "evals": [],
    "note": null,
-   "rate_it_s": null,
-   "eta": "2026-11-09T12:12+03:00",
-   "est_start": "2026-11-09T08:54+03:00"
+   "rate_it_s": 1.22,
+   "eta": "2026-11-10T00:35+03:00",
+   "est_start": null,
+   "loss": 0.02029
   }
  ],
  "references": [
