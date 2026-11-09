@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-09T12:49+03:00",
+ "updated": "2026-11-09T13:21+03:00",
  "gpu": {
-  "util": 0,
+  "util": 94,
   "mem_used_gb": 23.9,
   "mem_total_gb": 31.8
  },
@@ -15206,11 +15206,11 @@
    "name": "flame_v3_bx_trunk_afcrop",
    "title": "FLAME block cross-attention: FLAME-only prep (25k)",
    "description": "Every transformer block gets its own FLAME cross-attention before the audio cross-attention; FLAME is no longer mixed into the audio condition. 25k landmark-only prep, full size.",
-   "status": "training",
-   "step": 20765,
+   "status": "finished",
+   "step": 25000,
    "max_steps": 25000,
    "branch_step": 0,
-   "last_checkpoint": null,
+   "last_checkpoint": 25000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -15375,8 +15375,109 @@
     },
     {
      "step": 20000,
-     "loss": 0.01795,
-     "gnorm": 0.13396,
+     "loss": 0.01794,
+     "gnorm": 0.13254,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 21000,
+     "loss": 0.01765,
+     "gnorm": 0.12548,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 22000,
+     "loss": 0.0175,
+     "gnorm": 0.11753,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 23000,
+     "loss": 0.01734,
+     "gnorm": 0.11059,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 24000,
+     "loss": 0.01704,
+     "gnorm": 0.10122,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 25000,
+     "loss": 0.0176,
+     "gnorm": 0.093,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
+   "evals": [
+    {
+     "step": 25000,
+     "mode": "full FLAME",
+     "FID": 18.941,
+     "FVD": 112.9,
+     "CSIM": 0.905,
+     "LSE-D": 8.633,
+     "LSE-C": 6.907
+    }
+   ],
+   "note": null,
+   "rate_it_s": null,
+   "eta": null,
+   "est_start": null,
+   "loss": 0.0176
+  },
+  {
+   "name": "flame_v3_bx_noflame_afcrop",
+   "title": "FLAME block cross-attention: then audio only",
+   "description": "The block cross-attention model after its prep, trained audio only to 100k (FLAME dropped). Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
+   "status": "training",
+   "step": 28662,
+   "max_steps": 100000,
+   "branch_step": 25000,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [
+    {
+     "step": 25000,
+     "loss": 0.02069,
+     "gnorm": 0.09741,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 26000,
+     "loss": 0.0202,
+     "gnorm": 0.09463,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 27000,
+     "loss": 0.01968,
+     "gnorm": 0.09447,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 28000,
+     "loss": 0.01983,
+     "gnorm": 0.08933,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -15384,27 +15485,10 @@
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 0.98,
-   "eta": "2026-11-09T14:01+03:00",
+   "rate_it_s": 10.83,
+   "eta": "2026-11-09T15:11+03:00",
    "est_start": null,
-   "loss": 0.01795
-  },
-  {
-   "name": "flame_v3_bx_noflame_afcrop",
-   "title": "FLAME block cross-attention: then audio only",
-   "description": "The block cross-attention model after its prep, trained audio only to 100k (FLAME dropped). Checkpoints every 5k; audio-only evals at 50k, 75k, 85k, 90k, 95k, 100k.",
-   "status": "queued",
-   "step": 0,
-   "max_steps": 100000,
-   "branch_step": 25000,
-   "last_checkpoint": null,
-   "skipped_steps": 0,
-   "curve": [],
-   "evals": [],
-   "note": null,
-   "rate_it_s": null,
-   "eta": "2026-11-09T17:19+03:00",
-   "est_start": "2026-11-09T14:01+03:00"
+   "loss": 0.01983
   }
  ],
  "references": [
