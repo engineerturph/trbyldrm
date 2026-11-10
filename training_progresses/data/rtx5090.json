@@ -2,9 +2,9 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-10T14:56+03:00",
+ "updated": "2026-11-10T15:26+03:00",
  "gpu": {
-  "util": 93,
+  "util": 91,
   "mem_used_gb": 12.7,
   "mem_total_gb": 31.8
  },
@@ -18779,7 +18779,7 @@
    "title": "FLAME from input to target prep (D60)",
    "description": "From scratch. Prep without audio: FLAME given on every frame to 15k, thinned to keyframes and then to nothing by 50k, while a small head keeps predicting every frame's FLAME (FLAME as a target). Audio starts at 50k with the motion prior frozen until 75k; everything trains to 150k. FLAME-driven eval at 15k; audio-only evals at 75k-150k.",
    "status": "training",
-   "step": 88594,
+   "step": 99644,
    "max_steps": 150000,
    "branch_step": 0,
    "last_checkpoint": 75000,
@@ -19491,8 +19491,96 @@
     },
     {
      "step": 88000,
-     "loss": 0.02213,
-     "gnorm": 0.06662,
+     "loss": 0.02212,
+     "gnorm": 0.06675,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 89000,
+     "loss": 0.02166,
+     "gnorm": 0.06677,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 90000,
+     "loss": 0.02191,
+     "gnorm": 0.06631,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 91000,
+     "loss": 0.02181,
+     "gnorm": 0.06372,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 92000,
+     "loss": 0.02159,
+     "gnorm": 0.06542,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 93000,
+     "loss": 0.0217,
+     "gnorm": 0.0649,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 94000,
+     "loss": 0.02143,
+     "gnorm": 0.06544,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 95000,
+     "loss": 0.02147,
+     "gnorm": 0.06011,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 96000,
+     "loss": 0.02134,
+     "gnorm": 0.0621,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 97000,
+     "loss": 0.02135,
+     "gnorm": 0.06082,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 98000,
+     "loss": 0.02071,
+     "gnorm": 0.05801,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 99000,
+     "loss": 0.0211,
+     "gnorm": 0.06252,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -19528,10 +19616,45 @@
     }
    ],
    "note": null,
-   "rate_it_s": 10.69,
-   "eta": "2026-11-10T16:31+03:00",
+   "rate_it_s": 10.43,
+   "eta": "2026-11-10T16:46+03:00",
    "est_start": null,
-   "loss": 0.02213
+   "loss": 0.0211
+  },
+  {
+   "name": "flame_v3_audioprep_afcrop",
+   "title": "Baseline: audio from step 0, no prep (D61)",
+   "description": "The missing baseline for the FLAME-prep comparison: same model, data and schedule as the FLAME-prep and no-condition-prep runs, but audio from the first step and no prep stage. Queued behind D60. Audio-only evals at 50k, 75k, 100k (100k with three sampling seeds).",
+   "status": "paused",
+   "step": 1851,
+   "max_steps": 100000,
+   "branch_step": 0,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [
+    {
+     "step": 0,
+     "loss": 0.18401,
+     "gnorm": 1.33475,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 1000,
+     "loss": 0.04485,
+     "gnorm": 0.52343,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
+   "evals": [],
+   "note": null,
+   "rate_it_s": null,
+   "eta": null,
+   "est_start": null,
+   "loss": 0.04485
   }
  ],
  "references": [
