@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-10T11:20+03:00",
+ "updated": "2026-11-10T11:50+03:00",
  "gpu": {
-  "util": 85,
-  "mem_used_gb": 13.0,
+  "util": 93,
+  "mem_used_gb": 12.4,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -18160,11 +18160,11 @@
   },
   {
    "name": "flame_v3_a2fdiff_afcrop",
-   "title": "Audio-to-FLAME diffusion + FLAME renderer (D59-v2)",
-   "description": "From scratch: a small diffusion model learns to generate the FLAME embedding from audio while the main model learns to render from FLAME plus audio. Between 50k and 75k the main model's FLAME input slides from real to generated FLAME; generated only to 150k. FLAME-driven evals at 25k, 50k, 150k; audio-only (generated FLAME) at 50k-150k.",
-   "status": "training",
-   "step": 67021,
-   "max_steps": 150000,
+   "title": "Audio-to-FLAME diffusion + FLAME renderer (D59-v2) (stopped at ~69k)",
+   "description": "From scratch: a small diffusion model learns to generate the FLAME embedding from audio while the main model learns to render from FLAME plus audio. Between 50k and 75k the main model's FLAME input slides from real to generated FLAME; generated only to 150k. FLAME-driven evals at 25k, 50k, 150k; audio-only (generated FLAME) at 50k-150k. Stopped at ~69k on 11-10 to make room for D60; resumable from its 50k state (before the switch).",
+   "status": "paused",
+   "step": 50000,
+   "max_steps": 69000,
    "branch_step": 0,
    "last_checkpoint": 50000,
    "skipped_steps": 0,
@@ -18707,8 +18707,24 @@
     },
     {
      "step": 67000,
-     "loss": 0.08077,
-     "gnorm": 0.07333,
+     "loss": 0.08264,
+     "gnorm": 0.066,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 68000,
+     "loss": 0.08421,
+     "gnorm": 0.06546,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 69000,
+     "loss": 0.0786,
+     "gnorm": 0.07,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -18753,27 +18769,149 @@
     }
    ],
    "note": null,
-   "rate_it_s": 6.03,
-   "eta": "2026-11-10T15:09+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.08077
+   "loss": 0.0786
   },
   {
-   "name": "flame_v3_jointemb_afcrop",
-   "title": "Joint motion + 1024-d FLAME embedding (D59e)",
-   "description": "D59c's joint generation with the FLAME part = the 1024-number FLAME embedding of the frozen FLAME route from D58's 50k prep. Clean to 50k, generated more and more 50k-75k, always generated after.",
-   "status": "queued",
-   "step": 0,
+   "name": "flame_v3_flametarget_afcrop",
+   "title": "FLAME from input to target prep (D60)",
+   "description": "From scratch. Prep without audio: FLAME given on every frame to 15k, thinned to keyframes and then to nothing by 50k, while a small head keeps predicting every frame's FLAME (FLAME as a target). Audio starts at 50k with the motion prior frozen until 75k; everything trains to 150k. FLAME-driven eval at 15k; audio-only evals at 75k-150k.",
+   "status": "training",
+   "step": 14136,
    "max_steps": 150000,
    "branch_step": 0,
    "last_checkpoint": null,
    "skipped_steps": 0,
-   "curve": [],
+   "curve": [
+    {
+     "step": 0,
+     "loss": 0.10974,
+     "gnorm": 1.38497,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 1000,
+     "loss": 0.07674,
+     "gnorm": 0.88046,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 2000,
+     "loss": 0.11808,
+     "gnorm": 3.77005,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 3000,
+     "loss": 0.08216,
+     "gnorm": 2.24428,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 4000,
+     "loss": 0.07697,
+     "gnorm": 1.6369,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 5000,
+     "loss": 0.07194,
+     "gnorm": 1.26153,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 6000,
+     "loss": 0.07062,
+     "gnorm": 1.07703,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 7000,
+     "loss": 0.06774,
+     "gnorm": 0.8919,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 8000,
+     "loss": 0.06616,
+     "gnorm": 0.77164,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 9000,
+     "loss": 0.06432,
+     "gnorm": 0.68427,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 10000,
+     "loss": 0.06291,
+     "gnorm": 0.62613,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 11000,
+     "loss": 0.06206,
+     "gnorm": 0.5905,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 12000,
+     "loss": 0.06108,
+     "gnorm": 0.53134,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 13000,
+     "loss": 0.06085,
+     "gnorm": 0.50763,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 14000,
+     "loss": 0.05741,
+     "gnorm": 0.48457,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
    "evals": [],
    "note": null,
-   "rate_it_s": null,
-   "eta": "2026-11-10T21:44+03:00",
-   "est_start": "2026-11-10T15:09+03:00"
+   "rate_it_s": 11.1,
+   "eta": "2026-11-10T12:44+03:00",
+   "est_start": null,
+   "loss": 0.05741
   }
  ],
  "references": [
