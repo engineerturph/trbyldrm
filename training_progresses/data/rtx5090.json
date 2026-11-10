@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-10T07:18+03:00",
+ "updated": "2026-11-10T07:49+03:00",
  "gpu": {
-  "util": 0,
-  "mem_used_gb": 11.4,
+  "util": 68,
+  "mem_used_gb": 24.2,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -18157,6 +18157,90 @@
    "eta": null,
    "est_start": null,
    "loss": 0.1891
+  },
+  {
+   "name": "flame_v3_a2fdiff_afcrop",
+   "title": "Audio-to-FLAME diffusion + FLAME renderer (D59-v2)",
+   "description": "From scratch: a small diffusion model learns to generate the FLAME embedding from audio while the main model learns to render from FLAME plus audio. Between 50k and 75k the main model's FLAME input slides from real to generated FLAME; generated only to 150k. FLAME-driven evals at 25k, 50k, 150k; audio-only (generated FLAME) at 50k-150k.",
+   "status": "training",
+   "step": 5120,
+   "max_steps": 150000,
+   "branch_step": 0,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [
+    {
+     "step": 0,
+     "loss": 1.34969,
+     "gnorm": 11.30167,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 1000,
+     "loss": 0.40618,
+     "gnorm": 8.32002,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 2000,
+     "loss": 0.25581,
+     "gnorm": 8.34755,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 3000,
+     "loss": 0.2072,
+     "gnorm": 4.70395,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 4000,
+     "loss": 0.16879,
+     "gnorm": 0.28479,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 5000,
+     "loss": 0.16855,
+     "gnorm": 0.232,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
+   "evals": [],
+   "note": null,
+   "rate_it_s": 3.28,
+   "eta": "2026-11-10T20:06+03:00",
+   "est_start": null,
+   "loss": 0.16855
+  },
+  {
+   "name": "flame_v3_jointemb_afcrop",
+   "title": "Joint motion + 1024-d FLAME embedding (D59e)",
+   "description": "D59c's joint generation with the FLAME part = the 1024-number FLAME embedding of the frozen FLAME route from D58's 50k prep. Clean to 50k, generated more and more 50k-75k, always generated after.",
+   "status": "queued",
+   "step": 0,
+   "max_steps": 150000,
+   "branch_step": 0,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [],
+   "evals": [],
+   "note": null,
+   "rate_it_s": null,
+   "eta": "2026-11-11T02:41+03:00",
+   "est_start": "2026-11-10T20:06+03:00"
   }
  ],
  "references": [
