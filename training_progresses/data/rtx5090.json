@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-13T21:55+03:00",
+ "updated": "2026-11-13T22:25+03:00",
  "gpu": {
-  "util": 90,
-  "mem_used_gb": 13.1,
+  "util": 93,
+  "mem_used_gb": 14.0,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -20951,11 +20951,11 @@
    "name": "flame_v3_trunk150k_afcrop",
    "title": "FLAME prep, long: FLAME-only stage to 150k (D62, stage 1 of D63)",
    "description": "The FLAME-only prep of the FLAME-prep recipe, continued from the existing 50k prep checkpoint (seed 42) to 150k. No audio is trained here. FLAME-driven evaluation at 100k on HDTF, ViCo and RealTalk.",
-   "status": "training",
-   "step": 137050,
+   "status": "finished",
+   "step": 150000,
    "max_steps": 150000,
    "branch_step": 50000,
-   "last_checkpoint": 125000,
+   "last_checkpoint": 150000,
    "skipped_steps": 0,
    "curve": [
     {
@@ -21656,8 +21656,112 @@
     },
     {
      "step": 137000,
+     "loss": 0.01281,
+     "gnorm": 0.05419,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 138000,
+     "loss": 0.0127,
+     "gnorm": 0.05277,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 139000,
+     "loss": 0.01265,
+     "gnorm": 0.05678,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 140000,
+     "loss": 0.01296,
+     "gnorm": 0.05352,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 141000,
+     "loss": 0.01281,
+     "gnorm": 0.05457,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 142000,
+     "loss": 0.01271,
+     "gnorm": 0.05248,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 143000,
+     "loss": 0.01279,
+     "gnorm": 0.0527,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 144000,
+     "loss": 0.01263,
+     "gnorm": 0.05397,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 145000,
+     "loss": 0.01266,
+     "gnorm": 0.05321,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 146000,
+     "loss": 0.01277,
+     "gnorm": 0.05339,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 147000,
+     "loss": 0.0129,
+     "gnorm": 0.05412,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 148000,
      "loss": 0.01283,
-     "gnorm": 0.0545,
+     "gnorm": 0.0541,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 149000,
+     "loss": 0.01298,
+     "gnorm": 0.05329,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 150000,
+     "loss": 0.0154,
+     "gnorm": 0.038,
      "fm_full": null,
      "fm_mask": null,
      "cons": null
@@ -21665,27 +21769,61 @@
    ],
    "evals": [],
    "note": null,
-   "rate_it_s": 10.28,
-   "eta": "2026-11-13T22:16+03:00",
+   "rate_it_s": null,
+   "eta": null,
    "est_start": null,
-   "loss": 0.01283
+   "loss": 0.0154
   },
   {
    "name": "flame_v3_dyadic150k_afcrop",
    "title": "Talker and listener model: audio + partner, 150k to 500k (D63)",
    "description": "Branched from the 150k FLAME-only prep. FLAME is dropped; the avatar's audio and the conversation partner's voice and face are trained together. The partner goes through a new encoder and a new cross-attention in every block (45 M parameters). Evaluations at 200k, 300k, 400k, 500k on HDTF, ViCo and RealTalk; HDTF only at 225k, 250k, 350k, 450k. The audio-only run planned before it was cancelled.",
-   "status": "queued",
-   "step": 0,
+   "status": "training",
+   "step": 153231,
    "max_steps": 500000,
    "branch_step": 150000,
    "last_checkpoint": null,
-   "skipped_steps": 0,
-   "curve": [],
+   "skipped_steps": 27,
+   "curve": [
+    {
+     "step": 150000,
+     "loss": 0.02699,
+     "gnorm": 0.22644,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 151000,
+     "loss": 0.01687,
+     "gnorm": 0.05691,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 152000,
+     "loss": 0.01657,
+     "gnorm": 0.0569,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 153000,
+     "loss": 0.01701,
+     "gnorm": 0.05608,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
    "evals": [],
    "note": null,
-   "rate_it_s": null,
-   "eta": "2026-11-14T13:35+03:00",
-   "est_start": "2026-11-13T22:16+03:00"
+   "rate_it_s": 9.84,
+   "eta": "2026-11-14T08:13+03:00",
+   "est_start": null,
+   "loss": 0.01701
   }
  ],
  "references": [
