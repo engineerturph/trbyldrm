@@ -2,10 +2,10 @@
  "source": "RTX 5090 workstation",
  "project": "FLAME-conditioned Avatar Forcing: region-masking ablations, then a latent emotion split of the audio-driven model",
  "project_note": "Every ablation branches from one shared 25k-step trunk (landmark-only, no masks) and trains with a masked-consistency loss: each sample also runs with part of the FLAME condition removed. Evaluation: HDTF-50 at the Avatar Forcing crop, in three modes (full FLAME, FLAME without mouth + jaw, audio only). Latent split: an audio-only student of ablation 2 @100k whose block-4 features split into a neutral (speech) part and an emotion part, then a VA -> latent model that sets the emotion from valence / arousal. 50k steps per run.",
- "updated": "2026-11-11T00:12+03:00",
+ "updated": "2026-11-13T19:55+03:00",
  "gpu": {
-  "util": 0,
-  "mem_used_gb": 0.0,
+  "util": 94,
+  "mem_used_gb": 13.0,
   "mem_total_gb": 31.8
  },
  "eval_every": 50000,
@@ -20946,6 +20946,138 @@
    "eta": null,
    "est_start": null,
    "loss": 0.0152
+  },
+  {
+   "name": "flame_v3_trunk150k_afcrop",
+   "title": "FLAME prep, long: FLAME-only stage to 150k (D62)",
+   "description": "The FLAME-only prep of the FLAME-prep recipe, continued from the existing 50k prep checkpoint (seed 42) to 150k. No audio is trained here. FLAME-driven evaluation at 100k on HDTF, ViCo and RealTalk.",
+   "status": "training",
+   "step": 61438,
+   "max_steps": 150000,
+   "branch_step": 50000,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [
+    {
+     "step": 50000,
+     "loss": 0.01492,
+     "gnorm": 0.07188,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 51000,
+     "loss": 0.01479,
+     "gnorm": 0.07372,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 52000,
+     "loss": 0.01467,
+     "gnorm": 0.0727,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 53000,
+     "loss": 0.01483,
+     "gnorm": 0.07114,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 54000,
+     "loss": 0.01477,
+     "gnorm": 0.07359,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 55000,
+     "loss": 0.01442,
+     "gnorm": 0.07072,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 56000,
+     "loss": 0.01475,
+     "gnorm": 0.07262,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 57000,
+     "loss": 0.01453,
+     "gnorm": 0.0754,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 58000,
+     "loss": 0.01469,
+     "gnorm": 0.06944,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 59000,
+     "loss": 0.01458,
+     "gnorm": 0.06867,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 60000,
+     "loss": 0.01422,
+     "gnorm": 0.07011,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    },
+    {
+     "step": 61000,
+     "loss": 0.01448,
+     "gnorm": 0.0753,
+     "fm_full": null,
+     "fm_mask": null,
+     "cons": null
+    }
+   ],
+   "evals": [],
+   "note": null,
+   "rate_it_s": 9.26,
+   "eta": "2026-11-13T22:34+03:00",
+   "est_start": null,
+   "loss": 0.01448
+  },
+  {
+   "name": "flame_v3_noflame150k_afcrop",
+   "title": "FLAME prep, long: audio only 150k to 500k (D62)",
+   "description": "Branched from the 150k FLAME-only prep. FLAME is dropped on every sample and the model trains on audio alone for 350k steps (cosine learning rate from 150k to 10 % at 500k). Audio-only evaluations at 200k, 300k, 400k, 500k on HDTF, ViCo and RealTalk; HDTF only at 225k, 250k, 350k, 450k.",
+   "status": "queued",
+   "step": 0,
+   "max_steps": 500000,
+   "branch_step": 150000,
+   "last_checkpoint": null,
+   "skipped_steps": 0,
+   "curve": [],
+   "evals": [],
+   "note": null,
+   "rate_it_s": null,
+   "eta": "2026-11-14T13:53+03:00",
+   "est_start": "2026-11-13T22:34+03:00"
   }
  ],
  "references": [
