@@ -144,6 +144,10 @@
 <section id="done" class="hidden">
   <h2>Thank you!</h2>
   <p>You have finished all 12 videos. <span id="save2"></span></p>
+  <p id="idbox">Your participant ID: <b id="pid" style="font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;user-select:all"></b>
+    <button class="plain" id="copyid">Copy ID</button> <span class="note" id="copied"></span><br>
+    <span class="note">This random ID is the only thing stored with your answers. Please keep it if the person who invited
+    you asks for it.</span></p>
   <div id="fallback" class="hidden">
     <p><b>Your answers could not be sent yet.</b> Please keep this page open for a moment; it keeps trying. If it still
     does not work, copy the text below and send it to the person who invited you. Thank you for your patience.</p>
@@ -331,6 +335,11 @@
   function finish() {
     if (!state.doneSent) { state.doneSent = true; set(KEY_S, JSON.stringify(state)); push({ kind: "done", plan: [], ct: Date.now() }); }
     status.doneAt = Date.now();
+    $("pid").textContent = state.pid;
+    $("copyid").onclick = function () {
+      var done = function () { $("copied").textContent = "Copied ✓"; };
+      try { navigator.clipboard.writeText(state.pid).then(done, function () {}); } catch (e) {}
+    };
     show("done"); status(); flush();
     setInterval(status, 3000);
   }
