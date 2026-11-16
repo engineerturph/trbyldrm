@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Talking-Face Video User Study</title>
+<style>
+  :root { --ink:#111; --muted:#555; --rule:#cfcfcf; --accent:#1a3e72; --bg:#fff; --soft:#f4f5f7; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; background:var(--bg); color:var(--ink); }
+  body { font: 17px/1.55 Georgia, "Times New Roman", serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 28px 16px 56px; }
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 22px; }
+  h1 { font-size: 1.55rem; font-weight: normal; margin: 0; letter-spacing: .01em; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+  h2 { font-size: 1.15rem; margin: 26px 0 8px; }
+  ol, ul { padding-left: 1.3em; } li { margin: 4px 0; }
+  .note { color: var(--muted); font-size: .93rem; }
+  button { font: inherit; cursor: pointer; }
+  .primary { background: var(--accent); color:#fff; border:0; padding: 11px 26px; border-radius: 3px; font-size: 1.02rem; }
+  .primary:disabled { background:#9aa3b0; cursor: not-allowed; }
+  .plain { background:#fff; border:1px solid var(--ink); padding: 7px 16px; border-radius: 3px; }
+  .hidden { display:none !important; }
+
+  .bar { height: 4px; background: var(--soft); margin: 6px 0 18px; }
+  .bar > div { height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+  .progress { display:flex; justify-content: space-between; align-items: baseline; font-size: .95rem; color: var(--muted); }
+
+  .stage { max-width: 1040px; margin: 0 auto; }
+  .labels { display:grid; grid-template-columns: 1fr 1fr; text-align:center; font-weight: bold; font-size: 1.1rem;
+            letter-spacing: .04em; margin-bottom: 4px; }
+  .frame { position: relative; background:#000; aspect-ratio: 1040 / 512; }
+  video { width:100%; height:100%; display:block; background:#000; }
+  .overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;
+             gap:10px; color:#fff; background: rgba(0,0,0,.45); text-align:center; padding: 12px; font-size: 1rem; }
+  .overlay button { background:#fff; color:#111; border:0; border-radius: 3px; padding: 10px 24px; font-size: 1.05rem; }
+  .under { display:flex; justify-content: space-between; align-items:center; gap: 12px; margin: 8px 0 4px;
+           font-size: .93rem; color: var(--muted); flex-wrap: wrap; }
+
+  fieldset { border:0; padding:0; margin: 14px 0 0; min-width: 0; }
+  .q { display:grid; grid-template-columns: 1fr auto; gap: 8px 18px; align-items:center; padding: 12px 0;
+       border-top: 1px solid var(--rule); }
+  .q:last-of-type { border-bottom: 1px solid var(--rule); }
+  .q b { display:block; } .q span { color: var(--muted); font-size: .95rem; }
+  .opts { display:inline-flex; border:1px solid var(--ink); border-radius: 3px; overflow:hidden; }
+  .opts label { padding: 8px 20px; border-left:1px solid var(--ink); cursor:pointer; user-select:none; min-width: 74px;
+                text-align:center; background:#fff; }
+  .opts label:first-child { border-left:0; }
+  .opts input { position:absolute; opacity:0; pointer-events:none; }
+  .opts label:has(input:checked) { background: var(--accent); color:#fff; }
+  .opts label:has(input:focus-visible) { outline: 2px solid #e09b00; outline-offset: -2px; }
+  fieldset:disabled .opts { opacity:.45; } fieldset:disabled .opts label { cursor:not-allowed; }
+  .actions { display:flex; justify-content: space-between; align-items:center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+  .save { font-size: .9rem; color: var(--muted); }
+  textarea { width:100%; height: 130px; font: 12px/1.3 ui-monospace, Menlo, monospace; }
+  @media (max-width: 640px) {
+    body { font-size: 16px; } .q { grid-template-columns: 1fr; } .opts { display:flex; } .opts label { flex:1; padding: 9px 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Perceptual Study on Talking-Face Video Generation</h1>
+  <p>Anonymous research questionnaire &middot; about 6 minutes</p>
+</header>
+
+<section id="intro">
+  <p>Thank you for taking part. In this study you will watch <b>12 short videos</b> (15 seconds each). Every video shows
+  the <b>same person, animated from the same photo and the same speech recording by two different computer methods</b>,
+  placed side by side as <b>A</b> (left) and <b>B</b> (right). Which method is on which side changes from video to video.</p>
+  <h2>What to do</h2>
+  <ol>
+    <li>Turn the sound on (headphones are best) and watch each video to the end. You may replay it as often as you like.</li>
+    <li>Answer three questions for each video by choosing <b>A</b>, <b>B</b> or <b>Draw</b> (no real difference):
+      <ul>
+        <li><b>Lip sync</b> &mdash; which one has the better lip sync?</li>
+        <li><b>Non-verbal alignment</b> &mdash; which one looks more natural?</li>
+        <li><b>Overall preference</b> &mdash; which one would you prefer to talk to?</li>
+      </ul>
+    </li>
+    <li>There are no right or wrong answers; go with your own impression.</li>
+  </ol>
+  <p class="note">A laptop or desktop screen works best; on a phone, please hold it sideways.</p>
+  <h2>Privacy</h2>
+  <p class="note">The study is anonymous. We store only your answers, how long each video took, and a random code made by
+  your browser so that your 12 answers stay together. No name, e-mail or address is collected. The answers are used for
+  academic research only. Taking part is voluntary and you may stop at any time by closing the page.</p>
+  <p><button class="primary" id="start">I agree &mdash; start</button> <span class="note" id="introMsg"></span></p>
+</section>
+
+<section id="trial" class="hidden">
+  <div class="progress"><span id="count">Video 1 of 12</span><span class="save" id="save1"></span></div>
+  <div class="bar"><div id="barFill"></div></div>
+  <div class="stage">
+    <div class="labels"><div>A</div><div>B</div></div>
+    <div class="frame">
+      <video id="vid" playsinline preload="auto"></video>
+      <div class="overlay" id="overlay"><span id="ovText">Loading video&hellip;</span>
+        <button id="play" class="hidden">&#9654; Play</button></div>
+    </div>
+    <div class="under"><span id="hint">Please watch the whole video once; then the questions unlock.</span>
+      <button class="plain hidden" id="replay">&#8634; Replay</button></div>
+    <fieldset id="form" disabled>
+      <div class="q"><div><b>1. Lip sync</b><span>Which one has the better lip sync?</span></div>
+        <div class="opts"><label><input type="radio" name="lip" value="A">A</label><label><input type="radio" name="lip" value="B">B</label><label><input type="radio" name="lip" value="draw">Draw</label></div></div>
+      <div class="q"><div><b>2. Non-verbal alignment</b><span>Which one looks more natural? (head movement, expressions, eyes)</span></div>
+        <div class="opts"><label><input type="radio" name="natural" value="A">A</label><label><input type="radio" name="natural" value="B">B</label><label><input type="radio" name="natural" value="draw">Draw</label></div></div>
+      <div class="q"><div><b>3. Overall preference</b><span>Which one would you prefer to talk to?</span></div>
+        <div class="opts"><label><input type="radio" name="overall" value="A">A</label><label><input type="radio" name="overall" value="B">B</label><label><input type="radio" name="overall" value="draw">Draw</label></div></div>
+    </fieldset>
+    <div class="actions"><span class="note" id="need"></span><button class="primary" id="next" disabled>Next video</button></div>
+  </div>
+</section>
+
+<section id="done" class="hidden">
+  <h2>Thank you!</h2>
+  <p>You have finished all 12 videos. <span id="save2"></span></p>
+  <div id="fallback" class="hidden">
+    <p><b>Your answers could not be sent yet.</b> Please keep this page open for a moment; it keeps trying. If it still
+    does not work, copy the text below and send it to the person who invited you. Thank you for your patience.</p>
+    <textarea id="code" readonly></textarea>
+    <p><button class="plain" id="copy">Copy text</button> <button class="plain" id="retry">Try sending again</button></p>
+  </div>
+</section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var STUDY = "v1", N = 12, KEY_S = "us_state_" + STUDY, KEY_Q = "us_queue_" + STUDY;
+  var $ = function (id) { return document.getElementById(id); };
+  var mem = {};                                   // fallback when localStorage is blocked
+  function get(k) { try { var v = localStorage.getItem(k); return v === null ? (mem[k] || null) : v; } catch (e) { return mem[k] || null; } }
+  function set(k, v) { mem[k] = v; try { localStorage.setItem(k, v); } catch (e) {} }
+  function jget(k, d) { try { var v = get(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+
+  var state = jget(KEY_S, null);                  // {pid, plan:[token], idx}
+  var cache = {}, watched = false, plays = 0, t0 = 0, apiBase = null, flushing = false;
+
+  function hex(n) { var a = new Uint8Array(n); (window.crypto || window.msCrypto).getRandomValues(a);
+    return Array.prototype.map.call(a, function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function show(id) { ["intro", "trial", "done"].forEach(function (s) { $(s).classList.toggle("hidden", s !== id); }); window.scrollTo(0, 0); }
+
+  // ---------- sending answers: a queue kept in the browser until the server confirms ----------
+  function queue() { return jget(KEY_Q, []); }
+  function push(item) { var q = queue(); q.push(item); set(KEY_Q, JSON.stringify(q)); flush(); }
+  function api(force) {
+    if (apiBase !== null && !force) return Promise.resolve(apiBase);
+    return fetch("api.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); })
+      .then(function (j) { apiBase = (j.api || "").replace(/\/+$/, ""); return apiBase; });
+  }
+  function post(items, force) {
+    var ctl = new AbortController(), timer = setTimeout(function () { ctl.abort(); }, 12000);
+    return api(force).then(function (base) {
+      return fetch(base + "/submit", { method: "POST", headers: { "Content-Type": "text/plain" }, signal: ctl.signal,
+        body: JSON.stringify({ pid: state.pid, study: STUDY, items: items }) });
+    }).then(function (r) { clearTimeout(timer); return r.ok || r.status === 400 || r.status === 413; },   // 400: nothing to retry
+            function () { clearTimeout(timer); return false; });
+  }
+  function flush() {
+    if (flushing || !state) return;
+    var q = queue();
+    if (!q.length) { status(); return; }
+    flushing = true;
+    var batch = q.slice(0, 20);
+    post(batch, flush.failed).then(function (ok) {
+      flushing = false; flush.failed = !ok;
+      if (ok) { set(KEY_Q, JSON.stringify(queue().slice(batch.length))); flush(); }
+      status();
+    });
+  }
+  function status() {
+    var n = queue().length, txt = n ? "Saving answers…" : (state && state.idx > 0 ? "Answers saved ✓" : "");
+    $("save1").textContent = txt;
+    if (state && state.plan && state.idx >= state.plan.length) {
+      $("save2").textContent = n ? "Sending your answers…" : "Your answers have been saved. You can close this page now.";
+      var late = n && Date.now() - (status.doneAt || Date.now()) > 15000;
+      $("fallback").classList.toggle("hidden", !late);
+      if (late) $("code").value = JSON.stringify({ pid: state.pid, study: STUDY, items: queue() });
+    }
+  }
+  setInterval(flush, 6000);
+  window.addEventListener("online", flush);
+
+  // ---------- videos: fetched whole before playing, so playback never stalls ----------
+  function blob(token) {
+    if (!cache[token]) cache[token] = fetch("v/" + token + ".mp4").then(function (r) {
+      if (!r.ok) throw new Error("http " + r.status); return r.blob(); }).then(function (b) { return URL.createObjectURL(b); });
+    cache[token].catch(function () { delete cache[token]; });
+    return cache[token];
+  }
+
+  function begin() {
+    $("start").disabled = true; $("introMsg").textContent = "Preparing…";
+    fetch("clips.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (c) {
+      var g = [[], []];
+      c.clips.forEach(function (x) { g[x[1] ? 1 : 0].push(x[0]); });
+      shuffle(g[0]); shuffle(g[1]);
+      var half = N / 2, a = g[0].slice(0, half), b = g[1].slice(0, half);
+      var rest = shuffle(g[0].slice(half).concat(g[1].slice(half)));
+      var plan = shuffle(a.concat(b).concat(rest.slice(0, N - a.length - b.length)));
+      state = { pid: hex(12), plan: plan, idx: 0 };
+      set(KEY_S, JSON.stringify(state));
+      push({ kind: "start", plan: plan, ct: Date.now(), w: window.innerWidth, h: window.innerHeight });
+      trial();
+    }).catch(function () { $("start").disabled = false; $("introMsg").textContent = "Could not load the study. Please check your connection and try again."; });
+  }
+
+  function trial() {
+    if (state.idx >= state.plan.length) { finish(); return; }
+    show("trial");
+    var i = state.idx, token = state.plan[i], v = $("vid");
+    $("count").textContent = "Video " + (i + 1) + " of " + state.plan.length;
+    $("barFill").style.width = (100 * i / state.plan.length) + "%";
+    Array.prototype.forEach.call(document.querySelectorAll("#form input"), function (r) { r.checked = false; });
+    watched = false; plays = 0; t0 = Date.now();
+    $("form").disabled = true; $("next").disabled = true; $("replay").classList.add("hidden");
+    $("hint").textContent = "Please watch the whole video once; then the questions unlock.";
+    $("need").textContent = "";
+    $("next").textContent = i + 1 === state.plan.length ? "Finish" : "Next video";
+    $("overlay").classList.remove("hidden"); $("play").classList.add("hidden"); $("ovText").textContent = "Loading video…";
+    v.pause(); v.removeAttribute("src");
+    blob(token).then(function (url) {
+      if (state.plan[state.idx] !== token) return;
+      v.src = url; v.load();
+      $("ovText").textContent = "Sound on, then press play."; $("play").textContent = "▶ Play"; $("play").classList.remove("hidden");
+      if (i + 1 < state.plan.length) blob(state.plan[i + 1]).catch(function () {});
+    }).catch(function () {
+      if (state.plan[state.idx] !== token) return;
+      $("ovText").textContent = "The video could not be loaded."; $("play").textContent = "Try again"; $("play").classList.remove("hidden");
+    });
+    status();
+  }
+  function play() {
+    var v = $("vid");
+    if (!v.getAttribute("src")) { trial(); return; }
+    $("overlay").classList.add("hidden"); $("replay").classList.add("hidden");
+    v.currentTime = 0;
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { $("overlay").classList.remove("hidden"); });
+  }
+  function check() {
+    var all = ["lip", "natural", "overall"].every(function (q) { return document.querySelector('input[name="' + q + '"]:checked'); });
+    $("next").disabled = !(watched && all);
+    $("need").textContent = watched && !all ? "Please answer all three questions." : "";
+  }
+  function next() {
+    var val = function (q) { return document.querySelector('input[name="' + q + '"]:checked').value; };
+    push({ kind: "trial", trial: state.idx, token: state.plan[state.idx], lip: val("lip"), natural: val("natural"),
+           overall: val("overall"), plays: plays, ms: Date.now() - t0, ct: Date.now() });
+    state.idx += 1; set(KEY_S, JSON.stringify(state));
+    trial();
+  }
+  function finish() {
+    if (!state.doneSent) { state.doneSent = true; set(KEY_S, JSON.stringify(state)); push({ kind: "done", plan: [], ct: Date.now() }); }
+    status.doneAt = Date.now();
+    show("done"); status(); flush();
+    setInterval(status, 3000);
+  }
+
+  $("vid").addEventListener("ended", function () {
+    plays += 1; watched = true; $("form").disabled = false; $("replay").classList.remove("hidden");
+    $("hint").textContent = "You can replay the video before answering."; check();
+  });
+  $("vid").addEventListener("click", function () { var v = $("vid"); if (v.paused) { if (!v.ended) v.play(); } else v.pause(); });
+  $("play").addEventListener("click", play);
+  $("replay").addEventListener("click", play);
+  $("form").addEventListener("change", check);
+  $("next").addEventListener("click", next);
+  $("start").addEventListener("click", function () { if (resume()) trial(); else begin(); });
+  $("copy").addEventListener("click", function () { $("code").select(); try { document.execCommand("copy"); } catch (e) {} });
+  $("retry").addEventListener("click", function () { flush.failed = true; flush(); });
+
+  function resume() { return !!(state && state.pid && state.plan && state.plan.length && state.idx < state.plan.length); }
+  if (resume() && state.idx > 0) {                      // came back (reload): continue where they were
+    $("start").textContent = "Continue";
+    $("introMsg").textContent = "You have answered " + state.idx + " of " + state.plan.length + " videos.";
+  } else if (state && state.plan && state.plan.length && state.idx >= state.plan.length) finish();
+})();
+</script>
+</body>
+</html>
