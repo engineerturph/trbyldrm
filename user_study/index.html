@@ -129,7 +129,8 @@
 <script>
 (function () {
   "use strict";
-  var STUDY = "v1", N = 12, KEY_S = "us_state_" + STUDY, KEY_Q = "us_queue_" + STUDY;
+  // .../user_study/?test : a try-out run; its answers are stored apart and never counted
+  var STUDY = /[?&]test\b/.test(location.search) ? "test" : "v1", N = 12, KEY_S = "us_state_" + STUDY, KEY_Q = "us_queue_" + STUDY;
   var $ = function (id) { return document.getElementById(id); };
   var mem = {};                                   // fallback when localStorage is blocked
   function get(k) { try { var v = localStorage.getItem(k); return v === null ? (mem[k] || null) : v; } catch (e) { return mem[k] || null; } }
