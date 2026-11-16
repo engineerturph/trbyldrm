@@ -54,6 +54,8 @@
   .actions { display:flex; justify-content: space-between; align-items:center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
   .save { font-size: .9rem; color: var(--muted); }
   .testmode { background:#fff4d6; border:1px solid #d9a400; padding: 6px 12px; margin-bottom: 16px; font-size: .93rem; }
+  .tut { background: var(--soft); border-left: 3px solid var(--accent); padding: 12px 16px; margin: 0 0 16px; font-size: .95rem; }
+  .tut ul { margin: 6px 0; }
   .scroll { overflow-x: auto; }
   table.res { border-collapse: collapse; width: 100%; font-size: .95rem; }
   table.res th, table.res td { border-bottom: 1px solid var(--rule); padding: 6px 10px; text-align: center; white-space: nowrap; }
@@ -79,6 +81,7 @@
   <h2>What to do</h2>
   <ol>
     <li>Turn the sound on (headphones are best) and watch each video to the end. You may replay it as often as you like.</li>
+    <li>The first video is a <b>practice round</b>: it explains the questions and is not counted.</li>
     <li>Answer five questions for each video by choosing <b>A</b>, <b>B</b> or <b>Draw</b> (no real difference):
       <ul>
         <li><b>Lip sync</b> &mdash; which one has the better lip sync?</li>
@@ -102,6 +105,18 @@
   <div class="progress"><span id="count">Video 1 of 12</span><span class="save" id="save1"></span></div>
   <div class="bar"><div id="barFill"></div></div>
   <div class="stage">
+    <div class="tut hidden" id="tut">
+      <b>Practice round.</b> This example works exactly like the 12 videos that follow, but its answers are not recorded.
+      Use it to get used to the five questions:
+      <ul>
+        <li><b>Lip sync</b> &mdash; watch the mouth: do the lips open, close and shape the sounds at the right moments?</li>
+        <li><b>Non-verbal alignment</b> &mdash; watch the whole face: do the expressions, the eyes and the head movement look natural for a person saying this?</li>
+        <li><b>Motion richness</b> &mdash; is the movement lively and varied, or stiff and repetitive?</li>
+        <li><b>Reactiveness</b> &mdash; does the face follow the speech: stressing words, pausing, changing with the tone of voice?</li>
+        <li><b>Overall preference</b> &mdash; all things considered, which one would you prefer to talk to?</li>
+      </ul>
+      Choose <b>Draw</b> whenever you see no real difference. You can replay the video as often as you like.
+    </div>
     <div class="labels"><div>A</div><div>B</div></div>
     <div class="frame">
       <video id="vid" playsinline preload="auto"></video>
@@ -237,12 +252,15 @@
   window.addEventListener("online", flush);
 
   // ---------- videos: fetched whole before playing, so playback never stalls ----------
-  function blob(token) {
-    if (!cache[token]) cache[token] = fetch("v/" + token + ".mp4").then(function (r) {
+  function blob(path) {
+    if (!cache[path]) cache[path] = fetch(path).then(function (r) {
       if (!r.ok) throw new Error("http " + r.status); return r.blob(); }).then(function (b) { return URL.createObjectURL(b); });
-    cache[token].catch(function () { delete cache[token]; });
-    return cache[token];
+    cache[path].catch(function () { delete cache[path]; });
+    return cache[path];
   }
+  function clip(i) { return "v/" + state.plan[i] + ".mp4"; }
+  // the practice round comes once, before video 1; its answers are never sent
+  function practising() { return !state.practiced && state.idx === 0; }
 
   function begin() {
     $("start").disabled = true; $("introMsg").textContent = "Preparing…";
@@ -263,24 +281,27 @@
   function trial() {
     if (state.idx >= state.plan.length) { finish(); return; }
     show("trial");
-    var i = state.idx, token = state.plan[i], v = $("vid");
-    $("count").textContent = "Video " + (i + 1) + " of " + state.plan.length;
+    var prac = practising(), i = state.idx, path = prac ? "practice.mp4" : clip(i), v = $("vid");
+    var ticket = trial.ticket = (trial.ticket || 0) + 1;
+    $("tut").classList.toggle("hidden", !prac);
+    $("count").textContent = prac ? "Practice video (not counted)" : "Video " + (i + 1) + " of " + state.plan.length;
     $("barFill").style.width = (100 * i / state.plan.length) + "%";
     Array.prototype.forEach.call(document.querySelectorAll("#form input"), function (r) { r.checked = false; });
     watched = false; plays = 0; t0 = Date.now();
     $("form").disabled = true; $("next").disabled = true; $("replay").classList.add("hidden");
     $("hint").textContent = "Please watch the whole video once; then the questions unlock.";
     $("need").textContent = "";
-    $("next").textContent = i + 1 === state.plan.length ? "Finish" : "Next video";
+    $("next").textContent = prac ? "Start the 12 videos" : (i + 1 === state.plan.length ? "Finish" : "Next video");
     $("overlay").classList.remove("hidden"); $("play").classList.add("hidden"); $("ovText").textContent = "Loading video…";
     v.pause(); v.removeAttribute("src");
-    blob(token).then(function (url) {
-      if (state.plan[state.idx] !== token) return;
+    blob(path).then(function (url) {
+      if (ticket !== trial.ticket) return;
       v.src = url; v.load();
       $("ovText").textContent = "Sound on, then press play."; $("play").textContent = "▶ Play"; $("play").classList.remove("hidden");
-      if (i + 1 < state.plan.length) blob(state.plan[i + 1]).catch(function () {});
+      var nxt = prac ? 0 : i + 1;
+      if (nxt < state.plan.length) blob(clip(nxt)).catch(function () {});
     }).catch(function () {
-      if (state.plan[state.idx] !== token) return;
+      if (ticket !== trial.ticket) return;
       $("ovText").textContent = "The video could not be loaded."; $("play").textContent = "Try again"; $("play").classList.remove("hidden");
     });
     status();
@@ -299,7 +320,8 @@
     $("need").textContent = watched && !all ? "Please answer all five questions." : "";
   }
   function next() {
-    var val = function (q) { return document.querySelector('input[name="' + q + '"]:checked').value; };
+    if (practising()) { state.practiced = true; set(KEY_S, JSON.stringify(state)); trial(); return; }
+    var val =function (q) { return document.querySelector('input[name="' + q + '"]:checked').value; };
     var item = { kind: "trial", trial: state.idx, token: state.plan[state.idx], plays: plays, ms: Date.now() - t0, ct: Date.now() };
     QS.forEach(function (q) { item[q] = val(q); });
     push(item);
